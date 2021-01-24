@@ -1,0 +1,29 @@
+{
+  "name": "custom",
+  "version": "1.0.0",
+  "description": "Compiler for Custom.",
+  "main": "custom.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "c8 node_modules/.bin/mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Booker-M/lmu-cmsi-488.git"
+  },
+  "author": "Andrew Seaman, Booker Martin, Ian Green, Veronica Backer-Peral",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Booker-M/lmu-cmsi-488/issues"
+  },
+  "homepage": "https://github.com/Booker-M/lmu-cmsi-488#readme",
+  "dependencies": {
+    "ohm-js": "^15.4.1"
+  },
+  "devDependencies": {
+    "c8": "^7.4.0",
+    "mocha": "^8.2.1"
+  }
+}
