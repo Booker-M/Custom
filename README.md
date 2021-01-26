@@ -1,6 +1,6 @@
 ![](https://github.com/Booker-M/Custom/blob/main/logo/Custom.png?raw=true)
 
-# {CUSTOM}
+# {Custom}
 Andrew Seaman, Booker Martin, Ian Green, Veronica Backer-Peral
 
 ## Introduction
