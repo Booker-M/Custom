@@ -46,9 +46,9 @@ Problem3 {
             | Exp3
   Exp3 = Exp3 ("*"| "/") Exp4          --multiplicative
             | Exp4
-  Exp4 = "-" Exp5
-  Exp5 = Exp6 "!"
-  Exp 6 = Factor
+  Exp4 = "-"? Exp5
+  Exp5 = Exp6 "!"?
+  Exp6 = Factor
   			| "(" Exp ")" --parens
   Factor = id
             | num
