@@ -32,5 +32,40 @@ The negation operator, `-`, was given lower precedence than the multiplication o
 ### g.
 
 ## 3.
+NOT WORKING AND NOT FINISHED
+```
+Problem3 {
+  Program   = Function Exp
+  Function = "func" name "(" (param ",")* ")" Body
+  Body = (Exp ";")+ "end"   
+  
+  Exp = Exp1
+  Exp1 = Exp2 "if" Exp2 "else" Exp2 --conditional
+  			| Exp2
+  Exp2 = Exp2 ("+" | "-") Exp3            --additive
+            | Exp3
+  Exp3 = Exp3 ("*"| "/") Exp4          --multiplicative
+            | Exp4
+  Exp4 = "-" Exp5
+  Exp5 = Exp6 "!"
+  Exp 6 = Factor
+  			| "(" Exp ")" --parens
+  Factor = id
+            | num
+            
+  Call = id "[" (Exp ",")* "]"
+            
+  name = id
+  param = id
+  num       = digit+ ("." digit+)?
+  let       = "let" ~alnum
+  print     = "print" ~alnum
+  abs       = "abs" ~alnum
+  sqrt      = "sqrt" ~alnum
+  keyword   = let | print | abs | sqrt
+  id        = ~keyword letter alnum*
+  space    += "--" (any)* end  --comment
+}
+```
 
 ## 4.
