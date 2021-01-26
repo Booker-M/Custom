@@ -36,8 +36,8 @@ NOT WORKING AND NOT FINISHED
 ```
 Problem3 {
   Program   = Function Exp
-  Function = "func" name "(" (param ",")* ")" Body
-  Body = (Exp ";")+ "end"   
+  Function = "func" name "(" (param ("," param)*)? ")" Body //SHOULD THE LAST PARAM REQUIRE A "," AFTER?
+  Body = Exp (";" Exp)* "end" //SHOULD THE LAST EXP REQUIRE A ";" AFTER?
   
   Exp = Exp1
   Exp1 = Exp2 "if" Exp2 "else" Exp2 --conditional
