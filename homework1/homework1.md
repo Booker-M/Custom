@@ -52,18 +52,21 @@ Problem3 {
   			| "(" Exp ")" --parens
   Factor = id
             | num
+            | str
+            | Call
             
-  Call = id "[" (Exp ",")* "]"
-            
+  Call = id "[" (Exp ("," Exp)*)? "]" //SHOULD THE LAST EXP REQUIRE A "," AFTER? HOW MANY EXP MINIMUM?
+
   name = id
   param = id
-  num       = digit+ ("." digit+)?
+  num       = digit+ ("." digit+)? //Numeric literals are non-empty sequences of decimal digits with an optional fractional part and an optional exponent part.
+  str       = //String literals delimited with double quotes with the escape sequences \', \", \n, \\, and \u{hhhhhh} where xxxxxx is a sequence of one-to-six hexadecimal digits.
   let       = "let" ~alnum
   print     = "print" ~alnum
   abs       = "abs" ~alnum
   sqrt      = "sqrt" ~alnum
   keyword   = let | print | abs | sqrt
-  id        = ~keyword letter alnum*
+  id        = ~keyword letter alnum* //Identifiers are non-empty sequences of letters, decimal digits, underscores, at-signs, and dollar signs, beginning with a letter or at-sign, that are not also reserved words.
   space    += "--" (any)* end  --comment
 }
 ```
