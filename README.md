@@ -11,3 +11,27 @@ After the tragic loss of the Custom Hotel, we wanted to dedicate our customizabl
 -Typing "Juno" causes a compile error ("Hotel Juno" is the disappointing successor to the "Custom Hotel")  
 
 ## Example Programs
+### Program customized for English speakers:
+```
+pets = {"Leslie":"cat", "Ben":"armadillo","Andy":"dog","April":"snake"}
+
+for pet,breed in pets {
+	print (pet + " is a " + breed + "!");
+}
+```
+### Program customized for Spanish speakers:
+```
+mascotas = {"Leslie":"gata", "Ben":"armadillo","Andy":"perro","April":"serpiente"}
+
+por cada mascota,raza en mascotas {
+	imprime (mascota + " es un/una " + raza + "!");
+}
+```
+### Program customized for French speakers:
+```
+animaux = {"Leslie":"chat", "Ben":"tatou","Andy":"chien","April":"serpent"}
+
+pour animal,race dans animaux {
+	imprimez (animal + " cette un/une " + race + "!");
+}
+```
