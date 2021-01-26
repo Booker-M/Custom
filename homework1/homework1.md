@@ -1,9 +1,29 @@
+# Assignment 1
 Andrew Seaman, Booker Martin, Ian Green, Veronica Backer-Peral
 
-2.
-a. The grammar rule for `"and"` and `"or"` makes it impossible to check for `"or"`. OHM will see an `Exp1` and start checking for the left-most term that begins with `Exp1`. Thus, it will always check for the `("and" Exp1)*` following the first `Exp1` and never check for an `"or"`. If the intention is for them to have equal precedence then it should be:
+## 2.
+### a.
+The grammar rule for `"and"` and `"or"` makes it impossible to check for `"or"` in Ohm. Ohm will first encounter `Exp1` in the code and then start checking for the left-most rule that begins with `Exp1`. Ohm will always check for `("and" Exp1)*` following `Exp1` and never check for an `("or" Exp1)*`. Due to this issue, `"and"` takes absolute precedence (because `"or"` does not function).
+
+If the intention is for them to have equal precedence then it should be:
 ```Exp = Exp1 (("or" | "and") Exp1)*```
 
-b. This is not possible. The tree would parse into `Exp1 ("and" Exp1)*`. So, the initial `Exp1` could continue having infinitely more `"and" Exp1` but it will never be able to include an `"or"` because it no longer looks for an `Exp`.
+### b.
+The expression `X and Y or Z` is not possible. The tree would parse into `Exp1 ("and" Exp1)*`. So, an expression start with `Exp1 "and" Exp1` could continue being followed by infinitely more `"and" Exp1`, but it will never be able to include an `"or"`. Ignoring the issue discussed in part a. and supposing `Exp1 ("and" Exp1)*` and `Exp1 ("or" Exp1)*` had equal precedence, an expression that began with `X or Y` would then only be able to be followed by more `"or" Exp1`. Again, changing the rule to `Exp = Exp1 (("or" | "and") Exp1)*` would allow `and` and `or` to be combined in the same expression.
 
-c. Can't tell?
+### c.
+IS IT NON-ASSOCIATIVE SINCE Exp1 only parses into Exp2 and Exp2 only parses into Exp???
+The additive and relational operators are both **non-associative**. Exp2 does not have Exp2 on the right side of the equation nor does Exp3 have Exp3 on the right side of the equation.
+
+OR IS IT "I CAN'T TELL" since it uses (relop Exp2)? and (addop Exp3)*
+The associativity of the additive operator "cannot be told" because it uses the syntax `Exp3 (addop Exp3)*`.
+
+### d.
+The `not` operator is not right associative because it is located in rule `Exp4` but forms the expression `"not" Exp5`. Thus, Ohm parses into `Exp5` which must lead into something else, such as identifiers and numbers, instead of allowing more `"not" Exp5` to recurse on the right.
+
+### e.
+BY NEGATION DOES TOAL MEAN "-" in Exp2 or "not" in Exp4???
+
+### f.
+
+### g.
