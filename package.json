@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Booker-M/lmu-cmsi-488.git"
+    "url": "git+https://github.com/Booker-M/Custom.git"
   },
   "author": "Andrew Seaman, Booker Martin, Ian Green, Veronica Backer-Peral",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Booker-M/lmu-cmsi-488/issues"
+    "url": "https://github.com/Booker-M/Custom/issues"
   },
-  "homepage": "https://github.com/Booker-M/lmu-cmsi-488#readme",
+  "homepage": "https://github.com/Booker-M/Custom#readme",
   "dependencies": {
     "ohm-js": "^15.4.1"
   },
