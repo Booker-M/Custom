@@ -50,17 +50,16 @@ Problem3 {
   Exp5 = Exp6 "!"?
   Exp6 = Factor
   			| "(" Exp ")" --parens
-  Factor = id
+  Factor = Call
+  			| id
             | num
             | str
-            | Call
-            
   Call = id "[" (Exp ("," Exp)*)? "]" //SHOULD THE LAST EXP REQUIRE A "," AFTER? HOW MANY EXP MINIMUM?
 
   name = id
   param = id
   num       = digit+ ("." digit+)? //Numeric literals are non-empty sequences of decimal digits with an optional fractional part and an optional exponent part.
-  str       = //String literals delimited with double quotes with the escape sequences \', \", \n, \\, and \u{hhhhhh} where xxxxxx is a sequence of one-to-six hexadecimal digits.
+  str       = id //String literals delimited with double quotes with the escape sequences \', \", \n, \\, and \u{hhhhhh} where xxxxxx is a sequence of one-to-six hexadecimal digits.
   let       = "let" ~alnum
   print     = "print" ~alnum
   abs       = "abs" ~alnum
