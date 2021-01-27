@@ -57,9 +57,9 @@ Problem3 {
   name = id
   param = id
   numlit       = digit+ ("." digit+)? ("E" digit+)?
-  stringlit       = "\"" char* "\"" //String literals delimited with double quotes with the escape sequences \', \", \n, \\, and \u{hhhhhh} where xxxxxx is a sequence of one-to-six hexadecimal digits.
+  stringlit       = "\"" char* "\""
   char = escape | any
-  escape = "\\\'" | "\\\"" | "\\\\" | "\\n" | "\\u{\hex\hex\hex\hex\hex\hex}"
+  escape = "\\\'" | "\\\"" | "\\\\" | "\\n" | "\\u{" hex hex hex hex hex hex "}" --escape
   hex = digit | "A" | "a" | "B" | "b" | "C" | "c" | "D" | "d" | "E" | "e" | "F" | "f"
   let       = "let" ~alnum
   print     = "print" ~alnum
@@ -67,7 +67,7 @@ Problem3 {
   sqrt      = "sqrt" ~alnum
   reserved   = "func" | "if" | "else" | "end"
   id        = ~reserved (letter | "@") (letter | digit | "_" | "@" | "$")*
-  space    += "--" (any)* end  --comment
+  space    += "--" any* end  --comment
 }
 ```
 
