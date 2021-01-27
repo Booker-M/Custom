@@ -74,12 +74,10 @@ Problem3 {
   param	= id
   numlit = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
   stringlit = "\"" char* "\""
-  char	= "\\n"
-      | "\\\'"
-      | "\\\""
-      | "\\\\"
-      | "\\u{" hexDigit+ "}"		--hex
+  char	= "\\" ("n" | "\'" | "\"" | "\\")		--escape
+      | "\\u{" h h? h? h? h? h? "}"		--hex
       | ~"\"" ~"\\" any
+  h 	= hexDigit
   reserved = "func" | "if" | "else" | "end"
   id	= ~reserved (letter | "@") (alnum | "_" | "@" | "$")*
   space	+= "--" any* end  --comment
