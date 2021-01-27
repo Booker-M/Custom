@@ -35,11 +35,9 @@ The negation operator, `-`, was given lower precedence than the multiplication o
 NOT WORKING AND NOT FINISHED
 ```
 Problem3 {
-  Program   = Function* Exp
-  Function = "func" name "(" (param ("," param)*)? ")" Body //SHOULD THE LAST PARAM REQUIRE A "," AFTER?
-  Body = Exp (";" Exp)* "end" //SHOULD THE LAST EXP REQUIRE A ";" AFTER?
-  
-  Exp = Exp1
+  Program   = Function* Exp1
+  Function = "func" name "(" (param ("," param)*)? ")" Body
+  Body = Exp1 (";" Exp1)* "end"
   Exp1 = Exp2 "if" Exp2 "else" Exp2 --conditional
   			| Exp2
   Exp2 = Exp2 ("+" | "-") Exp3            --additive
@@ -49,23 +47,23 @@ Problem3 {
   Exp4 = "-"? Exp5
   Exp5 = Exp6 "!"?
   Exp6 = Factor
-  			| "(" Exp ")" --parens
+  			| "(" Exp1 ")" --parens
   Factor = Call
   			| id
             | num
             | str
-  Call = id "[" (Exp ("," Exp)*)? "]" //SHOULD THE LAST EXP REQUIRE A "," AFTER? HOW MANY EXP MINIMUM?
+  Call = id "[" (Exp1 ("," Exp1)*)? "]"
 
   name = id
   param = id
-  num       = digit+ ("." digit+)? //Numeric literals are non-empty sequences of decimal digits with an optional fractional part and an optional exponent part.
+  num       = digit+ ("." digit+)? ("E" digit+)?
   str       = id //String literals delimited with double quotes with the escape sequences \', \", \n, \\, and \u{hhhhhh} where xxxxxx is a sequence of one-to-six hexadecimal digits.
   let       = "let" ~alnum
   print     = "print" ~alnum
   abs       = "abs" ~alnum
   sqrt      = "sqrt" ~alnum
-  keyword   = let | print | abs | sqrt
-  id        = ~keyword letter alnum* //Identifiers are non-empty sequences of letters, decimal digits, underscores, at-signs, and dollar signs, beginning with a letter or at-sign, that are not also reserved words.
+  reserved   = "func" | "if" | "else" | "end"
+  id        = ~reserved (letter | "@") (letter | digit | "_" | "@" | "$")*
   space    += "--" (any)* end  --comment
 }
 ```
