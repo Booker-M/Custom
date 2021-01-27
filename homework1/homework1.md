@@ -73,7 +73,7 @@ Problem3 {
   name	= id
   param	= id
   numlit = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
-  stringlit	= "\"" char* "\""
+  stringlit = "\"" char* "\""
   char	= "\\n"
       | "\\\'"
       | "\\\""
