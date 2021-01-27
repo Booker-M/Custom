@@ -28,46 +28,58 @@ The `not` operator is not right associative because it is located in rule `Exp4`
 The negation operator, `-`, was given lower precedence than the multiplication operator so that the entire product is negated. The language designer made a choice for the multiplication to take place first. If the language includes parenthesis, placing the negation operator and a number within parenthesis, such as `(-X) * Y`, could be used to prioritize negating one of the factors. 
 
 ### f.
+-8 * 5
+```
+  -
+  |
+  *
+ / \
+8   5
+```
 
 ### g.
+-8 * 5
+
+```
+   *
+  / \
+ -   5
+ |
+ 8
+```
 
 ## 3.
-STRING LITERALS BROKEN
 ```
 Problem3 {
   Program   = Fundec* Exp1
   Fundec = "func" name "(" (param ("," param)*)? ")" Body
   Body = Exp1 (";" Exp1)* "end"
-  Exp1 = Exp2 "if" Exp2 "else" Exp2 --conditional
+  Exp1 = Exp2 "if" Exp2 "else" Exp2		--conditional
   			| Exp2
-  Exp2 = Exp2 ("+" | "-") Exp3            --additive
+  Exp2 = Exp2 ("+" | "-") Exp3		--additive
             | Exp3
-  Exp3 = Exp3 ("*"| "/") Exp4          --multiplicative
+  Exp3 = Exp3 ("*"| "/") Exp4		--multiplicative
             | Exp4
   Exp4 = "-"? Exp5
   Exp5 = Exp6 "!"?
   Exp6 = Factor
-  			| "(" Exp1 ")" --parens
+  			| "(" Exp1 ")"		--parens
   Factor = Call
   			| id
             | numlit
             | stringlit
   Call = id "[" (Exp1 ("," Exp1)*)? "]"
 
-  name = id
-  param = id
-  numlit       = digit+ ("." digit+)? ("E" digit+)?
-  stringlit       = "\"" char* "\""
-  char = escape | any
-  escape = "\\\'" | "\\\"" | "\\\\" | "\\n" | "\\u{" hex hex hex hex hex hex "}" --escape
-  hex = digit | "A" | "a" | "B" | "b" | "C" | "c" | "D" | "d" | "E" | "e" | "F" | "f"
-  let       = "let" ~alnum
-  print     = "print" ~alnum
-  abs       = "abs" ~alnum
-  sqrt      = "sqrt" ~alnum
-  reserved   = "func" | "if" | "else" | "end"
-  id        = ~reserved (letter | "@") (letter | digit | "_" | "@" | "$")*
-  space    += "--" any* end  --comment
+  name		= id
+  param		= id
+  numlit		= digit+ ("." digit+)? ("E" digit+)?
+  stringlit		= "\"" char* "\""
+  char		= escape | ~"\"" any
+  escape		= "\\\'" | "\\\"" | "\\\\" | "\\n" | "\\u{" hex hex hex hex hex hex "}" --escape
+  hex		= digit | "A" | "a" | "B" | "b" | "C" | "c" | "D" | "d" | "E" | "e" | "F" | "f"
+  reserved		= "func" | "if" | "else" | "end"
+  id		= ~reserved (letter | "@") (alnum | "_" | "@" | "$")*
+  space		+= "--" any* end  --comment
 }
 ```
 
