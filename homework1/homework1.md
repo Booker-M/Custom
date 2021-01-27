@@ -70,19 +70,19 @@ Problem3 {
       | stringlit
   Call = id "[" (Exp1 ("," Exp1)*)? "]"
 
-  name		= id
-  param		= id
-  numlit	= digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
+  name	= id
+  param	= id
+  numlit = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
   stringlit	= "\"" char* "\""
-  char		= "\\n"
+  char	= "\\n"
       | "\\\'"
       | "\\\""
       | "\\\\"
       | "\\u{" hexDigit+ "}"		--hex
       | ~"\"" ~"\\" any
-  reserved	= "func" | "if" | "else" | "end"
-  id		= ~reserved (letter | "@") (alnum | "_" | "@" | "$")*
-  space		+= "--" any* end  --comment
+  reserved = "func" | "if" | "else" | "end"
+  id	= ~reserved (letter | "@") (alnum | "_" | "@" | "$")*
+  space	+= "--" any* end  --comment
 }
 ```
 
