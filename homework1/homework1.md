@@ -51,7 +51,7 @@ The negation operator, `-`, was given lower precedence than the multiplication o
 ## 3.
 ```
 Problem3 {
-  Program   = Fundec* Exp1
+  Program = Fundec* Exp1
   Fundec = "func" name "(" (param ("," param)*)? ")" Body
   Body = Exp1 (";" Exp1)* "end"
   Exp1 = Exp2 "if" Exp2 "else" Exp2		--conditional
@@ -72,11 +72,14 @@ Problem3 {
 
   name		= id
   param		= id
-  numlit	= digit+ ("." digit+)? ("E" digit+)?
+  numlit	= digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
   stringlit	= "\"" char* "\""
-  char		= escape | ~"\"" any
-  escape	= "\\\'" | "\\\"" | "\\\\" | "\\n" | "\\u{" hex hex hex hex hex hex "}" --escape
-  hex		= digit | "A" | "a" | "B" | "b" | "C" | "c" | "D" | "d" | "E" | "e" | "F" | "f"
+  char		= "\\n"
+      | "\\\'"
+      | "\\\""
+      | "\\\\"
+      | "\\u{" hexDigit+ "}"		--hex
+      | ~"\"" ~"\\" any
   reserved	= "func" | "if" | "else" | "end"
   id		= ~reserved (letter | "@") (alnum | "_" | "@" | "$")*
   space		+= "--" any* end  --comment
