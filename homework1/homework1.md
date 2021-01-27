@@ -12,7 +12,7 @@ If the intention is for them to have equal precedence then it should be:
 ```Exp = Exp1 (("or" | "and") Exp1)*```
 
 ### b.
-The expression `X and Y or Z` is not possible. The tree would parse into `Exp1 ("and" Exp1)*`. So, an expression start with `Exp1 "and" Exp1` could continue being followed by infinitely more `"and" Exp1`, but it will never be able to include an `"or"`. Ignoring the issue discussed in part a. and supposing `Exp1 ("and" Exp1)*` and `Exp1 ("or" Exp1)*` had equal precedence, an expression that began with `X or Y` would then only be able to be followed by more `"or" Exp1`. Again, changing the rule to `Exp = Exp1 (("or" | "and") Exp1)*` would allow `and` and `or` to be combined in the same expression.
+The expression `X and Y or Z` is not possible. The tree would parse into `Exp1 ("and" Exp1)*`. So, an expression starting with `Exp1 "and" Exp1` could continue being followed by infinitely more `"and" Exp1`, but it will never be able to include an `"or"`. Ignoring the issue discussed in part a. and supposing `Exp1 ("and" Exp1)*` and `Exp1 ("or" Exp1)*` had equal precedence, an expression that began with `X or Y` would then only be able to be followed by more `"or" Exp1`. Again, changing the rule to `Exp = Exp1 (("or" | "and") Exp1)*` would allow `and` and `or` to be combined in the same expression.
 
 ### c.
 IS IT NON-ASSOCIATIVE SINCE Exp1 only parses into Exp2 and Exp2 only parses into Exp??????
@@ -35,7 +35,7 @@ The negation operator, `-`, was given lower precedence than the multiplication o
 NOT WORKING AND NOT FINISHED
 ```
 Problem3 {
-  Program   = Function Exp
+  Program   = Function* Exp
   Function = "func" name "(" (param ("," param)*)? ")" Body //SHOULD THE LAST PARAM REQUIRE A "," AFTER?
   Body = Exp (";" Exp)* "end" //SHOULD THE LAST EXP REQUIRE A ";" AFTER?
   
