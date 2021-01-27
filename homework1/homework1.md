@@ -84,3 +84,4 @@ Problem3 {
 ```
 
 ## 4.
+![Abstract Syntax Tree] (/problem4.jpg)
