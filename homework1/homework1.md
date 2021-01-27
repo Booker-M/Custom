@@ -32,11 +32,11 @@ The negation operator, `-`, was given lower precedence than the multiplication o
 ### g.
 
 ## 3.
-NOT WORKING AND NOT FINISHED
+STRING LITERALS BROKEN
 ```
 Problem3 {
-  Program   = Function* Exp1
-  Function = "func" name "(" (param ("," param)*)? ")" Body
+  Program   = Fundec* Exp1
+  Fundec = "func" name "(" (param ("," param)*)? ")" Body
   Body = Exp1 (";" Exp1)* "end"
   Exp1 = Exp2 "if" Exp2 "else" Exp2 --conditional
   			| Exp2
@@ -50,14 +50,17 @@ Problem3 {
   			| "(" Exp1 ")" --parens
   Factor = Call
   			| id
-            | num
-            | str
+            | numlit
+            | stringlit
   Call = id "[" (Exp1 ("," Exp1)*)? "]"
 
   name = id
   param = id
-  num       = digit+ ("." digit+)? ("E" digit+)?
-  str       = id //String literals delimited with double quotes with the escape sequences \', \", \n, \\, and \u{hhhhhh} where xxxxxx is a sequence of one-to-six hexadecimal digits.
+  numlit       = digit+ ("." digit+)? ("E" digit+)?
+  stringlit       = "\"" char* "\"" //String literals delimited with double quotes with the escape sequences \', \", \n, \\, and \u{hhhhhh} where xxxxxx is a sequence of one-to-six hexadecimal digits.
+  char = escape | any
+  escape = "\\\'" | "\\\"" | "\\\\" | "\\n" | "\\u{\hex\hex\hex\hex\hex\hex}"
+  hex = digit | "A" | "a" | "B" | "b" | "C" | "c" | "D" | "d" | "E" | "e" | "F" | "f"
   let       = "let" ~alnum
   print     = "print" ~alnum
   abs       = "abs" ~alnum
