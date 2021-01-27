@@ -6,20 +6,22 @@ https://github.com/Booker-M/ael-ohm
 
 ## 2.
 ### a.
-The grammar rule for `"and"` and `"or"` makes it impossible to check for `"or"` in Ohm. Ohm will first encounter `Exp1` in the code and then start checking for the left-most rule that begins with `Exp1`. Ohm will always check for `("and" Exp1)*` following `Exp1` and never check for an `("or" Exp1)*`. Due to this issue, `"and"` takes absolute precedence (because `"or"` does not function).
+The grammar rule `Exp = Exp1 ("and" Exp1)* | Exp1 ("or" Exp1)*` for `"and"` and `"or"` makes it impossible to check for `"or"` in Ohm. Ohm will first encounter `Exp1` in the code and then start checking for the left-most rule that begins with `Exp1`. Ohm will always check for `("and" Exp1)*` following `Exp1` and never check for an `("or" Exp1)*`. Due to this issue, `"and"` takes absolute precedence (because `"or"` does not function).
 
-If the intention is for them to have equal precedence then it should be:
-```Exp = Exp1 (("or" | "and") Exp1)*```
+If the code was:
+```
+Exp = Exp1 ("and" Exp1)+    --and
+  | Exp1 ("or" Exp1)+   --or
+  | Exp1
+```
+then `and` and `or` would have equal precedence.
 
 ### b.
-The expression `X and Y or Z` is not possible. The tree would parse into `Exp1 ("and" Exp1)*`. So, an expression starting with `Exp1 "and" Exp1` could continue being followed by infinitely more `"and" Exp1`, but it will never be able to include an `"or"`. Ignoring the issue discussed in part a. and supposing `Exp1 ("and" Exp1)*` and `Exp1 ("or" Exp1)*` had equal precedence, an expression that began with `X or Y` would then only be able to be followed by more `"or" Exp1`. Again, changing the rule to `Exp = Exp1 (("or" | "and") Exp1)*` would allow `and` and `or` to be combined in the same expression.
+The expression `X and Y or Z` is not possible. The tree would parse into `Exp1 ("and" Exp1)*`. So, an expression starting with `Exp1 "and" Exp1` could continue being followed by infinitely more `"and" Exp1`, but it will never be able to include an `"or"`. Ignoring the issue discussed in part **a.** and supposing `Exp1 ("and" Exp1)+` and `Exp1 ("or" Exp1)+` had equal precedence, an expression that began with `X or Y` would then only be able to be followed by more `"or" Exp1`. Changing the rule to `Exp = Exp1 (("or" | "and") Exp1)*` would allow `and` and `or` to be combined in the same expression.
 
 ### c.
-IS IT NON-ASSOCIATIVE SINCE Exp1 only parses into Exp2 and Exp2 only parses into Exp??????
-The additive and relational operators are both **non-associative**. Exp2 does not have Exp2 on the right side of the equation nor does Exp3 have Exp3 on the right side of the equation.
-
-OR IS IT "I CAN'T TELL" since it uses (relop Exp2)? and (addop Exp3)*??????
-The associativity of the additive operator "cannot be told" because it uses the syntax `Exp3 (addop Exp3)*`.
+The associativity of the additive operators "cannot be told" because they use the syntax `Exp3 (addop Exp3)*`. This could parse either left or right.  
+The relational operators use the syntax `Exp2 (relop Exp2)?`. This is equivalent to `Exp2 relop Exp2 | Exp2`, thus the relational operators are non-associative.  
 
 ### d.
 The `not` operator is not right associative because it is located in rule `Exp4` but forms the expression `"not" Exp5`. Ohm parses into `Exp5` which must lead into something else, such as identifiers and numbers, instead of allowing more `"not" Exp5` to recurse on the right. Thus, the `not` operator is non-associative.
