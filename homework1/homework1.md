@@ -84,4 +84,4 @@ Problem3 {
 ```
 
 ## 4.
-<img src="/homework1/problem4.jpeg" width="500">
+<img src="/homework1/problem4.jpg" width="500">
