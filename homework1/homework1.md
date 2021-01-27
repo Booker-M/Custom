@@ -55,29 +55,29 @@ Problem3 {
   Fundec = "func" name "(" (param ("," param)*)? ")" Body
   Body = Exp1 (";" Exp1)* "end"
   Exp1 = Exp2 "if" Exp2 "else" Exp2		--conditional
-  			| Exp2
+      | Exp2
   Exp2 = Exp2 ("+" | "-") Exp3		--additive
-            | Exp3
+      | Exp3
   Exp3 = Exp3 ("*"| "/") Exp4		--multiplicative
-            | Exp4
+      | Exp4
   Exp4 = "-"? Exp5
   Exp5 = Exp6 "!"?
   Exp6 = Factor
-  			| "(" Exp1 ")"		--parens
+      | "(" Exp1 ")"		--parens
   Factor = Call
-  			| id
-            | numlit
-            | stringlit
+      | id
+      | numlit
+      | stringlit
   Call = id "[" (Exp1 ("," Exp1)*)? "]"
 
   name		= id
   param		= id
-  numlit		= digit+ ("." digit+)? ("E" digit+)?
-  stringlit		= "\"" char* "\""
+  numlit	= digit+ ("." digit+)? ("E" digit+)?
+  stringlit	= "\"" char* "\""
   char		= escape | ~"\"" any
-  escape		= "\\\'" | "\\\"" | "\\\\" | "\\n" | "\\u{" hex hex hex hex hex hex "}" --escape
+  escape	= "\\\'" | "\\\"" | "\\\\" | "\\n" | "\\u{" hex hex hex hex hex hex "}" --escape
   hex		= digit | "A" | "a" | "B" | "b" | "C" | "c" | "D" | "d" | "E" | "e" | "F" | "f"
-  reserved		= "func" | "if" | "else" | "end"
+  reserved	= "func" | "if" | "else" | "end"
   id		= ~reserved (letter | "@") (alnum | "_" | "@" | "$")*
   space		+= "--" any* end  --comment
 }
