@@ -6,7 +6,7 @@
 import ohm from "ohm-js"
 import * as ast from "./ast.js"
 
-const aelGrammar = ohm.grammar(String.raw`Custom {
+const customGrammar = ohm.grammar(String.raw`Custom {
   Program       =  Block
   Block         =  "{" Statement+ "}"
   Statement          =  Decl | FuncDec | Exp | Print | FuncCall | Return
@@ -83,7 +83,7 @@ const aelGrammar = ohm.grammar(String.raw`Custom {
   comment       =  "##" (~"\n" any)*
 }`)
 
-const astBuilder = aelGrammar.createSemantics().addOperation("ast", {
+const astBuilder = customGrammar.createSemantics().addOperation("ast", {
   Program(body) {
     return new ast.Program(body.ast())
   },
@@ -120,7 +120,7 @@ const astBuilder = aelGrammar.createSemantics().addOperation("ast", {
 })
 
 export default function parse(sourceCode) {
-  const match = aelGrammar.match(sourceCode)
+  const match = customGrammar.match(sourceCode)
   if (!match.succeeded()) {
     throw new Error(match.message)
   }
