@@ -8,31 +8,29 @@ import * as ast from "./ast.js"
 
 const customGrammar = ohm.grammar(String.raw`Custom {
   Program       =  Block
-  Block         =  "{" Statement+ "}"
-  Statement          =  Decl | FuncDec | Exp | Print | FuncCall | Return
-                |  "if" Exp Block
+  Block         =  Statement+
+  Statement          =  (FuncCall | Decl | Assignment | FuncDec | Exp | Print  | Return) (";")? --declarative
+                |  "if" "(" Exp ")" "{" Block "}"
                    ("else if" Exp Block)*
                    ("else" Block)?                             -- if
 
-  Decl          =  Type id "=" BinExp                    -- decl
+  Decl          =  Type Assignment                -- decl
+  Assignment = id "=" Exp
 
-  FuncDec       =  Type id Params "{" Body "}"
+  FuncDec       =  Type id Params "{" Block* "}"
 
-  Type          =  "string" | "int" | "bool" | "char" | "float"
+  Type          =  "string" | "int" | "bool" | "char" | "float" 
+  						| "<" Type "," Type ">" 					--tuple
 
   FuncCall      =  id "(" Args ")"
-  Arg           =  (id)?
-  Args          =  ListOf<Arg, ",">
+  Args          =  (BinExp ("," BinExp)*)?
 
   Params        =  "(" (Param ("," Param)*)* ")"
-  Param         =  id
+  Param         =  Type id 
 
-  Body          =  ":" Block ";;"
 
-  Exp           =  Exp relop MatchExp                         -- binary
-                |  MatchExp "?" MatchExp ":" MatchExp         -- ternary
-                |  MatchExp
-  MatchExp      =  "match" id "with" Matches                  -- matchexp
+  Exp           =  Exp relop BinExp                         -- binary
+                |  BinExp "?" BinExp ":" BinExp         -- ternary
                 |  BinExp
   BinExp        =  BinExp binop AddExp                        -- binary
                 |  AddExp
@@ -44,27 +42,24 @@ const customGrammar = ohm.grammar(String.raw`Custom {
                 |  ExpoExp
   ExpoExp       =  ParenExp expop ExpoExp                     -- binary
                 |  ParenExp
-  ParenExp      =  "(" AddExp ")"                             -- parens
+  ParenExp      =  "(" Exp ")"                             -- parens
                 |  numlit
-                |  Tuplit
-                |  List
+                |  Tuple
+                |  Array
                 |  stringlit
                 |  charlit
+                | id
 
-  Matches       =  ("|" Exp "->" Exp)+
-
-  keyword       =  ("if" | "else" | "with" | "in" | "bool" | "int" | "string"
-                |  "double" | "float" | "long" | "list" | "hump" | "tuplit" | "spit") ~idrest
+  keyword       =  ("if" | "else"  | "bool" | "int" | "string"
+                |  "double" | "float" | "long" | "array" | "return" | "print")
 
   prefixop      =  ~"--" "not" | "!" | "-"                    -- prefix
-
-  id            =  ~keyword letter idrest*
-  Tuplit        =  "(" BinExp "," BinExp ")"
-  List          =  "[" BinExp ("," BinExp)* "]"               -- list
-                | "[]"
-  Print         =  "spit" "(" BinExp ")"                      -- print
-  Return        =  "hump" ParenExp
-  idrest        =  "_" | alnum | "@" | "$"
+  
+  id            =  ~keyword letter (alnum)*
+  Tuple        =  "(" BinExp "," BinExp ")"
+  Array          =  "[" (BinExp ("," BinExp)*)? "]"               -- array
+  Print         =  "print" "(" Exp ")"                      -- print
+  Return        =  "return" ParenExp
   relop         =  ">" | ">=" | "==" | "!=" | "<" | "<="
   addop         =  "+" | "-" | "::"
   mullop        =  "*" | "/" | "%"
@@ -78,9 +73,11 @@ const customGrammar = ohm.grammar(String.raw`Custom {
                 |  "\\u{" hexDigit+ "}"                       -- codepoint
   charlit       =  "'" (char | "\"") "'"
   stringlit     =  "\"" (char | "\'")* "\""
+  						| "\'" (char | "\"")* "\'"
 
-  space        := " " | "\t" | "\n" | "\r" | comment
-  comment       =  "##" (~"\n" any)*
+  space        := " " | "\t" | "\n" | comment
+  comment       =  "//" (~"\n" any)* --singleline
+  						| "/*" (~("*/") any )* "*/"		--multiline
 }`)
 
 const astBuilder = customGrammar.createSemantics().addOperation("ast", {
