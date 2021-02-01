@@ -6,21 +6,25 @@
 import ohm from "ohm-js"
 import * as ast from "./ast.js"
 
-const customGrammar = ohm.grammar(String.raw`Custom {
+const aelGrammar = ohm.grammar(String.raw`Custom {
   Program       =  Block
   Block         =  Statement+
-  Statement          =  (FuncCall | Decl | Assignment | FuncDec | Exp | Print  | Return) (";")? --declarative
+  Statement          =  (Loop | FuncCall | Decl | Assignment | FuncDec | Exp | Print  | Return) (";")? --declarative
                 |  "if" "(" Exp ")" "{" Block "}"
                    ("else if" Exp Block)*
                    ("else" Block)?                             -- if
 
   Decl          =  Type Assignment                -- decl
-  Assignment = id "=" Exp
+  Assignment = id "=" Exp						-- assign
+  						| id "++"							-- increment
+                        | id "--"								-- decrement
+  Loop 			= "while" "(" Exp ")" "{" Block* "}" --while
+						| "for" "("Decl ";" Exp ";" Assignment  ")" "{" Block* "}" --for
 
   FuncDec       =  Type id Params "{" Block* "}"
 
   Type          =  "string" | "int" | "bool" | "char" | "float" 
-  						| "<" Type "," Type ">" 					--tuple
+  						| "<" Type "," Type ">" 					-- tuple
 
   FuncCall      =  id "(" Args ")"
   Args          =  (BinExp ("," BinExp)*)?
@@ -80,7 +84,7 @@ const customGrammar = ohm.grammar(String.raw`Custom {
   						| "/*" (~("*/") any )* "*/"		--multiline
 }`)
 
-const astBuilder = customGrammar.createSemantics().addOperation("ast", {
+const astBuilder = aelGrammar.createSemantics().addOperation("ast", {
   Program(body) {
     return new ast.Program(body.ast())
   },
@@ -117,7 +121,7 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
 })
 
 export default function parse(sourceCode) {
-  const match = customGrammar.match(sourceCode)
+  const match = aelGrammar.match(sourceCode)
   if (!match.succeeded()) {
     throw new Error(match.message)
   }
