@@ -165,10 +165,10 @@ export default function isLegal(sourceCode) {
   return match.succeeded()
 }
 
-export default function parse(sourceCode) {
-  const match = customGrammar.match(sourceCode)
-  if (!match.succeeded()) {
-    throw new Error(match.message)
-  }
-  return astBuilder(match).ast()
-}
+// export default function parse(sourceCode) {
+//   const match = customGrammar.match(sourceCode)
+//   if (!match.succeeded()) {
+//     throw new Error(match.message)
+//   }
+//   return astBuilder(match).ast()
+// }
