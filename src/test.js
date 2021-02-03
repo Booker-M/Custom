@@ -14,10 +14,7 @@ int main(int argc, char  argv){
     }
     return 1;
 }
-
-
 `
-
 
 console.log(util.format(parse(source)))
 

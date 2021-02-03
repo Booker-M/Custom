@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "description": "Compiler for Custom.",
   "main": "custom.js",
-  "directories": {
-    "test": "test"
-  },
+  "type": "module",
   "scripts": {
     "test": "c8 node_modules/.bin/mocha"
   },

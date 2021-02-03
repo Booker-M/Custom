@@ -171,7 +171,6 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
 })
 
 
-
 export default function parse(sourceCode) {
   const match = customGrammar.match(sourceCode)
   if (!match.succeeded()) {
