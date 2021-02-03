@@ -92,29 +92,29 @@ export class Literal {
   }
 }
 
-export class Parameters{
-  constructor(params){
-    Object.assign(this, {params})
-  }
-}
+// export class Parameters{
+//   constructor(params){
+//     Object.assign(this, {params})
+//   }
+// }
 
-export class Parameter{
-  constructor(type, id){
-    Object.assign(this, {type, id})
-  }
-}
+// export class Parameter{
+//   constructor(type, id){
+//     Object.assign(this, {type, id})
+//   }
+// }
 
-export class NonemptyListOf{
-  constructor(first, ...rest){
-    Object.assign(this, {first, ...rest})
-  }
-}
+// export class NonemptyListOf{
+//   constructor(first, ...rest){
+//     Object.assign(this, {first, ...rest})
+//   }
+// }
 
-export class EmptyListOf{
-  constructor(list){
-    Object.assign(this, {list} )
-  }
-}
+// export class EmptyListOf{
+//   constructor(list){
+//     Object.assign(this, {list} )
+//   }
+// }
 
 /*
 Gracias a Profesor Toal for the following :)
