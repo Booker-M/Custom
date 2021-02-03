@@ -3,9 +3,16 @@ import util from "util"
 import parse from "../src/parser.js"
 
 const source =
-`int main(int argc){
+`int main(int argc, char  argv){
   print("hello");
-  return 0;
+  if(x < y){
+      print("YOOO");
+      print('please work')
+  }
+  else {
+      print('cry')
+  }
+  return 1;
 }`
 
 const expectedAst = `   1 | program: Program

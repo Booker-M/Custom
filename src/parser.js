@@ -82,8 +82,8 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
     return new ast.StatementIfElse(ifExpression.ast(), _ifBlock.ast(), elseIfExpression.ast(),
       elseIfBlocks.ast(), elseBlock.ast());
   },
-  // Array(?){
-  // ?????
+  // Array(){
+  // 
   // }
   Loop_while(_1, _2, exp, _3, _4, block, _5) {
     return new ast.WhileLoop(exp.ast(), block.ast())
@@ -159,6 +159,11 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
     return [];
   },
 })
+
+export default function isLegal(sourceCode) {
+  const match = customGrammar.match(sourceCode)
+  return match.succeeded()
+}
 
 export default function parse(sourceCode) {
   const match = customGrammar.match(sourceCode)
