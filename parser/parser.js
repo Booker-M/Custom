@@ -4,9 +4,9 @@
 // as a string and returns the AST.
 
 import ohm from "ohm-js"
-import * as ast from "./ast.js"
-import { Literal } from "./ast.js"
-import Custom from "./customGrammar.js"
+import * as ast from "../ast/ast.js"
+import { Literal } from "../ast/ast.js"
+import Custom from "../grammar/customGrammar.js"
 
 const customGrammar = ohm.grammar(Custom)
 

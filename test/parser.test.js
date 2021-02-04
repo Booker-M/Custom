@@ -1,6 +1,6 @@
 import assert from "assert"
 import util from "util"
-import isLegal from "../src/parser.js"
+import isLegal from "../parser/parser.js"
 
 const correctExamples = {
   "Main function" : 

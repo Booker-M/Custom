@@ -1,7 +1,7 @@
 
 import fs from 'fs'
 
-const languageConfig = JSON.parse(fs.readFileSync('./src/customLangConfig.json', 'utf8'))
+const languageConfig = JSON.parse(fs.readFileSync('./config/customConfig.json', 'utf8'))
 
 
 const Custom = `
