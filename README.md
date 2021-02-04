@@ -12,18 +12,27 @@ After the tragic loss of the Custom Hotel, we wanted to dedicate our customizabl
 -Setting a keyword to "Juno" causes a compile error ("Hotel Juno" is the disappointing successor to the "Custom Hotel")  
 
 ### Default Types and Keywords
-**Types:** `"string", "int", "bool", "char", "float"`  
-**Keywords:** `"if", "else", "array", "return", "print"`  
+**Types:** ` "string", "char", "bool", "int", "float"`  
+**Keywords:** `"if", "else", "return", "print"`  
 Change them to whatever you desire!  
 
 ### Variable Declaration and Assignment
 
 | Default | Custom |
-| - | - |
+| --- | --- |
+| `int x = 1` | `decimalBegone x = 1` |
 
 ### Operators
-| Default | Custom |
-| - | - |
+In order of lowest to highest precedence:  
+| Operator | Example |
+| --- | --- |
+| ">" \| ">=" \| "==" \| "!=" \| "<" \| "<=" | `return x < y` |
+| "\|\|" \| "&&" | `return(true && false)` |
+| "+" \| "-" | `int x = 4 + 20` |
+|  "\*" \| "/" \| "%" | `float x = 6 % 9` |
+| "!" | `return(!true)`|
+| "-" | `int x = -1` |
+| "^" | `float y = 1^100`|
 
 ### Comments
 ```
