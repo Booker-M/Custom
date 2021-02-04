@@ -1,0 +1,16 @@
+{
+    "name": "english",
+    "se": "if",
+    "alia": "else",
+    "por": "for",
+    "dum": "while",
+    "pres": "print",
+    "reveno": "return",
+    "vera": "true",
+    "falsa": "false",
+    "snuro": "string",
+    "karaktero": "char",
+    "integralo": "int",
+    "flos": "float",
+    "boolea": "bool"
+}
