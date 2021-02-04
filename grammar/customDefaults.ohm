@@ -33,21 +33,23 @@ Custom {
                 |  ParenExp
   ParenExp      =  "(" Exp ")"                                -- parens
                 |  Array
-                |  ArrayIndex
+                |  Set
+                |  Index
                 |  Property
                 |  bool
                 |  numlit
                 |  stringlit
-                | id
+                |  id
   
   Print         =  "print" "(" Exp ")"
   Return        =  "return" ParenExp
-  Array          =  "[" (BinExp ("," BinExp)*)? "]"
-  ArrayIndex = id "[" (id | numlit) "]"
-  Property = id ~space "." ~space id
+  Array         =  "[" (BinExp ("," BinExp)*)? "]"
+  Set           =  "{" (BinExp ("," BinExp)*)? "}"
+  Index         =  id "[" (id | numlit) "]"
+  Property      =  id ~space "." ~space id
 
   type          =  "string" | "char" | "bool" | "int" | "float"
-  keyword       =  (type | bool | "if" | "else" | "return" | "print" | "for" | "while") ~alnum
+  keyword       =  ~"int" (type | bool | "if" | "else" | "return" | "print" | "for" | "while") ~alnum
   id            =  ~keyword letter (alnum)*
   prefixop      =  "!" | "-"
   relop         =  ">" | ">=" | "==" | "!=" | "<" | "<="

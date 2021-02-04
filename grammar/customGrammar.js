@@ -40,18 +40,20 @@ Custom {
                   |  ParenExp
     ParenExp      =  "(" Exp ")"                                -- parens
                   |  Array
-                  |  ArrayIndex
-                  | Property
+                  |  Set
+                  |  Index
+                  |  Property
                   |  bool
                   |  numlit
                   |  stringlit
-                  | id
+                  |  id
     
     Print         =  "${languageConfig.print}" "(" Exp ")"
     Return        =  "${languageConfig.return}" ParenExp
-    Array          =  "[" (BinExp ("," BinExp)*)? "]"
-    ArrayIndex = id "[" (id | numlit) "]"
-    Property = id ~space "." ~space id
+    Array         =  "[" (BinExp ("," BinExp)*)? "]"
+    Set           =  "{" (BinExp ("," BinExp)*)? "}"
+    Index         =  id "[" (id | numlit) "]"
+    Property      =  id ~space "." ~space id
   
     type          =  "${languageConfig.string}" | "${languageConfig.char}" | "${languageConfig.bool}" | "${languageConfig.int}" | "${languageConfig.float}"
     keyword       =  (type | bool | "${languageConfig.if}" | "${languageConfig.else}" | "${languageConfig.return}" | "${languageConfig.print} | ${languageConfig.for} | ${languageConfig.while}") ~alnum
@@ -69,9 +71,9 @@ Custom {
     char          =  escape
                   |  ~"\\\\" ~"\\"" ~"\\'" ~"\\\\n" any
     escape        = "\\\\\\\\" | "\\\\\\"" | "\\\\'" | "\\\\n" | "\\\\t"
-                  |  "\\\\u{" hexDigit+ "}"                       -- codepoint
+                  |  "\\\\u{" hexDigit+ "}"                     -- codepoint
     space         := " " | "\\t" | "\\n" | comment
-    comment       =  "//" (~"\\n" any)*                          --singleline
+    comment       =  "//" (~"\\n" any)*                         --singleline
                   | "/*" (~("*/") any )* "*/"                   --multiline
 }`
 
