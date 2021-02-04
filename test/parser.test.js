@@ -24,6 +24,10 @@ const correctExamples = {
 `int x = [1,2,3]`,
 "id can start with a keyword as long as more characters follow" : 
 `bool x = iffy`,
+"Array indexing" : 
+`string x = Dogs[i]`,
+"Object properties" : 
+`string y = Person.name`,
 }
 
 const incorrectExamples = {

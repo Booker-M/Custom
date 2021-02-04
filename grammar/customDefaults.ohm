@@ -33,6 +33,8 @@ Custom {
                 |  ParenExp
   ParenExp      =  "(" Exp ")"                                -- parens
                 |  Array
+                |  ArrayIndex
+                |  Property
                 |  bool
                 |  numlit
                 |  stringlit
@@ -41,6 +43,8 @@ Custom {
   Print         =  "print" "(" Exp ")"
   Return        =  "return" ParenExp
   Array          =  "[" (BinExp ("," BinExp)*)? "]"
+  ArrayIndex = id "[" (id | numlit) "]"
+  Property = id ~space "." ~space id
 
   type          =  "string" | "char" | "bool" | "int" | "float"
   keyword       =  (type | bool | "if" | "else" | "return" | "print" | "for" | "while") ~alnum

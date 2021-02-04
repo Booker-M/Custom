@@ -40,6 +40,8 @@ Custom {
                   |  ParenExp
     ParenExp      =  "(" Exp ")"                                -- parens
                   |  Array
+                  |  ArrayIndex
+                  | Property
                   |  bool
                   |  numlit
                   |  stringlit
@@ -48,6 +50,8 @@ Custom {
     Print         =  "${languageConfig.print}" "(" Exp ")"
     Return        =  "${languageConfig.return}" ParenExp
     Array          =  "[" (BinExp ("," BinExp)*)? "]"
+    ArrayIndex = id "[" (id | numlit) "]"
+    Property = id ~space "." ~space id
   
     type          =  "${languageConfig.string}" | "${languageConfig.char}" | "${languageConfig.bool}" | "${languageConfig.int}" | "${languageConfig.float}"
     keyword       =  (type | bool | "${languageConfig.if}" | "${languageConfig.else}" | "${languageConfig.return}" | "${languageConfig.print} | ${languageConfig.for} | ${languageConfig.while}") ~alnum
