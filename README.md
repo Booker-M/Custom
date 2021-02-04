@@ -7,8 +7,8 @@ After the tragic loss of the Custom Hotel, we wanted to dedicate our customizabl
 
 ## Features
 -Statically-typed, object-oriented programming language  
--Every keyword comes from a JSON file that the user can customize  
--Data structures such as arrays  
+-Every keyword can be *customized* in the `custom/customConfig.json` file  
+-Data structures such as arrays and sets  
 -Setting a keyword to "Juno" causes a compile error ("Hotel Juno" is the inferior successor to "Custom Hotel")  
 
 ### Default Types and Keywords
