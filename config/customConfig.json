@@ -1,15 +1,15 @@
 {
-    "if": "if",
-    "else": "else",
-    "for": "for",
-    "while": "while",
-    "print": "print",
-    "return": "return",
-    "true": "true",
-    "falsa": "false",
-    "string": "string",
-    "char": "char",
-    "int": "int",
-    "float": "float",
-    "bool": "bool"
+    "if": "maybe",
+    "else": "yolo",
+    "for": "fosho",
+    "while": "whileWhileWhile",
+    "print": "gimme",
+    "return": "sendIt",
+    "true": "facts",
+    "false": "nawMan",
+    "string": "letterz",
+    "char": "charizard",
+    "int": "decimalBegone",
+    "float": "floatYoBoat",
+    "bool": "boolin"
 }

@@ -1,53 +1,56 @@
 import assert from "assert"
 import util from "util"
 import isLegal from "../parser/parser.js"
+import fs from 'fs'
+
+const languageConfig = JSON.parse(fs.readFileSync('./config/customConfig.json', 'utf8'))
 
 const correctExamples = {
   "English Example" : 
-  `string breeds = ["cat", "armadillo", "dog", "snake"]
-  string names = ["Leslie", "Ben","Andy","April"]
+  `${languageConfig.string} breeds = ["cat", "armadillo", "dog", "snake"]
+  ${languageConfig.string} names = ["Leslie", "Ben","Andy","April"]
   
-  for (int i=0; i < breeds.size; i++) {
-    print (names[i] + " is a " + breeds[i] + "!");
+  ${languageConfig.for} (${languageConfig.int} i=0; i < breeds.size; i++) {
+    ${languageConfig.print} (names[i] + " is a " + breeds[i] + "!");
   }`,
 
-  "If Else" : 
-`int main(int argc, char  argv){
-  print("hello");
-  if(x < y) {
-      print('please work')
+  "${languageConfig.if} ${languageConfig.else}" : 
+`${languageConfig.int} main(${languageConfig.int} argc, ${languageConfig.char}  argv){
+  ${languageConfig.print}("hello");
+  ${languageConfig.if}(x < y) {
+      ${languageConfig.print}('please work')
   }
-  else {
-      print('cry')
+  ${languageConfig.else} {
+      ${languageConfig.print}('cry')
   }
-  return 1;
+  ${languageConfig.return} 1;
 }`,
 
 "Operators" : 
 `x = -1 - 3 * 2 % 3 ^ 10;`,
 
 "Ternary Operator" : 
-`float x = (x == y) ? 0 : 1;`,
+`${languageConfig.float} x = (x == y) ? 0 : 1;`,
 
-"For Loop" : 
-`for (int i = 0; i < 10; i++) { print(i); }`,
+"${languageConfig.for} Loop" : 
+`${languageConfig.for} (${languageConfig.int} i = 0; i < 10; i++) { ${languageConfig.print}(i); }`,
 
 "Declaration" : 
-`int x = [1,2,3]`,
+`${languageConfig.int} x = [1,2,3]`,
 
 "id can start with a keyword as long as more characters follow" : 
-`bool x = iffy`,
+`${languageConfig.bool} x = ${languageConfig.if}fy`,
 
 "Array indexing" : 
-`string x = Dogs[i]`,
+`${languageConfig.string} x = Dogs[i]`,
 
 "Object properties" : 
-`string y = Person.name`,
+`${languageConfig.string} y = Person.name`,
 }
 
 const incorrectExamples = {
   "id CANNOT be a keyword" : 
-  'let x = if',
+  `let x = ${languageConfig.if}`,
 }
 
 describe("Checking parsing on correct code", () => {
