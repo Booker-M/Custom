@@ -3,7 +3,15 @@ import util from "util"
 import isLegal from "../parser/parser.js"
 
 const correctExamples = {
-  "Main function" : 
+  "English Example" : 
+  `string breeds = ["cat", "armadillo", "dog", "snake"]
+  string names = ["Leslie", "Ben","Andy","April"]
+  
+  for (int i=0; i < breeds.size; i++) {
+    print (names[i] + " is a " + breeds[i] + "!");
+  }`,
+
+  "If Else" : 
 `int main(int argc, char  argv){
   print("hello");
   if(x < y) {
@@ -14,18 +22,25 @@ const correctExamples = {
   }
   return 1;
 }`,
+
 "Operators" : 
 `x = -1 - 3 * 2 % 3 ^ 10;`,
+
 "Ternary Operator" : 
 `float x = (x == y) ? 0 : 1;`,
+
 "For Loop" : 
 `for (int i = 0; i < 10; i++) { print(i); }`,
+
 "Declaration" : 
 `int x = [1,2,3]`,
+
 "id can start with a keyword as long as more characters follow" : 
 `bool x = iffy`,
+
 "Array indexing" : 
 `string x = Dogs[i]`,
+
 "Object properties" : 
 `string y = Person.name`,
 }
