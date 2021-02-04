@@ -13,7 +13,7 @@ After the tragic loss of the Custom Hotel, we wanted to dedicate our customizabl
 
 ### Default Types and Keywords
 **Types:** ` "string", "char", "bool", "int", "float"`  
-**Keywords:** `"if", "else", "return", "print", "true", "false", "for", "while", "true", "false"`  
+**Keywords:** `"if", "else", "return", "print", "for", "while", "true", "false"`  
 Change them to whatever you desire!  
 
 ### Variable Declaration and Assignment
