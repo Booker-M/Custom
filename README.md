@@ -9,7 +9,7 @@ After the tragic loss of the Custom Hotel, we wanted to dedicate our customizabl
 -Statically-typed, object-oriented programming language  
 -Every keyword comes from a JSON file that the user can customize  
 -Data structures such as arrays  
--Setting a keyword to "Juno" causes a compile error ("Hotel Juno" is the disappointing successor to the "Custom Hotel")  
+-Setting a keyword to "Juno" causes a compile error ("Hotel Juno" is the inferior successor to "Custom Hotel")  
 
 ### Default Types and Keywords
 **Types:** ` "string", "char", "bool", "int", "float"`  
