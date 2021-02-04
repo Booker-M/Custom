@@ -36,7 +36,7 @@ In order of lowest to highest precedence:
 
 ### Comments
 ```
-`//this can say whatever you want!`
+//this can say whatever you want!
 ```
 ```
 /* this can
