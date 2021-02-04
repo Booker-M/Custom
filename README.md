@@ -49,25 +49,28 @@ you want! */
 ## Example Programs
 ### Program customized for English speakers:
 ```
-pets = {"Leslie":"cat", "Ben":"armadillo","Andy":"dog","April":"snake"}
+breeds = ["cat", "armadillo", "dog", "snake"}
+names = {"Leslie", "Ben","Andy,"April"}
 
-for pet,breed in pets {
-	print (pet + " is a " + breed + "!");
+for (int i=0; i < breeds.size; i++) {
+	print (names[i] + " is a " + breeds[i] + "!");
 }
 ```
 ### Program customized for Spanish speakers:
 ```
-mascotas = {"Leslie":"gata", "Ben":"armadillo","Andy":"perro","April":"serpiente"}
+razas = ["gata", "armadillo", "perro", "serpiente"}
+nombres = {"Leslie", "Ben","Andy,"April"}
 
-por cada mascota,raza en mascotas {
-	imprime (mascota + " es un/una " + raza + "!");
+por (ent i=0; i < razas.tamaño; i++) {
+	imprime (nombres[i] + " es un/una " + razas[i] + "!");
 }
 ```
 ### Program customized for French speakers:
 ```
-animaux = {"Leslie":"chat", "Ben":"tatou","Andy":"chien","April":"serpent"}
+races = ["chat", "tatou", "chien", "serpent"}
+noms = {"Leslie", "Ben","Andy,"April"}
 
-pour animal,race dans animaux {
-	imprimez (animal + " cette un/une " + race + "!");
+pour (ent i=0; i < race.dimension; i++) {
+	imprimez (noms[i] + " cette un/une " + races[i] + "!");
 }
 ```
