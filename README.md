@@ -69,6 +69,7 @@ you want! */
 ```
 let breeds = ["cat", "armadillo", "dog", "snake"]
 let names = ["Leslie", "Ben","Andy","April"]
+
 for (let i=0; i < breeds.length; i++) {
     console.log (names[i] + " is a " + breeds[i] + "!")
 }
