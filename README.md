@@ -12,12 +12,13 @@ After the tragic loss of the Custom Hotel, we wanted to dedicate our customizabl
 -Setting a keyword to "Juno" causes a compile error ("Hotel Juno" is the inferior successor to "Custom Hotel")  
 
 ### Default Types and Keywords
-**Types:** ` "string", "char", "bool", "int", "float"`  
-**Keywords:** `"if", "else", "return", "print", "for", "while", "true", "false"`  
+**Types:**  
+`"string", "char", "bool", "int", "float"`  
+**Keywords:**  
+`"if", "else", "return", "print", "for", "while", "true", "false"`  
 Change them to whatever you desire!  
 
 ### Variable Declaration and Assignment
-
 | Default | Custom |
 | --- | --- |
 | `int x = 1` | `decimalBegone x = 1` |
@@ -33,6 +34,60 @@ In order of lowest to highest precedence:
 | "!" | `return(!true)`|
 | "-" | `int x = -1` |
 | "^" | `float y = 1^100`|
+
+### Data Structures
+**Array:**  
+`float probabilities = [0.1, 0.4, 0.5]`  
+Arrays are fixed-length.  
+  
+**Set:**  
+`string cheese = {"brie", "cheddar", "mozzarella", "gouda"}`  
+Sets are dynamic-length.  
+
+### Loops
+**For Loop:**  
+<table>
+<tr><td>JavaScript</td><td>Custom</td></tr>
+<tr><td>
+
+```
+for (let i = 0; i < 10; i++) {
+    console.log(i)
+}
+```
+</td><td>
+
+```
+for (int i = 0; i < 10; i++) {
+    print(i);
+}
+```
+</td></tr>
+</table>
+
+**While Loop:**  
+<table>
+<tr><td>JavaScript</td><td>Custom</td></tr>
+<tr><td>
+
+```
+let i = 0;
+while (i < 10) {
+    console.log(i)
+    i++
+}
+```
+</td><td>
+
+```
+int i = 0;
+while (i < 10) {
+    print(i);
+    i++;
+}
+```
+</td></tr>
+</table>
 
 ### Comments
 ```
@@ -64,7 +119,7 @@ you want! */
 }
 ```
 
-## Example Programs
+## Example Program
 ### Original JavaScript program:
 ```
 let breeds = ["cat", "armadillo", "dog", "snake"]
