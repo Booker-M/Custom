@@ -103,19 +103,19 @@ you want! */
 ## Example Keyword Configuration
 ```
 {
-    "if": "se",
-    "else": "alia",
-    "for": "por",
-    "while": "dum",
-    "print": "pres",
-    "return": "reveno",
-    "true": "vera",
-    "false": "falsa",
-    "string": "snuro",
-    "char": "karaktero",
-    "int": "integralo",
-    "float": "flos",
-    "bool": "boolea"
+    "if": "maybe",
+    "else": "yolo",
+    "for": "fosho",
+    "while": "whileWhileWhile",
+    "print": "gimme",
+    "return": "sendIt",
+    "true": "facts",
+    "false": "nawMan",
+    "string": "letterz",
+    "char": "charizard",
+    "int": "decimalBegone",
+    "float": "floatYoBoat",
+    "bool": "boolin"
 }
 ```
 
