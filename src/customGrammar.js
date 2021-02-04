@@ -60,14 +60,14 @@ Custom {
     binop         =  "||" | "&&"
     bool          = "${languageConfig.vera}" | "${languageConfig.falsa}"
     numlit        =  digit+ ("." digit+)?
-    stringlit     =  "\"" (char | "\'")* "\""
-                  | "\'" (char | "\"")* "\'"
+    stringlit     =  "\\"" (char | "\\'")* "\\""
+                  | "\\'" (char | "\\"")* "\\'"
     char          =  escape
-                  |  ~"\\" ~"\"" ~"\'" ~"\\n" any
-    escape        = "\\\\" | "\\\"" | "\\'" | "\\n" | "\\t"
-                  |  "\\u{" hexDigit+ "}"                       -- codepoint
-    space         := " " | "\t" | "\n" | comment
-    comment       =  "//" (~"\n" any)*                          --singleline
+                  |  ~"\\\\" ~"\\"" ~"\\'" ~"\\\\n" any
+    escape        = "\\\\\\\\" | "\\\\\\"" | "\\\\'" | "\\\\n" | "\\\\t"
+                  |  "\\\\u{" hexDigit+ "}"                       -- codepoint
+    space         := " " | "\\t" | "\\n" | comment
+    comment       =  "//" (~"\\n" any)*                          --singleline
                   | "/*" (~("*/") any )* "*/"                   --multiline
 }`
 

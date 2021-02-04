@@ -3,12 +3,12 @@
 // Exports a single function called parse which accepts the source code
 // as a string and returns the AST.
 
-import fs from "fs"
 import ohm from "ohm-js"
 import * as ast from "./ast.js"
-import { Literal } from "./ast.js";
+import { Literal } from "./ast.js"
+import Custom from "./customGrammar.js"
 
-const customGrammar = ohm.grammar(fs.readFileSync("./src/custom.ohm"))
+const customGrammar = ohm.grammar(Custom)
 
 const astBuilder = customGrammar.createSemantics().addOperation("ast", {
   Program(block) { return new ast.Program(block.ast()); },
