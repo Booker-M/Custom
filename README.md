@@ -45,6 +45,24 @@ whatever
 you want! */
 ```
 
+## Example Keyword Configuration
+```
+{
+    "if": "se",
+    "else": "alia",
+    "for": "por",
+    "while": "dum",
+    "print": "pres",
+    "return": "reveno",
+    "true": "vera",
+    "false": "falsa",
+    "string": "snuro",
+    "char": "karaktero",
+    "int": "integralo",
+    "float": "flos",
+    "bool": "boolea"
+}
+```
 
 ## Example Programs
 ### Program customized for English speakers:
