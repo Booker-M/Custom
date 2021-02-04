@@ -11,6 +11,32 @@ After the tragic loss of the Custom Hotel, we wanted to dedicate our customizabl
 -Data structures such as arrays  
 -Setting a keyword to "Juno" causes a compile error ("Hotel Juno" is the disappointing successor to the "Custom Hotel")  
 
+### Default Types and Keywords
+**Types:** `"string", "int", "bool", "char", "float"`  
+**Keywords:** `"if", "else", "array", "return", "print"`  
+Change them to whatever you desire!  
+
+### Variable Declaration and Assignment
+
+| Default | Custom |
+| - | - |
+
+### Operators
+| Default | Custom |
+| - | - |
+
+### Comments
+```
+`//this can say whatever you want!`
+```
+```
+/* this can
+also say
+whatever
+you want! */
+```
+
+
 ## Example Programs
 ### Program customized for English speakers:
 ```
