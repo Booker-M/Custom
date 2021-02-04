@@ -1,7 +1,7 @@
 Custom {
-  Program       =  Block
+  Program       =  Block*
   Block         =  Statement+
-  Statement     =  (Loop | FunctionCall | Declaration | Assignment | FunctionDeclaration | Exp | Print  | Return) (";")?  --declarative
+  Statement     =  (Loop | FunctionCall | Declaration | Assignment | FunctionDeclaration | Print  | Return) (";")?  --declarative
                 | "if" "(" Exp ")" "{" Block "}"
                   ("else" "if" "(" Exp ")" "{" Block "}" )*
                   ("else" "{" Block "}")?                     -- if
@@ -33,6 +33,7 @@ Custom {
                 |  ParenExp
   ParenExp      =  "(" Exp ")"                                -- parens
                 |  Array
+                |  bool
                 |  numlit
                 |  stringlit
                 | id
@@ -41,16 +42,16 @@ Custom {
   Return        =  "return" ParenExp
   Array          =  "[" (BinExp ("," BinExp)*)? "]"
 
-  type          =  "string" | "int" | "bool" | "char" | "float"
-  keyword       =  type | "if" | "else" | "return" | "print"
-  id            =  keyword alnum+ --keywordPlus
-                | ~keyword letter (alnum)* --noKeyword
+  type          =  "string" | "char" | "bool" | "int" | "float"
+  keyword       =  (type | bool | "if" | "else" | "return" | "print") ~alnum
+  id            =  ~keyword letter (alnum)*
   prefixop      =  "!" | "-"
   relop         =  ">" | ">=" | "==" | "!=" | "<" | "<="
   addop         =  "+" | "-" 
   mullop        =  "*" | "/" | "%"
   expop         =  "^"
-  binop         =  "||" | "or" | "&&" | "and"
+  binop         =  "||" | "&&"
+  bool          = "true" | "false"
   numlit        =  digit+ ("." digit+)?
   stringlit     =  "\"" (char | "\'")* "\""
                 | "\'" (char | "\"")* "\'"

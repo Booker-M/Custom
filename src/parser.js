@@ -81,12 +81,10 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
   Return(_1, ParenExp){
     return ParenExp.ast()
   },
-  id_keywordPlus(_first, _rest) {
+  id(_first, _rest) {
     return new ast.IdentifierExpression(this.sourceString)
   },
-  id_noKeyword(_first, _rest) {
-    return new ast.IdentifierExpression(this.sourceString)
-  },
+
   numlit(_whole, _point, _fraction) {
     return Number(this.sourceString)
   },
