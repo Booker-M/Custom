@@ -70,7 +70,7 @@ por (ent i=0; i < razas.tamaño; i++) {
 races = ["chat", "tatou", "chien", "serpent"}
 noms = {"Leslie", "Ben","Andy,"April"}
 
-pour (ent i=0; i < race.dimension; i++) {
+pour (ent i=0; i < races.dimension; i++) {
 	imprimez (noms[i] + " cette un/une " + races[i] + "!");
 }
 ```
