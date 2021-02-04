@@ -67,8 +67,8 @@ you want! */
 ## Example Programs
 ### Program customized for English speakers:
 ```
-breeds = ["cat", "armadillo", "dog", "snake"}
-names = {"Leslie", "Ben","Andy,"April"}
+breeds = ["cat", "armadillo", "dog", "snake"]
+names = ["Leslie", "Ben","Andy","April"]
 
 for (int i=0; i < breeds.size; i++) {
 	print (names[i] + " is a " + breeds[i] + "!");
@@ -76,8 +76,8 @@ for (int i=0; i < breeds.size; i++) {
 ```
 ### Program customized for Spanish speakers:
 ```
-razas = ["gata", "armadillo", "perro", "serpiente"}
-nombres = {"Leslie", "Ben","Andy,"April"}
+razas = ["gata", "armadillo", "perro", "serpiente"]
+nombres = ["Leslie", "Ben","Andy,"April"]
 
 por (ent i=0; i < razas.tamaño; i++) {
 	imprime (nombres[i] + " es un/una " + razas[i] + "!");
@@ -85,8 +85,8 @@ por (ent i=0; i < razas.tamaño; i++) {
 ```
 ### Program customized for French speakers:
 ```
-races = ["chat", "tatou", "chien", "serpent"}
-noms = {"Leslie", "Ben","Andy,"April"}
+races = ["chat", "tatou", "chien", "serpent"]
+noms = ["Leslie", "Ben","Andy,"April"]
 
 pour (ent i=0; i < races.dimension; i++) {
 	imprimez (noms[i] + " cette un/une " + races[i] + "!");
