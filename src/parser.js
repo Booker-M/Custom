@@ -3,74 +3,12 @@
 // Exports a single function called parse which accepts the source code
 // as a string and returns the AST.
 
+import fs from "fs"
 import ohm from "ohm-js"
 import * as ast from "./ast.js"
 import { Literal } from "./ast.js";
 
-const customGrammar = ohm.grammar(String.raw`Custom {
-  Program       =  Block
-  Block         =  Statement+
-  Statement     =  (Loop | FunctionCall | Declaration | Assignment | FunctionDeclaration | Exp | Print  | Return) (";")?  --declarative
-                | "if" "(" Exp ")" "{" Block "}"
-                  ("else" "if" "(" Exp ")" "{" Block "}" )*
-                  ("else" "{" Block "}")?                     -- if
-  
-  Loop 			    = "while" "(" Exp ")" "{" Block* "}" --while
-                | "for" "(" Declaration ";" Exp ";" Assignment  ")" "{" Block* "}"  --for
-  FunctionCall  =  id "(" Args ")"
-  Declaration   =  type Assignment
-  Assignment    = id "=" Exp						                      -- assign
-                | id "++"							                        -- increment
-                | id "--"								                      -- decrement
-  FunctionDeclaration =  type id "(" ListOf<Param, ","> ")" "{" Block* "}"
-
-  Args          =  ListOf<BinExp, ",">
-  Param         =  type id 
-
-  Exp           =  Exp relop BinExp                           -- binary
-                |  BinExp "?" BinExp ":" BinExp               -- ternary
-                |  BinExp
-  BinExp        =  BinExp binop AddExp                        -- binary
-                |  AddExp
-  AddExp        =  AddExp addop MullExp                       -- binary
-                |  MullExp
-  MullExp       =  MullExp mullop PrefixExp                   -- binary
-                |  PrefixExp
-  PrefixExp     =  prefixop ExpoExp                           -- binary
-                |  ExpoExp
-  ExpoExp       =  ParenExp expop ExpoExp                     -- binary
-                |  ParenExp
-  ParenExp      =  "(" Exp ")"                                -- parens
-                |  numlit
-                |  Array
-                |  stringlit
-                | id
-  
-  Print         =  "print" "(" Exp ")"
-  Return        =  "return" ParenExp
-  Array          =  "[" (BinExp ("," BinExp)*)? "]"
-
-  type          =  "string" | "int" | "bool" | "char" | "float"
-  keyword       =  ("if" | "else"  | "bool" | "int" | "string"
-                |  "double" | "float" | "long" | "array" | "return" | "print")
-  id            =  ~keyword letter (alnum)*
-  prefixop      =  "!" | "-"
-  relop         =  ">" | ">=" | "==" | "!=" | "<" | "<="
-  addop         =  "+" | "-" 
-  mullop        =  "*" | "/" | "%"
-  expop         =  "^"
-  binop         =  "||" | "or" | "&&" | "and"
-  numlit        =  digit+ ("." digit+)?
-  stringlit     =  "\"" (char | "\'")* "\""
-                | "\'" (char | "\"")* "\'"
-  char          =  escape
-                |  ~"\\" ~"\"" ~"\'" ~"\\n" any
-  escape        = "\\\\" | "\\\"" | "\\'" | "\\n" | "\\t"
-                |  "\\u{" hexDigit+ "}"                       -- codepoint
-  space         := " " | "\t" | "\n" | comment
-  comment       =  "//" (~"\n" any)*                          --singleline
-                | "/*" (~("*/") any )* "*/"                   --multiline
-}`)
+const customGrammar = ohm.grammar(fs.readFileSync("./src/custom.ohm"))
 
 const astBuilder = customGrammar.createSemantics().addOperation("ast", {
   Program(block) { return new ast.Program(block.ast()); },
@@ -143,7 +81,10 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
   Return(_1, ParenExp){
     return ParenExp.ast()
   },
-  id(_first, _rest) {
+  id_keywordPlus(_first, _rest) {
+    return new ast.IdentifierExpression(this.sourceString)
+  },
+  id_noKeyword(_first, _rest) {
     return new ast.IdentifierExpression(this.sourceString)
   },
   numlit(_whole, _point, _fraction) {
