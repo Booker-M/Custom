@@ -9,12 +9,12 @@ Custom {
     Program       =  Block*
     Block         =  Statement+
     Statement     =  (Loop | FunctionCall | Declaration | Assignment | FunctionDeclaration | Print  | Return) (";")?  --declarative
-                  | "${languageConfig.se}" "(" Exp ")" "{" Block "}"
-                    ("${languageConfig.alia}" "${languageConfig.se}" "(" Exp ")" "{" Block "}" )*
-                    ("${languageConfig.alia}" "{" Block "}")?                     -- if
+                  | "${languageConfig.if}" "(" Exp ")" "{" Block "}"
+                    ("${languageConfig.else}" "${languageConfig.if}" "(" Exp ")" "{" Block "}" )*
+                    ("${languageConfig.else}" "{" Block "}")?                     -- if
     
-    Loop 			    = "${languageConfig.dum}" "(" Exp ")" "{" Block* "}" --while
-                  | "${languageConfig.por}" "(" Declaration ";" Exp ";" Assignment  ")" "{" Block* "}"  --for
+    Loop 			    = "${languageConfig.while}" "(" Exp ")" "{" Block* "}" --while
+                  | "${languageConfig.for}" "(" Declaration ";" Exp ";" Assignment  ")" "{" Block* "}"  --for
     FunctionCall  =  id "(" Args ")"
     Declaration   =  type Assignment
     Assignment    = id "=" Exp						                      -- assign
@@ -45,12 +45,12 @@ Custom {
                   |  stringlit
                   | id
     
-    Print         =  "${languageConfig.pres}" "(" Exp ")"
-    Return        =  "${languageConfig.reveno}" ParenExp
+    Print         =  "${languageConfig.print}" "(" Exp ")"
+    Return        =  "${languageConfig.return}" ParenExp
     Array          =  "[" (BinExp ("," BinExp)*)? "]"
   
-    type          =  "${languageConfig.snuro}" | "${languageConfig.karaktero}" | "${languageConfig.boolea}" | "${languageConfig.integralo}" | "${languageConfig.flos}"
-    keyword       =  (type | bool | "${languageConfig.se}" | "${languageConfig.alia}" | "${languageConfig.reveno}" | "${languageConfig.pres}") ~alnum
+    type          =  "${languageConfig.string}" | "${languageConfig.char}" | "${languageConfig.bool}" | "${languageConfig.int}" | "${languageConfig.float}"
+    keyword       =  (type | bool | "${languageConfig.if}" | "${languageConfig.else}" | "${languageConfig.return}" | "${languageConfig.print} | ${languageConfig.for} | ${languageConfig.while}") ~alnum
     id            =  ~keyword letter (alnum)*
     prefixop      =  "!" | "-"
     relop         =  ">" | ">=" | "==" | "!=" | "<" | "<="
@@ -58,7 +58,7 @@ Custom {
     mullop        =  "*" | "/" | "%"
     expop         =  "^"
     binop         =  "||" | "&&"
-    bool          = "${languageConfig.vera}" | "${languageConfig.falsa}"
+    bool          = "${languageConfig.true}" | "${languageConfig.false}"
     numlit        =  digit+ ("." digit+)?
     stringlit     =  "\\"" (char | "\\'")* "\\""
                   | "\\'" (char | "\\"")* "\\'"

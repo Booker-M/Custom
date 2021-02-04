@@ -43,7 +43,7 @@ Custom {
   Array          =  "[" (BinExp ("," BinExp)*)? "]"
 
   type          =  "string" | "char" | "bool" | "int" | "float"
-  keyword       =  (type | bool | "if" | "else" | "return" | "print") ~alnum
+  keyword       =  (type | bool | "if" | "else" | "return" | "print" | "for" | "while") ~alnum
   id            =  ~keyword letter (alnum)*
   prefixop      =  "!" | "-"
   relop         =  ">" | ">=" | "==" | "!=" | "<" | "<="
