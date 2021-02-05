@@ -11,7 +11,7 @@ Custom {
     Statement     =  (Loop | FunctionCall | Declaration | Assignment | FunctionDeclaration | Print  | Return) (";")?  --declarative
                   | "${languageConfig.if}" "(" Exp ")" "{" Block "}"
                     ("${languageConfig.else}" "${languageConfig.if}" "(" Exp ")" "{" Block "}" )*
-                    ("${languageConfig.else}" "{" Block "}")?                     -- if
+                    ("${languageConfig.else}" "{" Block "}")?   -- if
     
     Loop 			    = "${languageConfig.while}" "(" Exp ")" "{" Block* "}" --while
                   | "${languageConfig.for}" "(" Declaration ";" Exp ";" Assignment  ")" "{" Block* "}"  --for
