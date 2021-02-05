@@ -8,7 +8,7 @@ After the tragic loss of the Custom Hotel, we wanted to dedicate our customizabl
 ## Features
 -Statically-typed, object-oriented programming language  
 -Every keyword can be *customized* in the `./custom/customConfig.json` file  
--Data structures such as arrays and sets  
+-Data structures such as arrays, sets, and dictionaries  
 -Setting a keyword to "Juno" causes a compile error ("Hotel Juno" is the inferior successor to "Custom Hotel")  
 
 ### Default Types and Keywords
@@ -42,7 +42,10 @@ Arrays are fixed-length.
   
 **Set:**  
 `string cheese = {"brie", "cheddar", "mozzarella", "gouda"}`  
-Sets are dynamic-length.  
+
+**Dictionary:**  
+`<string, int> playersAndScores = {"Anthony" : 1, "Steve" : -1, "Gerry" : 3}`  
+Sets and dictionaries are dynamic-length.  
 
 ### Loops
 **For Loop:**  
