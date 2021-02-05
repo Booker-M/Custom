@@ -32,8 +32,11 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
   FunctionCall(id, _1, args, _2){
     return new ast.FunctionCall(id.ast(), args.ast())
   },
-  Declaration(type, assignment) {
+  Declaration_arrayAndSet(type, assignment) {
     return new ast.Declaration(type.ast(), assignment.ast())
+  },
+  Declaration_dictionary(_1, type1, _2, type2, _3, assignment) {
+    return new ast.Declaration(type1.ast(), type2.ast(), assignment.ast())
   },
   Assignment_assign(id, _1, exp) {
     return new ast.Assignment(id.sourceString, exp.ast())

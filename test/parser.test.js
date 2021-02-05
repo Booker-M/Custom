@@ -46,6 +46,8 @@ const correctExamples = {
 
 "Object properties" : 
 `${languageConfig.string} y = Person.name`,
+"Dictionaries" : 
+`<${languageConfig.string}, ${languageConfig.int}> playersAndScores = {"Anthony" : 1, "Steve" : -1, "Gerry" : 3}`
 }
 
 const incorrectExamples = {

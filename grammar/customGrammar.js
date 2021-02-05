@@ -16,7 +16,8 @@ Custom {
     Loop 			    = "${languageConfig.while}" "(" Exp ")" "{" Block* "}" --while
                   | "${languageConfig.for}" "(" Declaration ";" Exp ";" Assignment  ")" "{" Block* "}"  --for
     FunctionCall  =  id "(" Args ")"
-    Declaration   =  type Assignment
+    Declaration   =  type Assignment                            --arrayAndSet
+                  | "<" type "," type ">" Assignment            --dictionary
     Assignment    = id "=" Exp						                      -- assign
                   | id "++"							                        -- increment
                   | id "--"								                      -- decrement
@@ -41,6 +42,7 @@ Custom {
     ParenExp      =  "(" Exp ")"                                -- parens
                   |  Array
                   |  Set
+                  |  Dict
                   |  Index
                   |  Property
                   |  bool
@@ -52,6 +54,7 @@ Custom {
     Return        =  "${languageConfig.return}" ParenExp
     Array         =  "[" (BinExp ("," BinExp)*)? "]"
     Set           =  "{" (BinExp ("," BinExp)*)? "}"
+    Dict          =  "{" (BinExp ":" BinExp ("," BinExp ":" BinExp)*)? "}"
     Index         =  id "[" (id | numlit) "]"
     Property      =  id ~space "." ~space id
   
