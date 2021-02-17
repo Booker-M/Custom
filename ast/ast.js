@@ -98,11 +98,11 @@ export class Literal {
 //   }
 // }
 
-// export class Parameter{
-//   constructor(type, id){
-//     Object.assign(this, {type, id})
-//   }
-// }
+export class Parameter {
+  constructor(type, id){
+    Object.assign(this, {type, id})
+  }
+}
 
 // export class NonemptyListOf{
 //   constructor(first, ...rest){

@@ -21,9 +21,10 @@ Custom {
     Assignment    = id "=" Exp						                      -- assign
                   | id "++"							                        -- increment
                   | id "--"								                      -- decrement
-    FunctionDeclaration =  type id "(" ListOf<Param, ","> ")" "{" Block* "}"
+    FunctionDeclaration =  type id "(" Params ")" "{" Block* "}"
   
     Args          =  ListOf<BinExp, ",">
+    Params        =  ListOf<Param, ",">
     Param         =  type id 
   
     Exp           =  Exp relop BinExp                           -- binary

@@ -11,8 +11,8 @@ import Custom from "../grammar/customGrammar.js"
 const customGrammar = ohm.grammar(Custom)
 
 const astBuilder = customGrammar.createSemantics().addOperation("ast", {
-  Program(block) { return new ast.Program(block.ast()); },
-  Block(statements) { return new ast.Block(statements.ast()); },
+  Program(block) { return new ast.Program(block.ast()) },
+  Block(statements) { return new ast.Block(statements.ast()) },
   Statement_declarative(statement, _1){
     return statement.ast()
   },
@@ -20,9 +20,6 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
     return new ast.StatementIfElse(ifExpression.ast(), _ifBlock.ast(), elseIfExpression.ast(),
       elseIfBlocks.ast(), elseBlock.ast());
   },
-  // Array(){
-  // 
-  // }
   Loop_while(_1, _2, exp, _3, _4, block, _5) {
     return new ast.WhileLoop(exp.ast(), block.ast())
   },
@@ -51,9 +48,9 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
   FunctionDeclaration(type, id, _1, params, _2, _3, block, _4) {
     return new ast.FunctionDeclaration(type.sourceString, id.ast(), params.ast(), block.ast())
   },
-  // Param(type, id){
-  //   return new ast.Parameter(type, id)
-  // },
+  Param(type, id){
+    return new ast.Parameter(type, id)
+  },
   Exp_binary(Exp, relop, BinExp){
     return new ast.BinaryExpression(relop.sourceString, Exp.ast(), BinExp.ast())
   },
@@ -84,10 +81,12 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
   Return(_1, ParenExp){
     return ParenExp.ast()
   },
+  // Array(){
+  // 
+  // }
   id(_first, _rest) {
     return new ast.IdentifierExpression(this.sourceString)
   },
-
   numlit(_whole, _point, _fraction) {
     return Number(this.sourceString)
   },
@@ -102,15 +101,15 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
   },
 })
 
-export default function isLegal(sourceCode) {
+export function isLegal(sourceCode) {
   const match = customGrammar.match(sourceCode)
   return match.succeeded()
 }
 
-// export default function parse(sourceCode) {
-//   const match = customGrammar.match(sourceCode)
-//   if (!match.succeeded()) {
-//     throw new Error(match.message)
-//   }
-//   return astBuilder(match).ast()
-// }
+export default function parse(sourceCode) {
+  const match = customGrammar.match(sourceCode)
+  if (!match.succeeded()) {
+    throw new Error(match.message)
+  }
+  return astBuilder(match).ast()
+}

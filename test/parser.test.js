@@ -1,6 +1,5 @@
 import assert from "assert"
-import util from "util"
-import isLegal from "../parser/parser.js"
+import parse, { isLegal } from "../parser/parser.js"
 import fs from 'fs'
 
 const languageConfig = JSON.parse(fs.readFileSync('./config/customConfig.json', 'utf8'))
@@ -72,6 +71,24 @@ describe("Checking parsing on incorrect code", () => {
     })
   }
 })
+
+// describe("Checking parsing on correct code", () => {
+//   for (const [example, code] of Object.entries(correctExamples)) {
+//     it(`${example}:\n\n${code}\n`, done => {
+//       assert.ok(parse(code))
+//       done()
+//     })
+//   }
+// })
+
+// describe("Checking parsing on incorrect code", () => {
+//   for (const [example, code] of Object.entries(incorrectExamples)) {
+//     it(`${example}:\n\n${code}\n`, done => {
+//       assert.throws(parse(code))
+//       done()
+//     })
+//   }
+// })
 
 // const expectedAst = 
 // const errorFixture = []
