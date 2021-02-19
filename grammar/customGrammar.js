@@ -8,16 +8,16 @@ const Custom = `
 Custom {
     Program       =  Block*
     Block         =  Statement+
-    Statement     =  (Loop | FunctionCall | Declaration | Assignment | FunctionDeclaration | Print  | Return) (";")?  --declarative
+    Statement     =  (Loop | FunctionCall | Declaration | Assignment | FunctionDeclaration | Print  | Return) (";")?  -- declarative
                   | "${languageConfig.if}" "(" Exp ")" "{" Block "}"
                     ("${languageConfig.else}" "${languageConfig.if}" "(" Exp ")" "{" Block "}" )*
                     ("${languageConfig.else}" "{" Block "}")?   -- if
     
-    Loop 			    = "${languageConfig.while}" "(" Exp ")" "{" Block* "}" --while
-                  | "${languageConfig.for}" "(" Declaration ";" Exp ";" Assignment  ")" "{" Block* "}"  --for
+    Loop 			    = "${languageConfig.while}" "(" Exp ")" "{" Block* "}" -- while
+                  | "${languageConfig.for}" "(" Declaration ";" Exp ";" Assignment  ")" "{" Block* "}"  -- for
     FunctionCall  =  id "(" Args ")"
-    Declaration   =  type Assignment                            --arrayAndSet
-                  | "<" type "," type ">" Assignment            --dictionary
+    Declaration   =  type Assignment                            -- arrayAndSet
+                  | "<" type "," type ">" Assignment            -- dictionary
     Assignment    = id "=" Exp						                      -- assign
                   | id "++"							                        -- increment
                   | id "--"								                      -- decrement
@@ -53,11 +53,12 @@ Custom {
     
     Print         =  "${languageConfig.print}" "(" Exp ")"
     Return        =  "${languageConfig.return}" ParenExp
-    Array         =  "[" (BinExp ("," BinExp)*)? "]"
-    Set           =  "{" (BinExp ("," BinExp)*)? "}"
-    Dict          =  "{" (BinExp ":" BinExp ("," BinExp ":" BinExp)*)? "}"
+    Array         =  "[" ListOf<BinExp, ","> "]"
+    Set           =  "{" ListOf<BinExp, ","> "}"
+    Dict          =  "{" ListOf<KeyValue, ","> "}"
     Index         =  id "[" (id | numlit) "]"
     Property      =  id ~space "." ~space id
+    KeyValue      =  BinExp ":" BinExp
   
     type          =  "${languageConfig.string}" | "${languageConfig.char}" | "${languageConfig.bool}" | "${languageConfig.int}" | "${languageConfig.float}"
     keyword       =  (type | bool | "${languageConfig.if}" | "${languageConfig.else}" | "${languageConfig.return}" | "${languageConfig.print} | ${languageConfig.for} | ${languageConfig.while}") ~alnum
@@ -77,8 +78,8 @@ Custom {
     escape        = "\\\\\\\\" | "\\\\\\"" | "\\\\'" | "\\\\n" | "\\\\t"
                   |  "\\\\u{" hexDigit+ "}"                     -- codepoint
     space         := " " | "\\t" | "\\n" | comment
-    comment       =  "//" (~"\\n" any)*                         --singleline
-                  | "/*" (~("*/") any )* "*/"                   --multiline
+    comment       =  "//" (~"\\n" any)*                         -- singleline
+                  | "/*" (~("*/") any )* "*/"                   -- multiline
 }`
 
 export default Custom

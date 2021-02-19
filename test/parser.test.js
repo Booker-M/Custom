@@ -1,4 +1,5 @@
 import assert from "assert"
+import util from "util"
 import parse, { isLegal } from "../parser/parser.js"
 import fs from 'fs'
 
@@ -14,7 +15,7 @@ const correctExamples = {
   }`,
 
   "${languageConfig.if} ${languageConfig.else}" : 
-`${languageConfig.int} main(${languageConfig.int} argc, ${languageConfig.char}  argv){
+`${languageConfig.int} main (${languageConfig.int} argc, ${languageConfig.char}  argv) {
   ${languageConfig.print}("hello");
   ${languageConfig.if}(x < y) {
       ${languageConfig.print}('please work')
@@ -58,6 +59,7 @@ describe("Checking parsing on correct code", () => {
   for (const [example, code] of Object.entries(correctExamples)) {
     it(`${example}:\n\n${code}\n`, done => {
       assert.ok(isLegal(code))
+      console.log(util.format(parse(code)))
       done()
     })
   }

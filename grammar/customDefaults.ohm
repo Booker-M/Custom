@@ -46,11 +46,12 @@ Custom {
   
   Print         =  "print" "(" Exp ")"
   Return        =  "return" ParenExp
-  Array         =  "[" (BinExp ("," BinExp)*)? "]"
-  Set           =  "{" (BinExp ("," BinExp)*)? "}"
-  Dict          =  "{" (BinExp ":" BinExp ("," BinExp ":" BinExp)*)? "}"
+  Array         =  "[" ListOf<BinExp, ","> "]"
+  Set           =  "{" ListOf<BinExp, ","> "}"
+  Dict          =  "{" ListOf<KeyValue, ","> "}"
   Index         =  id "[" (id | numlit) "]"
   Property      =  id ~space "." ~space id
+  KeyValue      =  BinExp ":" BinExp
 
   type          =  "string" | "char" | "bool" | "int" | "float"
   keyword       =  ~"int" (type | bool | "if" | "else" | "return" | "print" | "for" | "while") ~alnum

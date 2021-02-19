@@ -86,17 +86,29 @@ export class Declaration {
   }
 }
 
+export class DictDeclaration {
+  constructor(type1, type2, assignment) {
+    Object.assign(this, { type1, type2, assignment })
+  }
+}
+
+export class TernaryExpression {
+  constructor(first, second, third) {
+    Object.assign(this, { first, second, third })
+  }
+}
+
+export class ParenExpression {
+  constructor(parens) {
+    this.parents = parens
+  }
+}
+
 export class Literal {
   constructor(value) {
     Object.assign(this, { value })
   }
 }
-
-// export class Parameters{
-//   constructor(params){
-//     Object.assign(this, {params})
-//   }
-// }
 
 export class Parameter {
   constructor(type, id){
@@ -104,17 +116,40 @@ export class Parameter {
   }
 }
 
-// export class NonemptyListOf{
-//   constructor(first, ...rest){
-//     Object.assign(this, {first, ...rest})
-//   }
-// }
+export class CustomArray {
+  constructor(elements) {
+    this.elements = elements
+  }
+}
 
-// export class EmptyListOf{
-//   constructor(list){
-//     Object.assign(this, {list} )
-//   }
-// }
+export class CustomSet {
+  constructor(elements) {
+    this.elements = elements
+  }
+}
+
+export class CustomDict {
+  constructor(keyValues) {
+    this.keyValues = keyValues
+  }
+}
+
+export class Index {
+  constructor(id1, id2) {
+    Object.assign(this, { id1, id2 })
+  }
+}
+export class Property {
+  constructor(id1, id2) {
+    Object.assign(this, { id1, id2 })
+  }
+}
+
+export class KeyValue {
+  constructor(key, value) {
+    Object.assign(this, { key, value })
+  }
+}
 
 /*
 Gracias a Profesor Toal for the following :)
@@ -124,31 +159,32 @@ function prettied(node) {
   // taking care of cycles. Written here from scratch because the built-in
   // inspect function, while nice, isn't nice enough.
   const seen = new Map()
+  let nodeId = 0
 
-  function setIds(node) {
-    seen.set(node, seen.size + 1)
-    for (const child of Object.values(node)) {
-      if (seen.has(child)) continue
-      else if (Array.isArray(child)) child.forEach(setIds)
-      else if (child && typeof child == "object") setIds(child)
-    }
-  }
-
-  function* lines() {
-    for (let [node, id] of [...seen.entries()].sort((a, b) => a[1] - b[1])) {
-      let [type, props] = [node.constructor.name, ""]
-      for (const [prop, child] of Object.entries(node)) {
-        const value = seen.has(child)
-          ? `#${seen.get(child)}`
-          : Array.isArray(child)
-            ? `[${child.map(c => `#${seen.get(c)}`)}]`
-            : util.inspect(child)
-        props += ` ${prop}=${value}`
+  function* prettiedSubtree(node, prefix, indent = 0) {
+    seen.set(node, ++nodeId)
+    let descriptor = `${" ".repeat(indent)}${prefix}: ${node.constructor.name}`
+    let [simpleProps, complexProps] = ["", []]
+    for (const [prop, child] of Object.entries(node)) {
+      if (seen.has(child)) {
+        simpleProps += ` ${prop}=$${seen.get(child)}`
+      } else if (Array.isArray(child) || (child && typeof child == "object")) {
+        complexProps.push([prop, child])
+      } else {
+        simpleProps += ` ${prop}=${util.inspect(child)}`
       }
-      yield `${String(id).padStart(4, " ")} | ${type}${props}`
+    }
+    yield `${String(nodeId).padStart(4, " ")} | ${descriptor}${simpleProps}`
+    for (let [prop, child] of complexProps) {
+      if (Array.isArray(child)) {
+        for (let [index, node] of child.entries()) {
+          yield* prettiedSubtree(node, `${prop}[${index}]`, indent + 2)
+        }
+      } else {
+        yield* prettiedSubtree(child, prop, indent + 2)
+      }
     }
   }
 
-  setIds(node)
-  return [...lines()].join("\n")
+  return [...prettiedSubtree(node, "program")].join("\n")
 }

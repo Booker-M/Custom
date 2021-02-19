@@ -27,26 +27,25 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
     return new ast.ForLoop(declaration.ast(), expression.ast(), block.ast())
   },
   FunctionCall(id, _1, args, _2){
-    return new ast.FunctionCall(id.ast(), args.ast())
+    return new ast.FunctionCall(id.sourceString, args.ast())
   },
   Declaration_arrayAndSet(type, assignment) {
-    return new ast.Declaration(type.ast(), assignment.ast())
+    return new ast.Declaration(type.sourceString, assignment.ast())
   },
   Declaration_dictionary(_1, type1, _2, type2, _3, assignment) {
-    return new ast.Declaration(type1.ast(), type2.ast(), assignment.ast())
+    return new ast.DictDeclaration(type1.sourceString, type2.sourceString, assignment.ast())
   },
   Assignment_assign(id, _1, exp) {
     return new ast.Assignment(id.sourceString, exp.ast())
   },
   // Assignment_increment(id, _1){
-  //   return new ast.Assignment(id, )
-  //     id = id + 1
+  //   return new ast.Assignment(id.sourceString, )
   // },
   // Assignment_decrement(id, _1){
-
+  //   return new ast.Assignment(id.sourceString, )
   // },
   FunctionDeclaration(type, id, _1, params, _2, _3, block, _4) {
-    return new ast.FunctionDeclaration(type.sourceString, id.ast(), params.ast(), block.ast())
+    return new ast.FunctionDeclaration(type.sourceString, id.sourceString, params.ast(), block.ast())
   },
   Param(type, id){
     return new ast.Parameter(type, id)
@@ -55,7 +54,7 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
     return new ast.BinaryExpression(relop.sourceString, Exp.ast(), BinExp.ast())
   },
   Exp_ternary(BinExp, _1, BinExp2, _2, BinExp3){
-    return new ast.ExpressionTernary(BinExp.ast(), BinExp2.ast(), BinExp3.ast())
+    return new ast.TernaryExpression(BinExp.ast(), BinExp2.ast(), BinExp3.ast())
   },
   BinExp_binary(BinExp, binop, AddExp){
     return new ast.BinaryExpression(binop.sourceString, BinExp.ast(), AddExp.ast())
@@ -73,7 +72,7 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
     return new ast.BinaryExpression(op.sourceString, parenexp.ast(), expoexp.ast());
   },
   ParenExp_parens(_1, expression, _2){
-    return new expression.ast()
+    return new ast.ParenExpression(expression.ast())
   },
   Print(_1, _2, exp, _3){
     return new ast.PrintStatement(exp.ast())
@@ -81,24 +80,42 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
   Return(_1, ParenExp){
     return ParenExp.ast()
   },
-  // Array(){
-  // 
-  // }
+  Array(_1, elements, _2){
+    return new ast.CustomArray(elements.ast())
+  },
+  Set(_1, elements, _2){
+    return new ast.CustomSet(elements.ast()) 
+  },
+  Dict(_1, keyValues, _2){
+    return new ast.CustomDict(keyValues.ast()) 
+  },
+  Index(id1, _1, id2, _2){
+    return new ast.Index(id1.ast(), id2.ast())
+  },
+  Property(id1, _1, id2){
+    return new ast.Property(id1.ast(), id2.ast())
+  },
+  KeyValue(key, _1, value){
+    return new ast.KeyValue(key.ast(), value.ast())
+  },
   id(_first, _rest) {
     return new ast.IdentifierExpression(this.sourceString)
   },
   numlit(_whole, _point, _fraction) {
     return Number(this.sourceString)
   },
-  stringlit(_1, chars ,_2){
+  stringlit(_1, chars , _2){
     return new Literal(this.sourceString.slice(1,-1))
   },
   NonemptyListOf(first, _, rest) {
-    return [first.ast(), ...rest.ast()];
+    return [first.ast(), ...rest.ast()]
   },
   EmptyListOf() {
-    return [];
+    return []
   },
+  _terminal() {
+    return this.sourceString
+  }
 })
 
 export function isLegal(sourceCode) {
