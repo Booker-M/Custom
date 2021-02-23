@@ -1,8 +1,8 @@
+import fs from "fs";
 
-import fs from 'fs'
-
-const languageConfig = JSON.parse(fs.readFileSync('./config/customConfig.json', 'utf8'))
-
+const languageConfig = JSON.parse(
+  fs.readFileSync("./config/customConfig.json", "utf8")
+);
 
 const Custom = `
 Custom {
@@ -80,6 +80,6 @@ Custom {
     space         := " " | "\\t" | "\\n" | comment
     comment       =  "//" (~"\\n" any)*                         -- singleline
                   | "/*" (~("*/") any )* "*/"                   -- multiline
-}`
+}`;
 
-export default Custom
+export default Custom;
