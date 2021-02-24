@@ -186,12 +186,10 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
   EmptyListOf() {
     return [];
   },
+  _terminal() {
+    return this.sourceString;
+  },
 });
-
-export function isLegal(sourceCode) {
-  const match = customGrammar.match(sourceCode);
-  return match.succeeded();
-}
 
 export default function parse(sourceCode) {
   const match = customGrammar.match(sourceCode);

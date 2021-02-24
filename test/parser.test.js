@@ -1,6 +1,6 @@
 import assert from "assert";
 import util from "util";
-import parse, { isLegal } from "../src/parser.js";
+import parse from "../src/parser.js";
 import fs from "fs";
 
 const languageConfig = JSON.parse(
@@ -64,36 +64,19 @@ const incorrectExamples = {
 
 describe("Checking parsing on correct code\n", () => {
   for (const [example, code] of Object.entries(correctExamples)) {
-    it(`${example}:\n\n${code}\n`, done => {
-      assert.ok(isLegal(code));
+    it(example, done => {
+      assert.ok(util.format(parse(code)));
       done();
-      console.log("Parse Tree:\n", util.format(parse(code)), "\n");
+      // console.log("Parse Tree:\n", util.format(parse(code)), "\n");
     });
   }
 });
 
 describe("Checking parsing on incorrect code\n", () => {
   for (const [example, code] of Object.entries(incorrectExamples)) {
-    it(`${example}:\n\n${code}\n`, done => {
-      assert.rejects(isLegal(code));
+    it(example, done => {
       assert.throws(() => parse(code), Error);
       done();
     });
   }
 });
-
-// const expectedAst =
-// const errorFixture = []
-
-// describe("The parser", () => {
-//   it("can parse all the nodes", done => {
-//     assert.deepStrictEqual(util.format(parse(source)), expectedAst)
-//     done()
-//   })
-//   for (const [scenario, source, errorMessagePattern] of errorFixture) {
-//     it(`throws on ${scenario}`, done => {
-//       assert.throws(() => parse(source), errorMessagePattern)
-//       done()
-//     })
-//   }
-// })
