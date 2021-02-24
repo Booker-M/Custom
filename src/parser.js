@@ -4,8 +4,7 @@
 // as a string and returns the AST.
 
 import ohm from "ohm-js";
-import * as ast from "../ast/ast.js";
-import { Literal } from "../ast/ast.js";
+import * as ast from "../src/ast.js";
 import Custom from "../grammar/customGrammar.js";
 
 const customGrammar = ohm.grammar(Custom);
@@ -179,7 +178,7 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
     return Number(this.sourceString);
   },
   stringlit(_1, chars, _2) {
-    return new Literal(this.sourceString.slice(1, -1));
+    return new ast.Literal(this.sourceString.slice(1, -1));
   },
   NonemptyListOf(first, _, rest) {
     return [first.ast(), ...rest.ast()];
@@ -187,9 +186,6 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
   EmptyListOf() {
     return [];
   },
-  // _terminal() {
-  //   return this.sourceString;
-  // },
 });
 
 export function isLegal(sourceCode) {

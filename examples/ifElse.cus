@@ -1,0 +1,10 @@
+${languageConfig.int} main (${languageConfig.int} argc, ${languageConfig.char}  argv) {
+  ${languageConfig.print}("hello");
+  ${languageConfig.if}(x < y) {
+      ${languageConfig.print}('please work')
+  }
+  ${languageConfig.else} {
+      ${languageConfig.print}('cry')
+  }
+  ${languageConfig.return} 1;
+}
