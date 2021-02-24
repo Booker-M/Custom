@@ -178,9 +178,12 @@ function prettied(node) {
     let descriptor = `${" ".repeat(indent)}${prefix}: ${node.constructor.name}`;
     let [simpleProps, complexProps] = ["", []];
     for (const [prop, child] of Object.entries(node)) {
-      if (seen.has(child)) {
+      /* if (seen.has(child)) {
         simpleProps += ` ${prop}=$${seen.get(child)}`;
-      } else if (Array.isArray(child) || (child && typeof child == "object")) {
+      } else */ if (
+        Array.isArray(child) ||
+        (child && typeof child == "object")
+      ) {
         complexProps.push([prop, child]);
       } else {
         simpleProps += ` ${prop}=${util.inspect(child)}`;

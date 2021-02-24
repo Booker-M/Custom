@@ -31,11 +31,13 @@ const correctExamples = {
 
   "Ternary Operator": `${languageConfig.float} x = (x == y) ? 0 : 1;`,
 
+  "Binary Operators": `return(${languageConfig.true} || ${languageConfig.false} && (x == 1))`,
+
   "${languageConfig.for} Loop": `${languageConfig.for} (${languageConfig.int} i = 0; i < 10; i++) { ${languageConfig.print}(i); }`,
 
   "${languageConfig.while} Loop": `${languageConfig.int} i = 0; ${languageConfig.while} (i < 10) { i++; ${languageConfig.print}(i); }`,
 
-  "Array Declaration": `${languageConfig.float} probabilities = [0.1, 0.4, 0.5]`,
+  "Array Declaration": `${languageConfig.float} probabilities = []; probabilities = [0.1, 0.4, 0.5]`,
 
   "Set Declaration": `${languageConfig.string} cheese = {"brie", "cheddar", "mozzarella", "gouda"}`,
 
@@ -45,9 +47,15 @@ const correctExamples = {
 
   "Object properties": `${languageConfig.string} y = Person.name`,
 
-  "Function Call": `print(a, b, c)`,
+  "Function Call": `test(a, b, c, (x == 1), "done")`,
 
   "Assignment Increment/Decrement": `x++; x--;`,
+
+  Comments: `//this can say whatever you want!
+  /* this can
+  also say
+  whatever
+  you want! */`,
 };
 
 const incorrectExamples = {
@@ -68,6 +76,7 @@ describe("Checking parsing on incorrect code\n", () => {
   for (const [example, code] of Object.entries(incorrectExamples)) {
     it(`${example}:\n\n${code}\n`, done => {
       assert.rejects(isLegal(code));
+      assert.throws(() => parse(code), Error);
       done();
     });
   }
