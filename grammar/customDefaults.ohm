@@ -6,15 +6,15 @@ Custom {
                   ("else" "if" "(" Exp ")" "{" Block "}" )*
                   ("else" "{" Block "}")?                     -- if
   
-  Loop 			    = "while" "(" Exp ")" "{" Block* "}" --while
-                | "for" "(" Declaration ";" Exp ";" Assignment  ")" "{" Block* "}"  --for
+  Loop 			    = "while" "(" Exp ")" "{" Block "}" --while
+                | "for" "(" Declaration ";" Exp ";" Assignment  ")" "{" Block "}"  --for
   FunctionCall  =  id "(" Args ")"
   Declaration   =  type Assignment                            --arrayAndSet
     				    | "<" type "," type ">" Assignment            --dictionary
   Assignment    = id "=" Exp						                      -- assign
                 | id "++"							                        -- increment
                 | id "--"								                      -- decrement
-  FunctionDeclaration =  type id "(" Params ")" "{" Block* "}"
+  FunctionDeclaration =  type id "(" Params ")" "{" Block "}"
 
   Args          =  ListOf<BinExp, ",">
   Params        =  ListOf<Param, ",">

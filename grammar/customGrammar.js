@@ -13,15 +13,15 @@ Custom {
                     ("${languageConfig.else}" "${languageConfig.if}" "(" Exp ")" "{" Block "}" )*
                     ("${languageConfig.else}" "{" Block "}")?   -- if
     
-    Loop 			    = "${languageConfig.while}" "(" Exp ")" "{" Block* "}" -- while
-                  | "${languageConfig.for}" "(" Declaration ";" Exp ";" Assignment  ")" "{" Block* "}"  -- for
+    Loop 			    = "${languageConfig.while}" "(" Exp ")" "{" Block "}" -- while
+                  | "${languageConfig.for}" "(" Declaration ";" Exp ";" Assignment  ")" "{" Block "}"  -- for
     FunctionCall  =  id "(" Args ")"
     Declaration   =  type Assignment                            -- arrayAndSet
                   | "<" type "," type ">" Assignment            -- dictionary
     Assignment    = id "=" Exp						                      -- assign
                   | id "++"							                        -- increment
                   | id "--"								                      -- decrement
-    FunctionDeclaration =  type id "(" Params ")" "{" Block* "}"
+    FunctionDeclaration =  type id "(" Params ")" "{" Block "}"
   
     Args          =  ListOf<BinExp, ",">
     Params        =  ListOf<Param, ",">
