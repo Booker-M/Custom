@@ -83,10 +83,10 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
     return new ast.Assignment(id.sourceString, exp.ast());
   },
   Assignment_increment(id, op) {
-    return new ast.Assignment_increment(id.sourceString, op.sourceString);
+    return new ast.Assignment(id.sourceString, op.sourceString);
   },
   Assignment_decrement(id, op) {
-    return new ast.Assignment_increment(id.sourceString, op.sourceString);
+    return new ast.Assignment(id.sourceString, op.sourceString);
   },
   FunctionDeclaration(type, id, _1, params, _2, _3, block, _4) {
     return new ast.FunctionDeclaration(
@@ -96,8 +96,15 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
       block.ast()
     );
   },
-  Param(type, id) {
+  Param_arrayAndSet(type, id) {
     return new ast.Parameter(type.sourceString, id.sourceString);
+  },
+  Param_dictionary(_1, type1, _2, type2, _3, id) {
+    return new ast.ParameterDict(
+      type1.sourceString,
+      type2.sourceString,
+      id.sourceString
+    );
   },
   Exp_binary(Exp, relop, BinExp) {
     return new ast.BinaryExpression(

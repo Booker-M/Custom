@@ -56,6 +56,10 @@ const correctExamples = {
   also say
   whatever
   you want! */`,
+
+  "Function Declaration": `${languageConfig.int} getFirstValue(<${languageConfig.string}, ${languageConfig.int}> keyValues) {
+    return(keyValues["key"])
+  }`,
 };
 
 const incorrectExamples = {

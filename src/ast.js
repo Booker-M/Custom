@@ -86,12 +86,6 @@ export class StatementIfElse {
   }
 }
 
-export class Assignment_increment {
-  constructor(target, op) {
-    Object.assign(this, { target, op });
-  }
-}
-
 export class Declaration {
   constructor(type, assignment) {
     Object.assign(this, { type, assignment });
@@ -125,6 +119,12 @@ export class Literal {
 export class Parameter {
   constructor(type, id) {
     Object.assign(this, { type, id });
+  }
+}
+
+export class ParameterDict {
+  constructor(type1, type2, id) {
+    Object.assign(this, { type1, type2, id });
   }
 }
 

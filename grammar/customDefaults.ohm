@@ -18,7 +18,8 @@ Custom {
 
   Args          =  ListOf<BinExp, ",">
   Params        =  ListOf<Param, ",">
-  Param         =  type id 
+  Param         =  type id                                    -- arrayAndSet
+                | "<" type "," type ">" id                    -- dictionary
 
   Exp           =  Exp relop BinExp                           -- binary
                 |  BinExp "?" BinExp ":" BinExp               -- ternary
@@ -49,7 +50,7 @@ Custom {
   Array         =  "[" ListOf<BinExp, ","> "]"
   Set           =  "{" ListOf<BinExp, ","> "}"
   Dict          =  "{" ListOf<KeyValue, ","> "}"
-  Index         =  id "[" (id | numlit) "]"
+  Index         =  id "[" (id | numlit | stringlit) "]"
   Property      =  id ~space "." ~space id
   KeyValue      =  BinExp ":" BinExp
 
