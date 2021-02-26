@@ -58,7 +58,7 @@ const correctExamples = {
   you want! */`,
 
   "Function Declaration": `${languageConfig.int} getFirstValue(<${languageConfig.string}, ${languageConfig.int}> keyValues) {
-    return(keyValues["key"])
+    return(keyValues["first"])
   }`,
 };
 
