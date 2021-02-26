@@ -23,6 +23,26 @@ Change them to whatever you desire!
 | --- | --- |
 | `int x = 1` | `decimalBegone x = 1` |
 
+### Function Declaration
+<table>
+<tr><td>JavaScript</td><td>Custom</td></tr>
+<tr><td>
+
+```
+function getFirstValue(keyValues) {
+    return keyValues["first"]
+}
+```
+</td><td>
+
+```
+int getFirstValue(string, int> keyValues) {
+    return(keyValues["first"])
+}
+```
+</td></tr>
+</table>
+
 ### Operators
 In order of lowest to highest precedence:  
 | Operator | Example |
