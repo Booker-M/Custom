@@ -163,6 +163,16 @@ export class KeyValue {
   }
 }
 
+export class ListComp {
+  constructor(newExp, args, array, condExp) {
+    Object.assign(this, {
+      newExp,
+      args,
+      array,
+      condExp
+    });
+  }
+}
 /*
 Gracias a Profesor Toal for the following :)
 */

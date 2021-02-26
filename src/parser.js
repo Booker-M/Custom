@@ -160,7 +160,7 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
   Return(_1, ParenExp) {
     return ParenExp.ast();
   },
-  Array(_1, elements, _2) {
+  Array_declarative(_1, elements, _2) {
     return new ast.CustomArray(elements.ast());
   },
   Set(_1, elements, _2) {
@@ -177,6 +177,9 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
   },
   KeyValue(key, _1, value) {
     return new ast.KeyValue(key.ast(), value.ast());
+  },
+  ListComp(_1, newExp, _2, args, _3, list, _4, condExp, _5) {
+    return new ast.ListComp(newExp.ast(), args.ast(), list.ast(), condExp.ast());
   },
   id(_first, _rest) {
     return new ast.IdentifierExpression(this.sourceString);

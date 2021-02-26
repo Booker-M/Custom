@@ -60,6 +60,8 @@ const correctExamples = {
   "Function Declaration": `${languageConfig.int} getFirstValue(<${languageConfig.string}, ${languageConfig.int}> keyValues) {
     return(keyValues["first"])
   }`,
+
+  "ListComprehension": `${languageConfig.int} y = [x%y ${languageConfig.for} x ${languageConfig.in} z ${languageConfig.for} y ${languageConfig.in} z ${languageConfig.if} x*y == 7];`
 };
 
 const incorrectExamples = {

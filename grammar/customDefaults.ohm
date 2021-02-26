@@ -5,7 +5,7 @@ Custom {
                 | "if" "(" Exp ")" "{" Block "}"
                   ("else" "if" "(" Exp ")" "{" Block "}" )*
                   ("else" "{" Block "}")?                     -- if
-  
+
   Loop 			    = "while" "(" Exp ")" "{" Block "}" --while
                 | "for" "(" Declaration ";" Exp ";" Assignment  ")" "{" Block "}"  --for
   FunctionCall  =  id "(" Args ")"
@@ -44,22 +44,26 @@ Custom {
                 |  numlit
                 |  stringlit
                 |  id
-  
+
   Print         =  "print" "(" Exp ")"
   Return        =  "return" ParenExp
-  Array         =  "[" ListOf<BinExp, ","> "]"
+  Array         =  "[" ListOf<BinExp, ","> "]"                    --declarative
+                |  ListComp
+
   Set           =  "{" ListOf<BinExp, ","> "}"
   Dict          =  "{" ListOf<KeyValue, ","> "}"
   Index         =  id "[" (id | numlit | stringlit) "]"
   Property      =  id ~space "." ~space id
   KeyValue      =  BinExp ":" BinExp
+  ListComp      =  "[" Exp ("for" Args "in" id)* ("if" Exp)* "]"
+
 
   type          =  "string" | "char" | "bool" | "int" | "float"
   keyword       =  ~"int" (type | bool | "if" | "else" | "return" | "print" | "for" | "while") ~alnum
   id            =  ~keyword letter (alnum)*
   prefixop      =  "!" | "-"
   relop         =  ">" | ">=" | "==" | "!=" | "<" | "<="
-  addop         =  "+" | "-" 
+  addop         =  "+" | "-"
   mullop        =  "*" | "/" | "%"
   expop         =  "^"
   binop         =  "||" | "&&"

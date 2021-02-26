@@ -12,7 +12,7 @@ Custom {
                   | "${languageConfig.if}" "(" Exp ")" "{" Block "}"
                     ("${languageConfig.else}" "${languageConfig.if}" "(" Exp ")" "{" Block "}" )*
                     ("${languageConfig.else}" "{" Block "}")?   -- if
-    
+
     Loop 			    = "${languageConfig.while}" "(" Exp ")" "{" Block "}" -- while
                   | "${languageConfig.for}" "(" Declaration ";" Exp ";" Assignment  ")" "{" Block "}"  -- for
     FunctionCall  =  id "(" Args ")"
@@ -22,12 +22,12 @@ Custom {
                   | id "++"							                        -- increment
                   | id "--"								                      -- decrement
     FunctionDeclaration =  type id "(" Params ")" "{" Block "}"
-  
+
     Args          =  ListOf<BinExp, ",">
     Params        =  ListOf<Param, ",">
     Param         =  type id                                    -- arrayAndSet
                   | "<" type "," type ">" id                    -- dictionary
-  
+
     Exp           =  Exp relop BinExp                           -- binary
                   |  BinExp "?" BinExp ":" BinExp               -- ternary
                   |  BinExp
@@ -51,22 +51,24 @@ Custom {
                   |  numlit
                   |  stringlit
                   |  id
-    
+
     Print         =  "${languageConfig.print}" "(" Exp ")"
     Return        =  "${languageConfig.return}" ParenExp
-    Array         =  "[" ListOf<BinExp, ","> "]"
+    Array         =  "[" ListOf<BinExp, ","> "]"                                -- declarative
+                  |  ListComp
     Set           =  "{" ListOf<BinExp, ","> "}"
     Dict          =  "{" ListOf<KeyValue, ","> "}"
     Index         =  id "[" (id | numlit | stringlit) "]"
     Property      =  id ~space "." ~space id
     KeyValue      =  BinExp ":" BinExp
-  
+    ListComp      = "[" Exp ("${languageConfig.for}" Args "${languageConfig.in}" id)* ("${languageConfig.if}" Exp)* "]"
+
     type          =  "${languageConfig.string}" | "${languageConfig.char}" | "${languageConfig.bool}" | "${languageConfig.int}" | "${languageConfig.float}"
     keyword       =  (type | bool | "${languageConfig.if}" | "${languageConfig.else}" | "${languageConfig.return}" | "${languageConfig.print}" | "${languageConfig.for}" | "${languageConfig.while}") ~alnum
     id            =  ~keyword letter (alnum)*
     prefixop      =  "!" | "-"
     relop         =  ">" | ">=" | "==" | "!=" | "<" | "<="
-    addop         =  "+" | "-" 
+    addop         =  "+" | "-"
     mullop        =  "*" | "/" | "%"
     expop         =  "^"
     binop         =  "||" | "&&"
