@@ -66,14 +66,46 @@ const incorrectExamples = {
   "id CANNOT be a keyword": `let x = ${languageConfig.if}`,
 };
 
+const ASTtest = `${languageConfig.int} main (${languageConfig.int} argc, ${languageConfig.char}  argv) {
+  ${languageConfig.print}("hello");
+  ${languageConfig.if}(x < y) {
+      ${languageConfig.print}('please work')
+  }
+  ${languageConfig.else} {
+      ${languageConfig.print}('cry')
+  }
+  ${languageConfig.return} 1;
+}`;
+
+const ASTexpected =
+  "   1 | program: Program\n" +
+  "   2 |   statements[0]: Block\n" +
+  "   3 |     statements[0]: FunctionDeclaration type='decimalBegone' id='main'\n" +
+  "   4 |       params[0]: Parameter type='decimalBegone' id='argc'\n" +
+  "   5 |       params[1]: Parameter type='charizard' id='argv'\n" +
+  "   6 |       block: Block\n" +
+  "   7 |         statements[0]: PrintStatement\n" +
+  "   8 |           argument: Literal value='hello'\n" +
+  "   9 |         statements[1]: StatementIfElse\n" +
+  "  10 |           exp: BinaryExpression op='<'\n" +
+  "  11 |             left: IdentifierExpression name='x'\n" +
+  "  12 |             right: IdentifierExpression name='y'\n" +
+  "  13 |           block: Block\n" +
+  "  14 |             statements[0]: PrintStatement\n" +
+  "  15 |               argument: Literal value='please work'\n" +
+  "  16 |           elseBlocks[0]: Block\n" +
+  "  17 |             statements[0]: PrintStatement\n" +
+  "  18 |               argument: Literal value='cry'\n" +
+  "  19 |         statements[2]: Number";
+
 describe("Checking parsing on correct code\n", () => {
   for (const [example, code] of Object.entries(correctExamples)) {
     it(example, done => {
       assert.ok(util.format(parse(code)));
       done();
-      // console.log("Parse Tree:\n", util.format(parse(code)), "\n");
     });
   }
+  assert.deepStrictEqual(util.format(parse(ASTtest)), ASTexpected);
 });
 
 describe("Checking parsing on incorrect code\n", () => {
