@@ -19,9 +19,9 @@ After the tragic loss of the Custom Hotel, we wanted to dedicate our customizabl
 Change them to whatever you desire!  
 
 ### Variable Declaration and Assignment
-| Default | Custom |
-| --- | --- |
-| `int x = 1` | `decimalBegone x = 1` |
+| JavaScript | Default | Custom |
+| --- | --- | --- |
+| `let x = 1` | `int x = 1` | `decimalBegone x = 1` |
 
 ### Function Declaration
 <table>
