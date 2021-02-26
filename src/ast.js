@@ -1,15 +1,58 @@
 import util from "util";
 
-/*
-Gracias a Dr. Toal for the following from the Ael Compiler
-We are using it as both an example and as code for portions of our parser
-*/
 export class Program {
-  constructor(statements) {
-    this.statements = statements;
+  constructor(block) {
+    this.block = block;
   }
   [util.inspect.custom]() {
     return prettied(this);
+  }
+}
+
+export class Block {
+  constructor(statements) {
+    this.statements = statements;
+  }
+}
+
+export class StatementIfElse {
+  constructor(ifExpression, ifBlock, elseIfExpression, elseIfBlock, elseBlock) {
+    Object.assign(this, {
+      ifExpression,
+      ifBlock,
+      elseIfExpression,
+      elseIfBlock,
+      elseBlock,
+    });
+  }
+}
+
+export class WhileLoop {
+  constructor(exp, block) {
+    Object.assign(this, { exp, block });
+  }
+}
+
+export class ForLoop {
+  constructor(declaration, expression, assignment, block) {
+    Object.assign(this, { declaration, expression, assignment, block });
+  }
+}
+
+export class FunctionDeclaration {
+  constructor(type, id, params, block) {
+    Object.assign(this, { type, id, params, block });
+  }
+}
+export class FunctionCall {
+  constructor(id, args) {
+    Object.assign(this, { id, args });
+  }
+}
+
+export class Declaration {
+  constructor(type, assignment) {
+    Object.assign(this, { type, assignment });
   }
 }
 
@@ -19,9 +62,9 @@ export class Assignment {
   }
 }
 
-export class PrintStatement {
-  constructor(argument) {
-    this.argument = argument;
+export class Parameter {
+  constructor(type, id) {
+    Object.assign(this, { type, id });
   }
 }
 
@@ -43,61 +86,6 @@ export class IdentifierExpression {
   }
 }
 
-/*The following is original code */
-
-export class Block {
-  constructor(statements) {
-    this.statements = statements;
-  }
-}
-
-export class FunctionDeclaration {
-  constructor(type, id, params, block) {
-    Object.assign(this, { type, id, params, block });
-  }
-}
-export class FunctionCall {
-  constructor(id, args) {
-    Object.assign(this, { id, args });
-  }
-}
-
-export class WhileLoop {
-  constructor(exp, block) {
-    Object.assign(this, { exp, block });
-  }
-}
-
-export class ForLoop {
-  constructor(declaration, expression, assignment, block) {
-    Object.assign(this, { declaration, expression, assignment, block });
-  }
-}
-
-export class StatementIfElse {
-  constructor(exp, block, elseIfExpressions, elseIfBlocks, elseBlocks) {
-    Object.assign(this, {
-      exp,
-      block,
-      elseIfExpressions,
-      elseIfBlocks,
-      elseBlocks,
-    });
-  }
-}
-
-export class Declaration {
-  constructor(type, assignment) {
-    Object.assign(this, { type, assignment });
-  }
-}
-
-export class DictDeclaration {
-  constructor(type1, type2, assignment) {
-    Object.assign(this, { type1, type2, assignment });
-  }
-}
-
 export class TernaryExpression {
   constructor(first, second, third) {
     Object.assign(this, { first, second, third });
@@ -105,26 +93,8 @@ export class TernaryExpression {
 }
 
 export class ParenExpression {
-  constructor(parens) {
-    this.parents = parens;
-  }
-}
-
-export class Literal {
-  constructor(value) {
-    Object.assign(this, { value });
-  }
-}
-
-export class Parameter {
-  constructor(type, id) {
-    Object.assign(this, { type, id });
-  }
-}
-
-export class ParameterDict {
-  constructor(type1, type2, id) {
-    Object.assign(this, { type1, type2, id });
+  constructor(exp) {
+    this.exp = exp;
   }
 }
 
@@ -160,6 +130,18 @@ export class Property {
 export class KeyValue {
   constructor(key, value) {
     Object.assign(this, { key, value });
+  }
+}
+
+export class TypeDict {
+  constructor(type1, type2) {
+    Object.assign(this, { type1, type2 });
+  }
+}
+
+export class Literal {
+  constructor(value) {
+    Object.assign(this, { value });
   }
 }
 

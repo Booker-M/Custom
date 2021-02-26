@@ -1,25 +1,23 @@
 Custom {
   Program       =  Block*
   Block         =  Statement+
-  Statement     =  (Loop | FunctionCall | Declaration | Assignment | FunctionDeclaration | Print  | Return) (";")?  --declarative
+  Statement     =  (Loop | FunctionDeclaration | FunctionCall | Declaration | Assignment | Print | Return) (";")?  --declarative
                 | "if" "(" Exp ")" "{" Block "}"
                   ("else" "if" "(" Exp ")" "{" Block "}" )*
                   ("else" "{" Block "}")?                     -- if
   
   Loop 			    = "while" "(" Exp ")" "{" Block "}" --while
                 | "for" "(" Declaration ";" Exp ";" Assignment  ")" "{" Block "}"  --for
-  FunctionCall  =  id "(" Args ")"
-  Declaration   =  type Assignment                            --arrayAndSet
-    				    | "<" type "," type ">" Assignment            --dictionary
-  Assignment    = id "=" Exp						                      -- assign
-                | id "++"							                        -- increment
-                | id "--"								                      -- decrement
-  FunctionDeclaration =  type id "(" Params ")" "{" Block "}"
+  FunctionDeclaration =  Type Id "(" Params ")" "{" Block "}"
+  FunctionCall  =  Id "(" Args ")"
+  Declaration   =  Type Assignment
+  Assignment    = Id "=" Exp						                      -- assign
+                | Id "++"							                        -- increment
+                | Id "--"								                      -- decrement
 
   Args          =  ListOf<BinExp, ",">
   Params        =  ListOf<Param, ",">
-  Param         =  type id                                    -- arrayAndSet
-                | "<" type "," type ">" id                    -- dictionary
+  Param         =  Type Id
 
   Exp           =  Exp relop BinExp                           -- binary
                 |  BinExp "?" BinExp ":" BinExp               -- ternary
@@ -35,28 +33,21 @@ Custom {
   ExpoExp       =  ParenExp expop ExpoExp                     -- binary
                 |  ParenExp
   ParenExp      =  "(" Exp ")"                                -- parens
-                |  Array
-                |  Set
-                |  Dict
-                |  Index
-                |  Property
-                |  bool
-                |  numlit
-                |  stringlit
-                |  id
+                |  Array | Set | Dict | Index | Property | bool | numlit | stringlit | Id
   
   Print         =  "print" "(" Exp ")"
   Return        =  "return" ParenExp
   Array         =  "[" ListOf<BinExp, ","> "]"
   Set           =  "{" ListOf<BinExp, ","> "}"
   Dict          =  "{" ListOf<KeyValue, ","> "}"
-  Index         =  id "[" (id | numlit | stringlit) "]"
-  Property      =  id ~space "." ~space id
+  Index         =  Id "[" (Id | numlit | stringlit) "]"
+  Property      =  Id ~space "." ~space Id
   KeyValue      =  BinExp ":" BinExp
+  Type          =  "<" Type "," Type ">"  -- dict
+                |  "string" | "char" | "bool" | "int" | "float"
+  Keyword       =  ~"int" (Type | bool | "if" | "else" | "return" | "print" | "for" | "while") ~alnum
+  Id            =  ~Keyword letter (alnum)*
 
-  type          =  "string" | "char" | "bool" | "int" | "float"
-  keyword       =  ~"int" (type | bool | "if" | "else" | "return" | "print" | "for" | "while") ~alnum
-  id            =  ~keyword letter (alnum)*
   prefixop      =  "!" | "-"
   relop         =  ">" | ">=" | "==" | "!=" | "<" | "<="
   addop         =  "+" | "-" 

@@ -25,7 +25,7 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
     ifExpression,
     _3,
     _4,
-    _ifBlock,
+    ifBlock,
     _5,
     _6,
     _7,
@@ -33,7 +33,7 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
     elseIfExpression,
     _9,
     _10,
-    elseIfBlocks,
+    elseIfBlock,
     _11,
     _12,
     _13,
@@ -42,9 +42,9 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
   ) {
     return new ast.StatementIfElse(
       ifExpression.ast(),
-      _ifBlock.ast(),
+      ifBlock.ast(),
       elseIfExpression.ast(),
-      elseIfBlocks.ast(),
+      elseIfBlock.ast(),
       elseBlock.ast()
     );
   },
@@ -58,26 +58,24 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
     _3,
     expression,
     _4,
-    _assignment,
+    assignment,
     _5,
     _6,
     block,
     _7
   ) {
-    return new ast.ForLoop(declaration.ast(), expression.ast(), block.ast());
+    return new ast.ForLoop(
+      declaration.ast(),
+      expression.ast(),
+      assignment.ast(),
+      block.ast()
+    );
   },
   FunctionCall(id, _1, args, _2) {
     return new ast.FunctionCall(id.sourceString, args.ast());
   },
-  Declaration_arrayAndSet(type, assignment) {
-    return new ast.Declaration(type.sourceString, assignment.ast());
-  },
-  Declaration_dictionary(_1, type1, _2, type2, _3, assignment) {
-    return new ast.DictDeclaration(
-      type1.sourceString,
-      type2.sourceString,
-      assignment.ast()
-    );
+  Declaration(type, assignment) {
+    return new ast.Declaration(type.ast(), assignment.ast());
   },
   Assignment_assign(id, _1, exp) {
     return new ast.Assignment(id.sourceString, exp.ast());
@@ -90,21 +88,14 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
   },
   FunctionDeclaration(type, id, _1, params, _2, _3, block, _4) {
     return new ast.FunctionDeclaration(
-      type.sourceString,
+      type.ast(),
       id.sourceString,
       params.ast(),
       block.ast()
     );
   },
-  Param_arrayAndSet(type, id) {
-    return new ast.Parameter(type.sourceString, id.sourceString);
-  },
-  Param_dictionary(_1, type1, _2, type2, _3, id) {
-    return new ast.ParameterDict(
-      type1.sourceString,
-      type2.sourceString,
-      id.sourceString
-    );
+  Param(type, id) {
+    return new ast.Parameter(type.ast(), id.sourceString);
   },
   Exp_binary(Exp, relop, BinExp) {
     return new ast.BinaryExpression(
@@ -154,8 +145,8 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
   ParenExp_parens(_1, expression, _2) {
     return new ast.ParenExpression(expression.ast());
   },
-  Print(_1, _2, exp, _3) {
-    return new ast.PrintStatement(exp.ast());
+  Print(_1, ParenExp) {
+    return ParenExp.ast();
   },
   Return(_1, ParenExp) {
     return ParenExp.ast();
@@ -178,13 +169,16 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
   KeyValue(key, _1, value) {
     return new ast.KeyValue(key.ast(), value.ast());
   },
-  id(_first, _rest) {
+  Type_dict(_1, type1, _2, type2, _3) {
+    return new ast.TypeDict(type1.sourceString, type2.sourceString);
+  },
+  Id(_first, _rest) {
     return new ast.IdentifierExpression(this.sourceString);
   },
   numlit(_whole, _point, _fraction) {
     return Number(this.sourceString);
   },
-  stringlit(_1, chars, _2) {
+  stringlit(_1, _chars, _2) {
     return new ast.Literal(this.sourceString.slice(1, -1));
   },
   NonemptyListOf(first, _, rest) {

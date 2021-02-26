@@ -8,25 +8,23 @@ const Custom = `
 Custom {
     Program       =  Block*
     Block         =  Statement+
-    Statement     =  (Loop | FunctionCall | Declaration | Assignment | FunctionDeclaration | Print | Return) (";")?  -- declarative
+    Statement     =  (Loop | FunctionDeclaration | FunctionCall | Declaration | Assignment | Print | Return) (";")?  --declarative
                   | "${languageConfig.if}" "(" Exp ")" "{" Block "}"
                     ("${languageConfig.else}" "${languageConfig.if}" "(" Exp ")" "{" Block "}" )*
                     ("${languageConfig.else}" "{" Block "}")?   -- if
     
     Loop 			    = "${languageConfig.while}" "(" Exp ")" "{" Block "}" -- while
                   | "${languageConfig.for}" "(" Declaration ";" Exp ";" Assignment  ")" "{" Block "}"  -- for
-    FunctionCall  =  id "(" Args ")"
-    Declaration   =  type Assignment                            -- arrayAndSet
-                  | "<" type "," type ">" Assignment            -- dictionary
-    Assignment    = id "=" Exp						                      -- assign
-                  | id "++"							                        -- increment
-                  | id "--"								                      -- decrement
-    FunctionDeclaration =  type id "(" Params ")" "{" Block "}"
+    FunctionDeclaration =  Type Id "(" Params ")" "{" Block "}"
+    FunctionCall  =  Id "(" Args ")"
+    Declaration   =  Type Assignment
+    Assignment    = Id "=" Exp						                      -- assign
+                  | Id "++"							                        -- increment
+                  | Id "--"								                      -- decrement
   
     Args          =  ListOf<BinExp, ",">
     Params        =  ListOf<Param, ",">
-    Param         =  type id                                    -- arrayAndSet
-                  | "<" type "," type ">" id                    -- dictionary
+    Param         =  Type Id
   
     Exp           =  Exp relop BinExp                           -- binary
                   |  BinExp "?" BinExp ":" BinExp               -- ternary
@@ -42,28 +40,21 @@ Custom {
     ExpoExp       =  ParenExp expop ExpoExp                     -- binary
                   |  ParenExp
     ParenExp      =  "(" Exp ")"                                -- parens
-                  |  Array
-                  |  Set
-                  |  Dict
-                  |  Index
-                  |  Property
-                  |  bool
-                  |  numlit
-                  |  stringlit
-                  |  id
+                  |  Array | Set | Dict | Index | Property | bool | numlit | stringlit | Id
     
-    Print         =  "${languageConfig.print}" "(" Exp ")"
+    Print         =  "${languageConfig.print}" ParenExp
     Return        =  "${languageConfig.return}" ParenExp
     Array         =  "[" ListOf<BinExp, ","> "]"
     Set           =  "{" ListOf<BinExp, ","> "}"
     Dict          =  "{" ListOf<KeyValue, ","> "}"
-    Index         =  id "[" (id | numlit | stringlit) "]"
-    Property      =  id ~space "." ~space id
+    Index         =  Id "[" (Id | numlit | stringlit) "]"
+    Property      =  Id ~space "." ~space Id
     KeyValue      =  BinExp ":" BinExp
-  
-    type          =  "${languageConfig.string}" | "${languageConfig.char}" | "${languageConfig.bool}" | "${languageConfig.int}" | "${languageConfig.float}"
-    keyword       =  (type | bool | "${languageConfig.if}" | "${languageConfig.else}" | "${languageConfig.return}" | "${languageConfig.print}" | "${languageConfig.for}" | "${languageConfig.while}") ~alnum
-    id            =  ~keyword letter (alnum)*
+    Type          =  "<" Type "," Type ">"  -- dict
+                  |  "${languageConfig.string}" | "${languageConfig.char}" | "${languageConfig.bool}" | "${languageConfig.int}" | "${languageConfig.float}"
+    Keyword       =  (Type | bool | "${languageConfig.if}" | "${languageConfig.else}" | "${languageConfig.return}" | "${languageConfig.print}" | "${languageConfig.for}" | "${languageConfig.while}") ~alnum
+    Id            =  ~Keyword letter (alnum)*
+
     prefixop      =  "!" | "-"
     relop         =  ">" | ">=" | "==" | "!=" | "<" | "<="
     addop         =  "+" | "-" 
