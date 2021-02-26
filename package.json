@@ -5,6 +5,7 @@
   "main": "custom.js",
   "type": "module",
   "scripts": {
+    "lint": "eslint .",
     "test": "c8 node_modules/.bin/mocha"
   },
   "repository": {
@@ -18,6 +19,7 @@
   },
   "homepage": "https://github.com/Booker-M/Custom#readme",
   "dependencies": {
+    "eslint": "^7.20.0",
     "ohm-js": "^15.4.1"
   },
   "devDependencies": {
