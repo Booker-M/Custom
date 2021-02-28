@@ -17,13 +17,13 @@ Custom {
                   | "${languageConfig.for}" "(" Declaration ";" Exp ";" Assignment  ")" "{" Block "}"  -- for
     FunctionDeclaration =  Type Id "(" Params ")" "{" Block "}"
     FunctionCall  =  Id "(" Args ")"
-    Declaration   =  Type Assignment
+    Declaration   =  Type Assignment                            -- singletype
+                    | "<" Type "," Type ">" Id "=" Dict
     Assignment    = Id "=" Exp						                      -- assign
                   | Id "++"							                        -- increment
                   | Id "--"								                      -- decrement
-                  | Type "[]" Id "=" Array                      -- array
-                  | "<" Type "," Type ">" Id "=" Dict           -- dict
-                  | Type "{}" Id "=" Set                        -- set
+                  | "[]" Id "=" Array                      -- array
+                  | "{}" Id "=" Set                        -- set
 
     Args          =  ListOf<BinExp, ",">
     Params        =  ListOf<Param, ",">
