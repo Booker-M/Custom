@@ -63,7 +63,7 @@ Arrays are fixed-length.
   
 **Set:**  
 `string{} cheese = {"brie", "cheddar", "mozzarella", "gouda"}`  
-`languageConfig.bool{}{} nestedSets = {{true,false,true}, {false,true}, {true}}`  
+`bool{}{} nestedSets = {{true,false,true}, {false,true}, {true}}`  
 
 **Dictionary:**  
 `<string, int> playersAndScores = {"Anthony" : 1, "Steve" : -1, "Gerry" : 3}`  
