@@ -15,7 +15,7 @@ After the tragic loss of the Custom Hotel, we wanted to dedicate our customizabl
 **Types:**  
 `"string", "char", "bool", "int", "float"`  
 **Keywords:**  
-`"if", "else", "return", "print", "for", "while", "true", "false"`  
+`"if", "else", "return", "print", "for", "while", "in", "true", "false"`  
 Change them to whatever you desire!  
 
 ### Variable Declaration and Assignment
