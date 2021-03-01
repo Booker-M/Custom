@@ -134,12 +134,14 @@ export class KeyValue {
 }
 
 export class ListComp {
-  constructor(newExp, args, array, condExp) {
+  constructor(newKeyExp, newValueExp, key, value, list, condExp) {
     Object.assign(this, {
-      newExp,
-      args,
-      array,
-      condExp
+      newKeyExp,
+      newValueExp,
+      key,
+      value,
+      list,
+      condExp,
     });
   }
 }
@@ -149,9 +151,21 @@ export class TypeDict {
   }
 }
 
+export class TypeArray {
+  constructor(type) {
+    this.type = type;
+  }
+}
+
+export class TypeSet {
+  constructor(type) {
+    this.type = type;
+  }
+}
+
 export class Literal {
   constructor(value) {
-    Object.assign(this, { value });
+    this.value = value;
   }
 }
 

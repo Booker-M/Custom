@@ -8,16 +8,16 @@ Custom {
 
   Loop 			    = "while" "(" Exp ")" "{" Block "}" --while
                 | "for" "(" Declaration ";" Exp ";" Assignment  ")" "{" Block "}"  --for
-  FunctionDeclaration =  Type Id "(" Params ")" "{" Block "}"
-  FunctionCall  =  Id "(" Args ")"
-  Declaration   =  Type Assignment
-  Assignment    = Id "=" Exp						                      -- assign
-                | Id "++"							                        -- increment
-                | Id "--"								                      -- decrement
+  FunctionDeclaration =  type id "(" Params ")" "{" Block "}"
+  FunctionCall  =  id "(" Args ")"
+  Declaration   =  type Assignment
+  Assignment    = id "=" Exp						                      -- assign
+                | id "++"							                        -- increment
+                | id "--"								                      -- decrement
 
   Args          =  ListOf<BinExp, ",">
   Params        =  ListOf<Param, ",">
-  Param         =  Type Id
+  Param         =  type id
 
   Exp           =  Exp relop BinExp                           -- binary
                 |  BinExp "?" BinExp ":" BinExp               -- ternary
@@ -33,25 +33,24 @@ Custom {
   ExpoExp       =  ParenExp expop ExpoExp                     -- binary
                 |  ParenExp
   ParenExp      =  "(" Exp ")"                                -- parens
-                |  Array | Set | Dict | Index | Property | bool | numlit | stringlit | Id
+                |  ListComp | Array | Set | Dict | Index | Property | bool | numlit | stringlit | id
 
   Print         =  "print" "(" Exp ")"
   Return        =  "return" ParenExp
-  Array         =  "[" ListOf<BinExp, ","> "]"                    --declarative
-                |  ListComp
-
+  Array         =  "[" ListOf<BinExp, ","> "]"
   Set           =  "{" ListOf<BinExp, ","> "}"
   Dict          =  "{" ListOf<KeyValue, ","> "}"
-  Index         =  Id "[" (Id | numlit | stringlit) "]"
-  Property      =  Id ~space "." ~space Id
+  Index         =  id "[" (id | numlit | stringlit) "]"
+  Property      =  id ~space "." ~space id
   KeyValue      =  BinExp ":" BinExp
-  ListComp      =  "[" Exp ("for" Args "in" Id)* ("if" Exp)* "]"
+  ListComp      =  ("[" | "{") Exp (":" Exp)? ("for" id ("," id)? "in" id)+ ("if" Exp)* ("]" | "}")
 
-  Type          =  "<" Type "," Type ">"  -- dict
+  type          =  "<" space? type space? "," space? type space? ">"  -- dict
+                | type "[]"                                   -- array
+                | type "{}"                                   -- set
                 |  "string" | "char" | "bool" | "int" | "float"
-  Keyword       =  ~"int" (Type | bool | "if" | "else" | "return" | "print" | "for" | "while") ~alnum
-  Id            =  ~Keyword letter (alnum)*
-
+  keyword       =  ~"int" (type | bool | "if" | "else" | "return" | "print" | "for" | "while" | "in") ~alnum
+  id            =  ~keyword letter (alnum)*
   prefixop      =  "!" | "-"
   relop         =  ">" | ">=" | "==" | "!=" | "<" | "<="
   addop         =  "+" | "-"

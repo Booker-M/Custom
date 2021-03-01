@@ -151,7 +151,7 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
   Return(_1, ParenExp) {
     return ParenExp.ast();
   },
-  Array_declarative(_1, elements, _2) {
+  Array(_1, elements, _2) {
     return new ast.CustomArray(elements.ast());
   },
   Set(_1, elements, _2) {
@@ -169,13 +169,40 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
   KeyValue(key, _1, value) {
     return new ast.KeyValue(key.ast(), value.ast());
   },
-  ListComp(_1, newExp, _2, args, _3, list, _4, condExp, _5) {
-    return new ast.ListComp(newExp.ast(), args.ast(), list.ast(), condExp.ast());
+  ListComp(
+    _1,
+    newKeyExp,
+    _2,
+    newValueExp,
+    _3,
+    key,
+    _4,
+    value,
+    _5,
+    list,
+    _6,
+    condExp,
+    _7
+  ) {
+    return new ast.ListComp(
+      newKeyExp.ast(),
+      newValueExp.ast(),
+      key.sourceString,
+      value.sourceString,
+      list.sourceString,
+      condExp.ast()
+    );
   },
-  Type_dict(_1, type1, _2, type2, _3) {
-    return new ast.TypeDict(type1.sourceString, type2.sourceString);
+  type_dict(_1, _2, type1, _3, _4, _5, type2, _6, _7) {
+    return new ast.TypeDict(type1.ast(), type2.ast());
   },
-  Id(_first, _rest) {
+  type_array(type, _1) {
+    return new ast.TypeArray(type.ast());
+  },
+  type_set(type, _1) {
+    return new ast.TypeSet(type.ast());
+  },
+  id(_first, _rest) {
     return new ast.IdentifierExpression(this.sourceString);
   },
   numlit(_whole, _point, _fraction) {

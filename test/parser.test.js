@@ -8,13 +8,13 @@ const languageConfig = JSON.parse(
 );
 
 const correctExamples = {
-  "English Breeds": `${languageConfig.string} breeds = ["cat", "armadillo", "dog", "snake"]
-  ${languageConfig.string} names = ["Leslie", "Ben","Andy","April"]
+  "English Breeds": `${languageConfig.string}[] breeds = ["cat", "armadillo", "dog", "snake"]
+  ${languageConfig.string}[] names = ["Leslie", "Ben","Andy","April"]
   ${languageConfig.for} (${languageConfig.int} i=0; i < breeds.size; i++) {
     ${languageConfig.print} (names[i] + " is a " + breeds[i] + "!");
   }`,
 
-  "${languageConfig.if} ${languageConfig.else}": `${languageConfig.int} main (${languageConfig.int} argc, ${languageConfig.char}  argv) {
+  "${languageConfig.if} ${languageConfig.else}": `${languageConfig.int} main (${languageConfig.int} argc, ${languageConfig.char}[]  argv) {
   ${languageConfig.print}("hello");
   ${languageConfig.if}(x < y) {
       ${languageConfig.print}('please work')
@@ -37,13 +37,23 @@ const correctExamples = {
 
   "${languageConfig.while} Loop": `${languageConfig.int} i = 0; ${languageConfig.while} (i < 10) { i++; ${languageConfig.print}(i); }`,
 
-  "Array Declaration": `${languageConfig.float} probabilities = []; probabilities = [0.1, 0.4, 0.5]`,
+  "Array Declaration": `${languageConfig.float}[] probabilities = []; probabilities = [0.1, 0.4, 0.5]`,
 
-  "Set Declaration": `${languageConfig.string} cheese = {"brie", "cheddar", "mozzarella", "gouda"}`,
+  "Nested Arrays": `${languageConfig.int}[][] arrays = [[1,2], [3,4], [5,6]]`,
+
+  "Set Declaration": `${languageConfig.string}{} cheese = {"brie", "cheddar", "mozzarella", "gouda"}`,
+
+  "Nested Sets": `${languageConfig.int}{}{} sets = {{1,2}, {3,4}, {5,6}}`,
 
   "Dict Declaration": `<${languageConfig.string}, ${languageConfig.int}> playersAndScores = {"Anthony" : 1, "Steve" : -1, "Gerry" : 3}`,
 
+  "Nested Dicts": `<${languageConfig.string}, <${languageConfig.string}, ${languageConfig.string}>> dicts = {"outer key" : {"inner key" : "inner value"}}`,
+
+  "Nested Data Structures": `<${languageConfig.string}[]{}, <${languageConfig.string}[], ${languageConfig.string}>> dicts = {{["outer"], ["key"]} : {["inner", "key"] : "inner value"}}`,
+
   "Array indexing": `${languageConfig.string} x = Dogs[i]`,
+
+  "List Comprehension": `<${languageConfig.bool}, ${languageConfig.int}> newDict = { a:b*b ${languageConfig.for} a,b ${languageConfig.in} oldDict ${languageConfig.if} a == ${languageConfig.true}}`,
 
   "Object properties": `${languageConfig.string} y = Person.name`,
 
@@ -61,7 +71,7 @@ const correctExamples = {
     return(keyValues["first"])
   }`,
 
-  "ListComprehension": `${languageConfig.int} y = [x%y ${languageConfig.for} x ${languageConfig.in} z ${languageConfig.for} y ${languageConfig.in} z ${languageConfig.if} x*y == 7];`
+  ListComprehension: `${languageConfig.int} y = [x%y ${languageConfig.for} x ${languageConfig.in} z ${languageConfig.for} y ${languageConfig.in} z ${languageConfig.if} x*y == 7];`,
 };
 
 const incorrectExamples = {
