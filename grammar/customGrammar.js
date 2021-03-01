@@ -17,13 +17,10 @@ Custom {
                   | "${languageConfig.for}" "(" Declaration ";" Exp ";" Assignment  ")" "{" Block "}"  -- for
     FunctionDeclaration =  Type Id "(" Params ")" "{" Block "}"
     FunctionCall  =  Id "(" Args ")"
-    Declaration   =  Type Assignment                            -- singletype
-                    | "<" Type "," Type ">" Id "=" Dict
+    Declaration   =  Type Assignment
     Assignment    = Id "=" Exp						                      -- assign
                   | Id "++"							                        -- increment
                   | Id "--"								                      -- decrement
-                  | "[]" Id "=" Array                      -- array
-                  | "{}" Id "=" Set                        -- set
 
     Args          =  ListOf<BinExp, ",">
     Params        =  ListOf<Param, ",">
@@ -43,7 +40,7 @@ Custom {
     ExpoExp       =  ParenExp expop ExpoExp                     -- binary
                   |  ParenExp
     ParenExp      =  "(" Exp ")"                                -- parens
-                  |  Index | Property | bool | numlit | stringlit | Id
+                  |  Array | Set | Dict | Index | Property | bool | numlit | stringlit | Id
 
     Print         =  "${languageConfig.print}" ParenExp
     Return        =  "${languageConfig.return}" ParenExp
@@ -56,7 +53,10 @@ Custom {
     KeyValue      =  BinExp ":" BinExp
     ListComp      = "[" Exp ("${languageConfig.for}" Args "${languageConfig.in}" Id)* ("${languageConfig.if}" Exp)* "]"
 
-    Type          = "${languageConfig.string}" | "${languageConfig.char}" | "${languageConfig.bool}" | "${languageConfig.int}" | "${languageConfig.float}"
+    Type          = "<" Type "," Type ">"             -- dict
+                    | "[]" Type                       -- array
+                    | "{}" Type                       -- set
+                    |"${languageConfig.string}" | "${languageConfig.char}" | "${languageConfig.bool}" | "${languageConfig.int}" | "${languageConfig.float}"
     Keyword       =  (Type | bool | "${languageConfig.if}" | "${languageConfig.else}" | "${languageConfig.return}" | "${languageConfig.print}" | "${languageConfig.for}" | "${languageConfig.while}") ~alnum
     Id            =  ~Keyword letter (alnum)*
 
