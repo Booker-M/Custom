@@ -21,9 +21,10 @@ Prints to stdout according to <outputType>, which must be one of:
   js         the translation to JavaScript
   c          the translation to C
   llvm       the translation to LLVM
+  string     the string with any string literals replaced with your custom config values
 `;
 
-async function compileFromFile(filename, outputType = "string") {
+async function compileFromFile(filename, outputType) {
   try {
     const buffer = await fs.readFile(filename);
     console.log(compile(eval("`" + buffer.toString() + "`"), outputType));
