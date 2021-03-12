@@ -59,6 +59,8 @@ const correctExamples = {
 
   "Function Call": `test(a, b, c, (x == 1), "done")`,
 
+  "Nested Function Call": `f(g(x))`,
+
   "Assignment Increment/Decrement": `x++; x--;`,
 
   Comments: `//this can say whatever you want!
