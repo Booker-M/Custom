@@ -40,7 +40,7 @@ Custom {
     ExpoExp       =  ParenExp expop ExpoExp                     -- binary
                   |  ParenExp
     ParenExp      =  "(" Exp ")"                                -- parens
-                  |  ListComp | Array | Set | Dict | Index | Property | bool | numlit | stringlit | id
+                  |  ListComp | Array | Set | Dict | Index | FunctionCall | Property | bool | numlit | stringlit | id
 
     Print         =  "${languageConfig.print}" ParenExp
     Return        =  "${languageConfig.return}" ParenExp
