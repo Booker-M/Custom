@@ -194,7 +194,7 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
     return new ast.TypeDict(type1.ast(), type2.ast());
   },
   type_array(type, _1) {
-    return new ast.TypeArray(type.ast());
+    return new ast.ArrayType(type.ast());
   },
   type_set(type, _1) {
     return new ast.TypeSet(type.ast());

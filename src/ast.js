@@ -182,16 +182,16 @@ export class Type {
   constructor(name) {
     this.name = name;
   }
-  static BOOLEAN = new Type(`${languageConfig.bool}`)
-  static INT = new Type(`${languageConfig.int}`)
-  static FLOAT = new Type(`${languageConfig.float}`)
-  static STRING = new Type(`${languageConfig.string}`)
-  static VOID = new Type(`${languageConfig.void}`)
-  static TYPE = new Type("type")
+  static BOOLEAN = new Type(`${languageConfig.bool}`);
+  static INT = new Type(`${languageConfig.int}`);
+  static FLOAT = new Type(`${languageConfig.float}`);
+  static STRING = new Type(`${languageConfig.string}`);
+  static VOID = new Type(`${languageConfig.void}`);
+  static TYPE = new Type("type");
 
   // Equivalence: when are two types the same
   isEquivalentTo(target) {
-    return this == target;
+    return this.name === target.name;
   }
   // T1 assignable to T2 is when x:T1 can be assigned to y:T2. By default
   // this is only when two types are equivalent; however, for other kinds
@@ -203,7 +203,7 @@ export class Type {
 
 export class ArrayType extends Type {
   constructor(baseType) {
-    super(`${baseType.name}`);
+    super(`[${baseType}]`);
     this.baseType = baseType;
   }
   // [T] equivalent to [U] only when T is equivalent to U. Same for
@@ -243,10 +243,9 @@ export class Function {
 // These nodes are created during semantic analysis only
 export class Variable {
   constructor(name) {
-    Object.assign(this, { name })
+    Object.assign(this, { name });
   }
 }
-
 
 /*
 Gracias a Profesor Toal for the following :)
@@ -263,12 +262,9 @@ function prettied(node) {
     let descriptor = `${" ".repeat(indent)}${prefix}: ${node.constructor.name}`;
     let [simpleProps, complexProps] = ["", []];
     for (const [prop, child] of Object.entries(node)) {
-       if (seen.has(child)) {
+      if (seen.has(child)) {
         simpleProps += ` ${prop}=$${seen.get(child)}`;
-      } else  if (
-        Array.isArray(child) ||
-        (child && typeof child == "object")
-      ) {
+      } else if (Array.isArray(child) || (child && typeof child == "object")) {
         complexProps.push([prop, child]);
       } else {
         simpleProps += ` ${prop}=${util.inspect(child)}`;
