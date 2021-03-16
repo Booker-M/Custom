@@ -1,4 +1,9 @@
 import util from "util";
+import fs from "fs";
+
+const languageConfig = JSON.parse(
+  fs.readFileSync("./config/customConfig.json", "utf8")
+);
 
 //PARSER
 
@@ -177,10 +182,12 @@ export class Type {
   constructor(name) {
     this.name = name;
   }
-  static BOOLEAN = new Type("boolean");
-  static INT = new Type("int");
-  static FLOAT = new Type("float");
-  static STRING = new Type("string");
+  static BOOLEAN = new Type(`${languageConfig.bool}`)
+  static INT = new Type(`${languageConfig.int}`)
+  static FLOAT = new Type(`${languageConfig.float}`)
+  static STRING = new Type(`${languageConfig.string}`)
+  static VOID = new Type(`${languageConfig.void}`)
+  static TYPE = new Type("type")
 
   // Equivalence: when are two types the same
   isEquivalentTo(target) {
@@ -196,7 +203,7 @@ export class Type {
 
 export class ArrayType extends Type {
   constructor(baseType) {
-    super(`[${baseType.name}]`);
+    super(`${baseType.name}`);
     this.baseType = baseType;
   }
   // [T] equivalent to [U] only when T is equivalent to U. Same for
@@ -233,6 +240,14 @@ export class Function {
   }
 }
 
+// These nodes are created during semantic analysis only
+export class Variable {
+  constructor(name) {
+    Object.assign(this, { name })
+  }
+}
+
+
 /*
 Gracias a Profesor Toal for the following :)
 */
@@ -248,9 +263,9 @@ function prettied(node) {
     let descriptor = `${" ".repeat(indent)}${prefix}: ${node.constructor.name}`;
     let [simpleProps, complexProps] = ["", []];
     for (const [prop, child] of Object.entries(node)) {
-      /* if (seen.has(child)) {
+       if (seen.has(child)) {
         simpleProps += ` ${prop}=$${seen.get(child)}`;
-      } else */ if (
+      } else  if (
         Array.isArray(child) ||
         (child && typeof child == "object")
       ) {

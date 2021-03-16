@@ -12,3 +12,5 @@ ${languageConfig.int} fibonacci (${languageConfig.int} n) {
       ${languageConfig.return}(fibonacci(n))
   }
 }
+
+fibonacci(1)

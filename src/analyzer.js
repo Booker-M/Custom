@@ -4,8 +4,8 @@ import {
   FunctionType,
   Function,
   ArrayType,
-  StructDeclaration,
 } from "./ast.js";
+import fs from "fs";
 import * as stdlib from "./stdlib.js";
 
 function must(condition, errorMessage) {
@@ -40,7 +40,7 @@ const check = self => ({
     );
   },
   isAType() {
-    must([Type, StructDeclaration].includes(self.constructor), "Type expected");
+    must(Type === self.constructor, "Type expected");
   },
   isAnOptional() {
     must(self.type.constructor === OptionalType, "Optional expected");
@@ -64,7 +64,7 @@ const check = self => ({
     must(
       type === Type.ANY || self.type.isAssignableTo(type),
       `Cannot assign a ${self.type.name} to a ${type.name}`
-    );
+    )
   },
   isNotReadOnly() {
     must(!self.readOnly, `Cannot assign to constant ${self.name}`);
@@ -86,8 +86,7 @@ const check = self => ({
   },
   isCallable() {
     must(
-      self.constructor === StructDeclaration ||
-        self.type.constructor == FunctionType,
+      self.callable = true,
       "Call of non-function or non-constructor"
     );
   },
@@ -159,55 +158,85 @@ class Context {
     return new Context(this, configuration);
   }
   analyze(node) {
+    console.log(node)
+    console.log("--------HELLO")
     return this[node.constructor.name](node);
   }
   Program(p) {
-    p.statements = this.analyze(p.statements);
+    p.statements = this.analyze(p.block[0].statements);
     return p;
   }
   ArrayType(t) {
     t.baseType = this.analyze(t.baseType);
     return t;
   }
-  FunctionType(t) {
-    t.parameterTypes = this.analyze(t.parameterTypes);
-    t.returnType = this.analyze(t.returnType);
-    return t;
-  }
   OptionalType(t) {
     t.baseType = this.analyze(t.baseType);
     return t;
   }
-  VariableDeclaration(d) {
+  Declaration(d) {
     // Declarations generate brand new variable objects
-    d.initializer = this.analyze(d.initializer);
-    d.variable = new Variable(d.name, d.readOnly);
-    d.variable.type = d.initializer.type;
-    this.add(d.variable.name, d.variable);
-    return d;
-  }
-  StructDeclaration(d) {
-    // Add early to allow recursion
-    this.add(d.name, d); // TODO is this ok?
-    d.fields = this.analyze(d.fields);
-    check(d.fields).areAllDistinct();
-    return d;
+    d.assignment.source = this.analyze(d.assignment.source)
+    d.variable = new Variable(d.assignment.target)
+    d.variable.type = this.analyze(d.type)
+    d.assignment.target = d.variable
+
+
+    /*
+
+    Notes from our attempt
+    1. the d.assignment.source is CORRECT 
+    2. d.assignment.target is INCORRECT
+    3. d.assignment.target must use d.type to figure out its type
+        -> aka, it must be made to point to the context type (Type.Int for example)
+
+    4. this might be possible with TypeId? not quite sure
+    5. might have to import our customConfig.json again
+    6. d.type COULD BE an object, for example TypeArray, which denote a collection
+    7. or d.type could be a straight up string, for example `string` which denotes a basic type
+    8. :(
+    
+    */
+
+    // // TODO
+    // this is an attempt to infer type from d.type
+    // if(typeof(d.assignment.target.type) === 'object'){
+    //   const createType = (type) =>{
+    //     if(typeof(type) === 'object'){
+    //       return new ArrayType(createType(type.type))
+    //     } else {
+    //       return new Type(type)
+    //     }
+    //   }
+    //   d.assignment.target.type = createType(d.assignment.target.type)
+    // }else{
+    //   d.assignment.target.type = new Type(d.assignment.target.type)
+    // }
+
+    console.log("aosdjfasjfdaj")
+    console.log(d)
+    console.log(d.assignment.source.type)
+    console.log(d.assignment.target.type)
+    d.assignment.source.type == d.assignment.target.type --> false
+    // d.assignment.source.type.isEquivalentTo(d.assignment.target.type)
+    check(d.assignment.source).isAssignableTo(d.assignment.target.type)
+    return d
   }
   Field(f) {
     f.type = this.analyze(f.type);
     return f;
   }
   FunctionDeclaration(d) {
-    d.returnType = d.returnType ? this.analyze(d.returnType) : Type.VOID;
+    d.type = d.type ? this.analyze(d.returnType) : Type.VOID;
     // Declarations generate brand new function objects
     const f = (d.function = new Function(d.name));
     // When entering a function body, we must reset the inLoop setting,
     // because it is possible to declare a function inside a loop!
     const childContext = this.newChild({ inLoop: false, forFunction: f });
-    d.parameters = childContext.analyze(d.parameters);
+    d.params = childContext.analyze(d.params);
     f.type = new FunctionType(
-      d.parameters.map(p => p.type),
-      d.returnType
+      d.params.map(p => p.type),
+      d.type
     );
     // Add before analyzing the body to allow recursion
     this.add(f.name, f);
@@ -230,11 +259,11 @@ class Context {
     return s;
   }
   Assignment(s) {
-    s.source = this.analyze(s.source);
-    s.target = this.analyze(s.target);
-    check(s.source).isAssignableTo(s.target.type);
-    check(s.target).isNotReadOnly();
-    return s;
+    s.source = this.analyze(s.source)
+    s.target = this.analyze(s.target)
+    check(s.source).isAssignableTo(s.target.type)
+    check(s.target).isNotReadOnly()
+    return s
   }
   BreakStatement(s) {
     check(this).isInsideALoop();
@@ -384,7 +413,7 @@ class Context {
     check(e.index).isInteger();
     return e;
   }
-  ArrayExpression(a) {
+  CustomArray(a) {
     a.elements = this.analyze(a.elements);
     check(a.elements).allHaveSameType();
     a.type = new ArrayType(a.elements[0].type);
@@ -405,13 +434,9 @@ class Context {
     c.callee = this.analyze(c.callee);
     check(c.callee).isCallable();
     c.args = this.analyze(c.args);
-    if (c.callee.constructor === StructDeclaration) {
-      check(c.args).matchFieldsOf(c.callee);
-      c.type = c.callee; // weird but seems ok for now
-    } else {
-      check(c.args).matchParametersOf(c.callee.type);
-      c.type = c.callee.type.returnType;
-    }
+    check(c.args).matchParametersOf(c.callee.type);
+    c.type = c.callee.type.returnType;
+    
     return c;
   }
   IdentifierExpression(e) {
@@ -435,12 +460,33 @@ class Context {
   String(e) {
     return e;
   }
+  // CustomArray(a){
+  //   return this.ArrayExpression(a)
+  //   // a.size === a.elements.length TODO
+  //   //check if elements all of same type TODO
+  //   a.elements = a.elements.map(item => this.analyze(item));
+  //   console.log('LKJlja;ldkfja;lskdjf;alsdkjf')
+  //   console.log(a)
+
+  //   return a
+  //   // return this.ArrayType(a.elements)
+  // }
+  CustomSet(s) {
+    return s.elements.map(item => this.analyze(item));
+  }
   Array(a) {
     return a.map(item => this.analyze(item));
+  }
+  Literal(l){
+    return l.value
+  }
+  elements(e){
+    return e.map(item => this.analyze(item));
   }
 }
 
 export default function analyze(node) {
+  console.log(`AYYOOO ${node}`)
   // Allow primitives to be automatically typed
   Number.prototype.type = Type.FLOAT;
   BigInt.prototype.type = Type.INT;
@@ -448,11 +494,12 @@ export default function analyze(node) {
   String.prototype.type = Type.STRING;
   Type.prototype.type = Type.TYPE;
   const initialContext = new Context();
-
+  console.log(`FUCK  ${node}`)
   // Add in all the predefined identifiers from the stdlib module
   const library = { ...stdlib.types, ...stdlib.constants, ...stdlib.functions };
   for (const [name, type] of Object.entries(library)) {
     initialContext.add(name, type);
   }
+  console.log(`I HATE THIS ${node}`)
   return initialContext.analyze(node);
 }
