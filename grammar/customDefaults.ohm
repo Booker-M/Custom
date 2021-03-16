@@ -1,7 +1,7 @@
 Custom {
   Program       =  Block*
   Block         =  Statement+
-  Statement     =  (Loop | FunctionDeclaration | FunctionCall | Declaration | Assignment | Print | Return) (";")?  --declarative
+  Statement     =  (Loop | FunctionDeclaration | FunctionCall | Declaration | Assignment | Return) (";")?  --declarative
                 | "if" "(" Exp ")" "{" Block "}"
                   ("else" "if" "(" Exp ")" "{" Block "}" )*
                   ("else" "{" Block "}")?                     -- if
@@ -35,7 +35,6 @@ Custom {
   ParenExp      =  "(" Exp ")"                                -- parens
                 |  ListComp | Array | Set | Dict | Index | FunctionCall | Property | bool | numlit | stringlit | id
 
-  Print         =  "print" "(" Exp ")"
   Return        =  "return" ParenExp
   Array         =  "[" ListOf<BinExp, ","> "]"
   Set           =  "{" ListOf<BinExp, ","> "}"
@@ -49,7 +48,7 @@ Custom {
                 | type "[]"                                   -- array
                 | type "{}"                                   -- set
                 |  "string" | "bool" | "int" | "float"
-  keyword       =  ~"int" (type | bool | "if" | "else" | "return" | "print" | "for" | "while" | "in") ~alnum
+  keyword       =  ~"int" (type | bool | "if" | "else" | "return" | "for" | "while" | "in" | "void") ~alnum
   id            =  ~keyword letter (alnum)*
   prefixop      =  "!" | "-"
   relop         =  ">" | ">=" | "==" | "!=" | "<" | "<="

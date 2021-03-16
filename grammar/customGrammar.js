@@ -8,7 +8,7 @@ const Custom = `
 Custom {
     Program       =  Block*
     Block         =  Statement+
-    Statement     =  (Loop | FunctionDeclaration | FunctionCall | Declaration | Assignment | Print | Return) (";")?  --declarative
+    Statement     =  (Loop | FunctionDeclaration | FunctionCall | Declaration | Assignment | Return) (";")?  --declarative
                   | "${languageConfig.if}" "(" Exp ")" "{" Block "}"
                     ("${languageConfig.else}" "${languageConfig.if}" "(" Exp ")" "{" Block "}" )*
                     ("${languageConfig.else}" "{" Block "}")?   -- if
@@ -42,7 +42,6 @@ Custom {
     ParenExp      =  "(" Exp ")"                                -- parens
                   |  ListComp | Array | Set | Dict | Index | FunctionCall | Property | bool | numlit | stringlit | id
 
-    Print         =  "${languageConfig.print}" ParenExp
     Return        =  "${languageConfig.return}" ParenExp
     Array         =  "[" ListOf<BinExp, ","> "]"
     Set           =  "{" ListOf<BinExp, ","> "}"
@@ -56,7 +55,7 @@ Custom {
                   | type "[]"                                   -- array
                   | type "{}"                                   -- set
                   |"${languageConfig.string}" | "${languageConfig.bool}" | "${languageConfig.int}" | "${languageConfig.float}"
-    keyword       =  (type | bool | "${languageConfig.if}" | "${languageConfig.else}" | "${languageConfig.return}" | "${languageConfig.print}" | "${languageConfig.for}" | "${languageConfig.while}" | "${languageConfig.in}") ~alnum
+    keyword       =  (type | bool | "${languageConfig.if}" | "${languageConfig.else}" | "${languageConfig.return}" | "${languageConfig.for}" | "${languageConfig.while}" | "${languageConfig.in}" | "${languageConfig.void}") ~alnum
     id            =  ~keyword letter (alnum)*
     prefixop      =  "!" | "-"
     relop         =  ">" | ">=" | "==" | "!=" | "<" | "<="

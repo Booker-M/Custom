@@ -145,9 +145,6 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
   ParenExp_parens(_1, expression, _2) {
     return new ast.ParenExpression(expression.ast());
   },
-  Print(_1, ParenExp) {
-    return ParenExp.ast();
-  },
   Return(_1, ParenExp) {
     return ParenExp.ast();
   },

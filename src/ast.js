@@ -178,7 +178,6 @@ export class Type {
     this.name = name;
   }
   static BOOLEAN = new Type("boolean");
-  static CHAR = new Type("char");
   static INT = new Type("int");
   static FLOAT = new Type("float");
   static STRING = new Type("string");
@@ -223,6 +222,14 @@ export class FunctionType extends Type {
         target.parameterTypes[i].isAssignableTo(t)
       )
     );
+  }
+}
+
+// These nodes are created during semantic analysis only
+export class Function {
+  constructor(name) {
+    this.name = name;
+    // Other properties set after construction
   }
 }
 

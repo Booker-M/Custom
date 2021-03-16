@@ -11,5 +11,6 @@
     "string": "letterz",
     "int": "decimalBegone",
     "float": "floatYoBoat",
-    "bool": "boolin"
+    "bool": "boolin",
+    "void": "darkness"
 }
