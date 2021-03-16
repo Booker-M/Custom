@@ -48,7 +48,7 @@ Custom {
   type          =  "<" space? type space? "," space? type space? ">"  -- dict
                 | type "[]"                                   -- array
                 | type "{}"                                   -- set
-                |  "string" | "char" | "bool" | "int" | "float"
+                |  "string" | "bool" | "int" | "float"
   keyword       =  ~"int" (type | bool | "if" | "else" | "return" | "print" | "for" | "while" | "in") ~alnum
   id            =  ~keyword letter (alnum)*
   prefixop      =  "!" | "-"

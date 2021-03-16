@@ -55,7 +55,7 @@ Custom {
     type          =  "<" space? type space? "," space? type space? ">"  -- dict
                   | type "[]"                                   -- array
                   | type "{}"                                   -- set
-                  |"${languageConfig.string}" | "${languageConfig.char}" | "${languageConfig.bool}" | "${languageConfig.int}" | "${languageConfig.float}"
+                  |"${languageConfig.string}" | "${languageConfig.bool}" | "${languageConfig.int}" | "${languageConfig.float}"
     keyword       =  (type | bool | "${languageConfig.if}" | "${languageConfig.else}" | "${languageConfig.return}" | "${languageConfig.print}" | "${languageConfig.for}" | "${languageConfig.while}" | "${languageConfig.in}") ~alnum
     id            =  ~keyword letter (alnum)*
     prefixop      =  "!" | "-"

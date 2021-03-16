@@ -1,5 +1,7 @@
 import util from "util";
 
+//PARSER
+
 export class Program {
   constructor(block) {
     this.block = block;
@@ -166,6 +168,61 @@ export class TypeSet {
 export class Literal {
   constructor(value) {
     this.value = value;
+  }
+}
+
+//ANALYZER
+
+export class Type {
+  constructor(name) {
+    this.name = name;
+  }
+  static BOOLEAN = new Type("boolean");
+  static CHAR = new Type("char");
+  static INT = new Type("int");
+  static FLOAT = new Type("float");
+  static STRING = new Type("string");
+
+  // Equivalence: when are two types the same
+  isEquivalentTo(target) {
+    return this == target;
+  }
+  // T1 assignable to T2 is when x:T1 can be assigned to y:T2. By default
+  // this is only when two types are equivalent; however, for other kinds
+  // of types there may be special rules.
+  isAssignableTo(target) {
+    return this.isEquivalentTo(target);
+  }
+}
+
+export class ArrayType extends Type {
+  constructor(baseType) {
+    super(`[${baseType.name}]`);
+    this.baseType = baseType;
+  }
+  // [T] equivalent to [U] only when T is equivalent to U. Same for
+  // assignability: we do NOT want arrays to be covariant!
+  isEquivalentTo(target) {
+    return (
+      target.constructor === ArrayType && this.baseType === target.baseType
+    );
+  }
+}
+
+export class FunctionType extends Type {
+  constructor(parameterTypes, returnType) {
+    super(`(${parameterTypes.map(t => t.name).join(",")})->${returnType.name}`);
+    Object.assign(this, { parameterTypes, returnType });
+  }
+  isAssignableTo(target) {
+    return (
+      target.constructor === FunctionType &&
+      this.returnType.isAssignableTo(target.returnType) &&
+      this.parameterTypes.length === target.parameterTypes.length &&
+      this.parameterTypes.every((t, i) =>
+        target.parameterTypes[i].isAssignableTo(t)
+      )
+    );
   }
 }
 

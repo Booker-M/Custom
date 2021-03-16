@@ -14,7 +14,7 @@ const correctExamples = {
     ${languageConfig.print} (names[i] + " is a " + breeds[i] + "!");
   }`,
 
-  "${languageConfig.if} ${languageConfig.else}": `${languageConfig.int} main (${languageConfig.int} argc, ${languageConfig.char}[]  argv) {
+  "${languageConfig.if} ${languageConfig.else}": `${languageConfig.int} main (${languageConfig.int} argc, ${languageConfig.string}[]  argv) {
   ${languageConfig.print}("hello");
   ${languageConfig.if}(x < y) {
       ${languageConfig.print}('please work')
@@ -80,7 +80,7 @@ const incorrectExamples = {
   "id CANNOT be a keyword": `let x = ${languageConfig.if}`,
 };
 
-const ASTtest = `${languageConfig.int} main (${languageConfig.int} argc, ${languageConfig.char}  argv) {
+const ASTtest = `${languageConfig.int} main (${languageConfig.int} argc, ${languageConfig.string}  argv) {
   ${languageConfig.print}("hello");
   ${languageConfig.if}(x < y) {
       ${languageConfig.print}('please work')
@@ -92,25 +92,25 @@ const ASTtest = `${languageConfig.int} main (${languageConfig.int} argc, ${langu
 }`;
 
 const ASTexpected =
-  "   1 | program: Program\n" +
-  "   2 |   block[0]: Block\n" +
-  "   3 |     statements[0]: FunctionDeclaration type='decimalBegone' id='main'\n" +
-  "   4 |       params[0]: Parameter type='decimalBegone' id='argc'\n" +
-  "   5 |       params[1]: Parameter type='charizard' id='argv'\n" +
-  "   6 |       block: Block\n" +
-  "   7 |         statements[0]: ParenExpression\n" +
-  "   8 |           exp: Literal value='hello'\n" +
-  "   9 |         statements[1]: StatementIfElse\n" +
-  "  10 |           ifExpression: BinaryExpression op='<'\n" +
-  "  11 |             left: IdentifierExpression name='x'\n" +
-  "  12 |             right: IdentifierExpression name='y'\n" +
-  "  13 |           ifBlock: Block\n" +
-  "  14 |             statements[0]: ParenExpression\n" +
-  "  15 |               exp: Literal value='please work'\n" +
-  "  16 |           elseBlock[0]: Block\n" +
-  "  17 |             statements[0]: ParenExpression\n" +
-  "  18 |               exp: Literal value='cry'\n" +
-  "  19 |         statements[2]: Number";
+  `   1 | program: Program\n` +
+  `   2 |   block[0]: Block\n` +
+  `   3 |     statements[0]: FunctionDeclaration type='${languageConfig.int}' id='main'\n` +
+  `   4 |       params[0]: Parameter type='${languageConfig.int}' id='argc'\n` +
+  `   5 |       params[1]: Parameter type='${languageConfig.string}' id='argv'\n` +
+  `   6 |       block: Block\n` +
+  `   7 |         statements[0]: ParenExpression\n` +
+  `   8 |           exp: Literal value='hello'\n` +
+  `   9 |         statements[1]: StatementIfElse\n` +
+  `  10 |           ifExpression: BinaryExpression op='<'\n` +
+  `  11 |             left: IdentifierExpression name='x'\n` +
+  `  12 |             right: IdentifierExpression name='y'\n` +
+  `  13 |           ifBlock: Block\n` +
+  `  14 |             statements[0]: ParenExpression\n` +
+  `  15 |               exp: Literal value='please work'\n` +
+  `  16 |           elseBlock[0]: Block\n` +
+  `  17 |             statements[0]: ParenExpression\n` +
+  `  18 |               exp: Literal value='cry'\n` +
+  `  19 |         statements[2]: Number`;
 
 describe("Checking parsing on correct code\n", () => {
   for (const [example, code] of Object.entries(correctExamples)) {
