@@ -63,7 +63,7 @@ const check = self => ({
     );
   },
   isAssignableTo(type) {
-    console.log(self, type);
+    // console.log(self, type);
     must(
       type === Type.ANY || self.isAssignableTo(type),
       `Cannot assign a ${self.name} to a ${type.name}`
@@ -162,9 +162,9 @@ class Context {
     return new Context(this, configuration);
   }
   analyze(node) {
-    console.log("NODE:");
-    console.log(node);
-    console.log(node.constructor.name + "()\n");
+    // console.log("NODE:");
+    // console.log(node);
+    // console.log(node.constructor.name + "()\n");
     return this[node.constructor.name](node);
   }
   Program(p) {
@@ -419,12 +419,10 @@ class Context {
   CustomDict(a) {
     a.keys = a.keyValues.map(item => this.analyze(item.key));
     a.values = a.keyValues.map(item => this.analyze(item.value));
-    console.log(a.keyValues);
     check(a.keys).allHaveSameType();
     check(a.values).allHaveSameType();
-    console.log("PASSED CHECK:", a);
     a.type = new DictType(a.keys[0]?.type, a.values[0]?.type);
-    console.log("DICT TYPE:", a.type);
+    // console.log("DICT TYPE:", a.type);
     return a;
   }
   EmptyArray(e) {
@@ -506,6 +504,6 @@ export default function analyze(node) {
   for (const [name, type] of Object.entries(library)) {
     initialContext.add(name, type);
   }
-  console.log(initialContext);
+  // console.log(initialContext);
   return initialContext.analyze(node);
 }
