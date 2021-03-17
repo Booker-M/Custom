@@ -1,4 +1,12 @@
-import { Variable, Type, FunctionType, Function, ArrayType } from "./ast.js";
+import {
+  Variable,
+  Type,
+  FunctionType,
+  Function,
+  ArrayType,
+  DictType,
+  SetType,
+} from "./ast.js";
 import * as stdlib from "./stdlib.js";
 
 function must(condition, errorMessage) {
@@ -48,8 +56,9 @@ const check = self => ({
     );
   },
   allHaveSameType() {
+    // self.slice(1).every(e => console.log(e.type.name, self[0].type.name)),
     must(
-      self.slice(1).every(e => e.type === self[0].type),
+      self.slice(1).every(e => e.type.name === self[0].type.name),
       "Not all elements have the same type"
     );
   },
@@ -163,9 +172,16 @@ class Context {
     return p;
   }
   ArrayType(t) {
-    console.log("OLD BASETYPE:", t.baseType);
     t.baseType = this.analyze(t.baseType);
-    console.log("NEW BASETYPE:", t.baseType);
+    return t;
+  }
+  SetType(t) {
+    t.baseType = this.analyze(t.baseType);
+    return t;
+  }
+  DictType(t) {
+    t.baseKey = this.analyze(t.baseKey);
+    t.baseValue = this.analyze(t.baseValue);
     return t;
   }
   FunctionType(t) {
@@ -174,22 +190,15 @@ class Context {
     return t;
   }
   Declaration(d) {
-    console.log("BEFORE:", d);
+    // console.log("BEFORE:", d);
     let variable = new Variable(this.analyze(d.assignment.target));
     variable.type = this.analyze(d.type);
     this.add(variable.name, variable);
     d.assignment.target = variable;
     d.assignment = this.analyze(d.assignment);
-    console.log("AFTER:", d);
+    // console.log("AFTER:", d);
     return d;
   }
-  // StructDeclaration(d) {
-  //   // Add early to allow recursion
-  //   this.add(d.name, d); // TODO is this ok?
-  //   d.fields = this.analyze(d.fields);
-  //   check(d.fields).areAllDistinct();
-  //   return d;
-  // }
   Field(f) {
     f.type = this.analyze(f.type);
     return f;
@@ -227,15 +236,12 @@ class Context {
     return s;
   }
   Assignment(s) {
-    console.log("SOURCE:", s.source);
-    console.log("TARGET:", s.target);
+    // console.log("SOURCE:", s.source);
+    // console.log("TARGET:", s.target);
     s.source = this.analyze(s.source);
-    let source = s.source;
-    if (source.type) {
-    }
     s.target = this.analyze(s.target);
-    console.log("SOURCE 2.0:", s.source);
-    console.log("TARGET 2.0:", s.target);
+    // console.log("SOURCE 2.0:", s.source);
+    // console.log("TARGET 2.0:", s.target);
     check(s.source.type).isAssignableTo(s.target.type);
     // check(s.target).isNotReadOnly();
     return s;
@@ -391,8 +397,34 @@ class Context {
   CustomArray(a) {
     a.elements = this.analyze(a.elements);
     check(a.elements).allHaveSameType();
-    console.log("ARRAY ELEMENT TYPE:", a.elements[0].type.name);
-    a.type = new ArrayType(a.elements[0].type.name);
+    a.type = new ArrayType(
+      typeof a.elements[0].type === "object"
+        ? a.elements[0].type
+        : a.elements[0].type.name
+    );
+    // console.log("ARRAY TYPE:", a.type);
+    return a;
+  }
+  CustomSet(a) {
+    a.elements = this.analyze(a.elements);
+    check(a.elements).allHaveSameType();
+    a.type = new SetType(
+      typeof a.elements[0].type === "object"
+        ? a.elements[0].type
+        : a.elements[0].type.name
+    );
+    // console.log("SET TYPE:", a.type);
+    return a;
+  }
+  CustomDict(a) {
+    a.keys = a.keyValues.map(item => this.analyze(item.key));
+    a.values = a.keyValues.map(item => this.analyze(item.value));
+    console.log(a.keyValues);
+    check(a.keys).allHaveSameType();
+    check(a.values).allHaveSameType();
+    console.log("PASSED CHECK:", a);
+    a.type = new DictType(a.keys[0]?.type, a.values[0]?.type);
+    console.log("DICT TYPE:", a.type);
     return a;
   }
   EmptyArray(e) {
@@ -446,20 +478,18 @@ class Context {
   elements(e) {
     return e.map(item => this.analyze(item));
   }
+  keyValues(e) {
+    e.keys = e.map(item => this.analyze(item.key));
+    e.values = e.map(item => this.analyze(item.value));
+    return e;
+  }
   Variable(v) {
     // v.type = this.analyze(new Type(v.type));
-    console.log("VARIABLE TYPE:", typeof v.type);
     if (typeof v.type === "string") {
       v.type = new Type(v.type);
     }
     return v;
   }
-  // Type(t) {
-  //   // console.log("TYPE BEFORE:", t);
-  //   // t.name = this.analyze(t.name);
-  //   // console.log("TYPE AFTER:", t);
-  //   return t;
-  // }
 }
 
 export default function analyze(node) {

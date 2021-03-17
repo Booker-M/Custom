@@ -191,13 +191,13 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
     );
   },
   type_dict(_1, _2, type1, _3, _4, _5, type2, _6, _7) {
-    return new ast.TypeDict(type1.ast(), type2.ast());
+    return new ast.DictType(type1.ast(), type2.ast());
   },
   type_array(type, _1) {
     return new ast.ArrayType(type.ast());
   },
   type_set(type, _1) {
-    return new ast.TypeSet(type.ast());
+    return new ast.SetType(type.ast());
   },
   id(_first, _rest) {
     return new ast.IdentifierExpression(this.sourceString);

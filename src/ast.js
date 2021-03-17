@@ -152,23 +152,23 @@ export class ListComp {
     });
   }
 }
-export class TypeDict {
-  constructor(type1, type2) {
-    Object.assign(this, { type1, type2 });
-  }
-}
+// export class TypeDict {
+//   constructor(type1, type2) {
+//     Object.assign(this, { type1, type2 });
+//   }
+// }
 
-export class TypeArray {
-  constructor(type) {
-    this.type = type;
-  }
-}
+// export class TypeArray {
+//   constructor(type) {
+//     this.type = type;
+//   }
+// }
 
-export class TypeSet {
-  constructor(type) {
-    this.type = type;
-  }
-}
+// export class TypeSet {
+//   constructor(type) {
+//     this.type = type;
+//   }
+// }
 
 export class Literal {
   constructor(value) {
@@ -203,15 +203,32 @@ export class Type {
 
 export class ArrayType extends Type {
   constructor(baseType) {
-    super(`[${baseType}]`);
+    super(`[${baseType.name ? baseType.name : baseType}]`);
     this.baseType = baseType;
   }
   // [T] equivalent to [U] only when T is equivalent to U. Same for
   // assignability: we do NOT want arrays to be covariant!
-  isEquivalentTo(target) {
-    return (
-      target.constructor === ArrayType && this.baseType === target.baseType
+  // isEquivalentTo(target) {
+  //   return target.constructor === ArrayType && this.name === target.name;
+  // }
+}
+
+export class SetType extends Type {
+  constructor(baseType) {
+    super(`{${baseType.name ? baseType.name : baseType}}`);
+    this.baseType = baseType;
+  }
+}
+
+export class DictType extends Type {
+  constructor(baseKey, baseValue) {
+    super(
+      `<${baseKey.name ? baseKey.name : baseKey}, ${
+        baseValue.name ? baseValue.name : baseValue
+      }>`
     );
+    this.baseKey = baseKey;
+    this.baseValue = baseValue;
   }
 }
 
