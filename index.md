@@ -82,7 +82,7 @@ In order of lowest to highest precedence:
 `float x = 6 % 9`
 </div></td></tr>
 <tr><td><div markdown="1">
-"!"
+`!`
 </div></td><td><div markdown="1">
 `return(!true)`
 </div></td></tr>
