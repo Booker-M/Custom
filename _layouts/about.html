@@ -1,0 +1,33 @@
+---
+layout: default
+---
+<html>
+<head>
+  <title>Cols</title>
+  <style>
+    #left {
+      width: 270px;
+      float: left;
+    }
+    #right {
+      margin-left: 270px;
+    }
+    .clear {
+      clear: both;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container">
+    <div id="left">
+      <img src="../images/booker.jpg" alt="Booker" width="189" height="252">
+    </div>
+    <div id="right">
+      {{ content }}
+    </div>
+    <div class="clear"></div>
+  </div>
+</body>
+
+</html>

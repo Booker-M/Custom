@@ -5,8 +5,7 @@
 layout: home
 ---
 ![](https://github.com/Booker-M/Custom/blob/main/logo/Custom.png?raw=true)  
-# <div align="center">{Custom}</div>  
-### <div align="center">Andrew Seaman, Booker Martin, Ian Green, Veronica Backer-Peral</div>
+### Booker Martin, Ian Green, Veronica Backer-Peral, Andrew Seaman
 
 ## Introduction
 After the tragic loss of the Custom Hotel, we wanted to dedicate our customizable language to the fallen Westchester landmark. Much like the Custom Hotel, we want our language to appeal to everyone in the community and foster an environment where people can come together to share their unique version of the language. To make this possible, Custom features keywards that you define in a customizable JSON. Each person's version of Custom is truly their own. When you see "CUSTOM," you know you are home.
@@ -25,41 +24,79 @@ After the tragic loss of the Custom Hotel, we wanted to dedicate our customizabl
 Change them to whatever you desire!  
 
 ### Variable Declaration and Assignment
-| JavaScript | Default | Custom |
-| --- | --- | --- |
-| `let x = 1` | `int x = 1` | `decimalBegone x = 1` |
+<table>
+<tr><td>JavaScript</td><td>Default</td><td>Custom</td></tr>
+<tr><td><div markdown="1">
+`let x = 1`
+</div></td><td><div markdown="1">
+`int x = 1`
+</div></td><td><div markdown="1">
+`decimalBegone x = 1`
+</div></td></tr>
+</table>
 
 ### Function Declaration
 <table>
 <tr><td>JavaScript</td><td>Custom</td></tr>
 <tr><td>
-
+<div markdown="1">
 ```
 function getFirstValue(keyValues) {
     return keyValues["first"]
 }
 ```
+</div>
 </td><td>
-
+<div markdown="1">
 ```
 int getFirstValue(string, int> keyValues) {
     return(keyValues["first"])
 }
 ```
+</div>
 </td></tr>
 </table>
 
 ### Operators
 In order of lowest to highest precedence:  
-| Operator | Example |
-| --- | --- |
-| ">" \| ">=" \| "==" \| "!=" \| "<" \| "<=" | `return x < y` |
-| "\|\|" \| "&&" | `return(true && false)` |
-| "+" \| "-" | `int x = 4 + 20` |
-|  "\*" \| "/" \| "%" | `float x = 6 % 9` |
-| "!" | `return(!true)`|
-| "-" | `int x = -1` |
-| "^" | `float y = 1^100`|
+<table>
+<tr><td>Operator</td><td>Example</td></tr>
+<tr><td><div markdown="1">
+`>` `>=` `==` `!=` `<` `<=`
+</div></td><td><div markdown="1">
+`return x < y`
+</div></td></tr>
+<tr><td><div markdown="1">
+`||` `&&`
+</div></td><td><div markdown="1">
+`return(true && false)`
+</div></td></tr>
+<tr><td><div markdown="1">
+`+` `-`
+</div></td><td><div markdown="1">
+`int x = 4 + 20`
+</div></td></tr>
+<tr><td><div markdown="1">
+`*` `%`
+</div></td><td><div markdown="1">
+`float x = 6 % 9`
+</div></td></tr>
+<tr><td><div markdown="1">
+"!"
+</div></td><td><div markdown="1">
+`return(!true)`
+</div></td></tr>
+<tr><td><div markdown="1">
+`-`
+</div></td><td><div markdown="1">
+`int x = -1`
+</div></td></tr>
+<tr><td><div markdown="1">
+`^`
+</div></td><td><div markdown="1">
+`float y = 1^100`
+</div></td></tr>
+</table>
 
 ### Data Structures
 **Array:**  
@@ -95,19 +132,21 @@ Sets and dictionaries are dynamic-length.
 <table>
 <tr><td>JavaScript</td><td>Custom</td></tr>
 <tr><td>
-
+<div markdown="1">
 ```
 for (let i = 0; i < 10; i++) {
     console.log(i)
 }
 ```
+</div>
 </td><td>
-
+<div markdown="1">
 ```
 for (int i = 0; i < 10; i++) {
     print(i);
 }
 ```
+</div>
 </td></tr>
 </table>
 
@@ -115,7 +154,7 @@ for (int i = 0; i < 10; i++) {
 <table>
 <tr><td>JavaScript</td><td>Custom</td></tr>
 <tr><td>
-
+<div markdown="1">
 ```
 let i = 0;
 while (i < 10) {
@@ -123,8 +162,9 @@ while (i < 10) {
     i++
 }
 ```
+</div>
 </td><td>
-
+<div markdown="1">
 ```
 int i = 0;
 while (i < 10) {
@@ -132,6 +172,7 @@ while (i < 10) {
     i++;
 }
 ```
+</div>
 </td></tr>
 </table>
 
