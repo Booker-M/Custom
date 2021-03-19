@@ -77,7 +77,7 @@ In order of lowest to highest precedence:
 `int x = 4 + 20`
 </div></td></tr>
 <tr><td><div markdown="1">
-`*` `%`
+`*` `\` `%`
 </div></td><td><div markdown="1">
 `float x = 6 % 9`
 </div></td></tr>
