@@ -124,13 +124,13 @@ export class CustomDict {
 }
 
 export class Index {
-  constructor(id1, id2) {
-    Object.assign(this, { id1, id2 });
+  constructor(collection, element) {
+    Object.assign(this, { collection, element });
   }
 }
 export class Property {
-  constructor(id1, id2) {
-    Object.assign(this, { id1, id2 });
+  constructor(object, field) {
+    Object.assign(this, { object, field });
   }
 }
 
@@ -191,7 +191,11 @@ export class Type {
 
   // Equivalence: when are two types the same
   isEquivalentTo(target) {
-    return this.name === target.name;
+    return (
+      // (target.name === `${languageConfig.float}` &&
+      //   this.name === `${languageConfig.int}`) ||
+      this.name === target.name
+    );
   }
   // T1 assignable to T2 is when x:T1 can be assigned to y:T2. By default
   // this is only when two types are equivalent; however, for other kinds
@@ -209,7 +213,11 @@ export class ArrayType extends Type {
   // [T] equivalent to [U] only when T is equivalent to U. Same for
   // assignability: we do NOT want arrays to be covariant!
   // isEquivalentTo(target) {
-  //   return target.constructor === ArrayType && this.name === target.name;
+  //   return (
+  //     this.baseType &&
+  //     target.baseType &&
+  //     this.baseType.isEquivalentTo(target.baseType)
+  //   );
   // }
 }
 

@@ -10,7 +10,7 @@ const languageConfig = JSON.parse(
 const correctExamples = {
   "English Breeds": `${languageConfig.string}[] breeds = ["cat", "armadillo", "dog", "snake"]
   ${languageConfig.string}[] names = ["Leslie", "Ben","Andy","April"]
-  ${languageConfig.for} (${languageConfig.int} i=0; i < breeds.size; i++) {
+  ${languageConfig.for} (${languageConfig.int} i=0; i < ${languageConfig.length}(breeds); i++) {
     ${languageConfig.print} (names[i] + " is a " + breeds[i] + "!");
   }`,
 
@@ -98,19 +98,22 @@ const ASTexpected =
   `   4 |       params[0]: Parameter type='${languageConfig.int}' id='argc'\n` +
   `   5 |       params[1]: Parameter type='${languageConfig.string}' id='argv'\n` +
   `   6 |       block: Block\n` +
-  `   7 |         statements[0]: FunctionCall id='gimme'\n` +
-  `   8 |           args[0]: Literal value='hello'\n` +
-  `   9 |         statements[1]: StatementIfElse\n` +
-  `  10 |           ifExpression: BinaryExpression op='<'\n` +
-  `  11 |             left: IdentifierExpression name='x'\n` +
-  `  12 |             right: IdentifierExpression name='y'\n` +
-  `  13 |           ifBlock: Block\n` +
-  `  14 |             statements[0]: FunctionCall id='gimme'\n` +
-  `  15 |               args[0]: Literal value='please work'\n` +
-  `  16 |           elseBlock[0]: Block\n` +
-  `  17 |             statements[0]: FunctionCall id='gimme'\n` +
-  `  18 |               args[0]: Literal value='cry'\n` +
-  `  19 |         statements[2]: Number`;
+  `   7 |         statements[0]: FunctionCall\n` +
+  `   8 |           id: IdentifierExpression name='${languageConfig.print}'\n` +
+  `   9 |           args[0]: Literal value='hello'\n` +
+  `  10 |         statements[1]: StatementIfElse\n` +
+  `  11 |           ifExpression: BinaryExpression op='<'\n` +
+  `  12 |             left: IdentifierExpression name='x'\n` +
+  `  13 |             right: IdentifierExpression name='y'\n` +
+  `  14 |           ifBlock: Block\n` +
+  `  15 |             statements[0]: FunctionCall\n` +
+  `  16 |               id: IdentifierExpression name='${languageConfig.print}'\n` +
+  `  17 |               args[0]: Literal value='please work'\n` +
+  `  18 |           elseBlock[0]: Block\n` +
+  `  19 |             statements[0]: FunctionCall\n` +
+  `  20 |               id: IdentifierExpression name='${languageConfig.print}'\n` +
+  `  21 |               args[0]: Literal value='cry'\n` +
+  `  22 |         statements[2]: BigInt`;
 
 describe("Checking parsing on correct code\n", () => {
   for (const [example, code] of Object.entries(correctExamples)) {

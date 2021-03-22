@@ -6,6 +6,7 @@
     "in": "within",
     "print": "gimme",
     "return": "sendIt",
+    "length": "whatsDaSize",
     "true": "facts",
     "false": "nawMan",
     "string": "letterz",

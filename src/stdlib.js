@@ -33,9 +33,14 @@ export const constants = {
   // true: makeConstant("true", Type.BOOLEAN, true),
 };
 
-export const functions = {
-  print: makeFunction(
-    `${languageConfig.print}`,
-    new FunctionType([Type.STRING], Type.VOID)
-  ),
-};
+const functions = {};
+functions[languageConfig.print] = makeFunction(
+  `${languageConfig.print}`,
+  new FunctionType([Type.STRING], Type.VOID)
+);
+functions[languageConfig.length] = makeFunction(
+  `${languageConfig.length}`,
+  new FunctionType([ArrayType], Type.INT)
+);
+
+export { functions };

@@ -8,7 +8,7 @@ const Custom = `
 Custom {
     Program       =  Block*
     Block         =  Statement+
-    Statement     =  (Loop | FunctionDeclaration | FunctionCall | Declaration | Assignment | Return) (";")?  --declarative
+    Statement     =  (Loop | FunctionDeclaration | Return | FunctionCall | Declaration | Assignment) (";")?  --declarative
                   | "${languageConfig.if}" "(" Exp ")" "{" Block "}"
                     ("${languageConfig.else}" "${languageConfig.if}" "(" Exp ")" "{" Block "}" )*
                     ("${languageConfig.else}" "{" Block "}")?   -- if
@@ -40,13 +40,13 @@ Custom {
     ExpoExp       =  ParenExp expop ExpoExp                     -- binary
                   |  ParenExp
     ParenExp      =  "(" Exp ")"                                -- parens
-                  |  ListComp | Array | Set | Dict | Index | FunctionCall | Property | bool | numlit | stringlit | id
+                  |  ListComp | Array | Set | Dict | Index | FunctionCall | Property | bool | floatlit | intlit | stringlit | id
 
-    Return        =  "${languageConfig.return}" ParenExp
+    Return        =  "${languageConfig.return} " ParenExp
     Array         =  "[" ListOf<BinExp, ","> "]"
     Set           =  "{" ListOf<BinExp, ","> "}"
     Dict          =  "{" ListOf<KeyValue, ","> "}"
-    Index         =  id "[" (id | numlit | stringlit) "]"
+    Index         =  id "[" (id | intlit | stringlit) "]"
     Property      =  id ~space "." ~space id
     KeyValue      =  BinExp ":" BinExp
     ListComp      =  ("[" | "{") Exp (":" Exp)? ("${languageConfig.for}" id ("," id)? "${languageConfig.in}" id)+ ("${languageConfig.if}" Exp)* ("]" | "}")
@@ -63,8 +63,11 @@ Custom {
     mullop        =  "*" | "/" | "%"
     expop         =  "^"
     binop         =  "||" | "&&"
-    bool          = "${languageConfig.true}" | "${languageConfig.false}"
-    numlit        =  digit+ ("." digit+)?
+    bool          = true | false
+    true          = "${languageConfig.true}" ~alnum
+    false         = "${languageConfig.false}" ~alnum
+    intlit        =  digit+
+    floatlit      =  digit+ "." digit+
     stringlit     =  "\\"" (char | "\\'")* "\\""
                   | "\\'" (char | "\\"")* "\\'"
     char          =  escape

@@ -40,9 +40,9 @@ const check = self => ({
       `Expected an integer, found ${self.type.name}`
     );
   },
-  isAType() {
-    must([Type, StructDeclaration].includes(self.constructor), "Type expected");
-  },
+  // isAType() {
+  //   must([Type, StructDeclaration].includes(self.constructor), "Type expected");
+  // },
   isAnOptional() {
     must(self.type.constructor === OptionalType, "Optional expected");
   },
@@ -89,8 +89,7 @@ const check = self => ({
   },
   isCallable() {
     must(
-      self.constructor === StructDeclaration ||
-        self.type.constructor == FunctionType,
+      self.type.constructor == FunctionType,
       "Call of non-function or non-constructor"
     );
   },
@@ -162,13 +161,17 @@ class Context {
     return new Context(this, configuration);
   }
   analyze(node) {
-    // console.log("NODE:");
-    // console.log(node);
-    // console.log(node.constructor.name + "()\n");
+    console.log("NODE:");
+    console.log(node);
+    console.log(node.constructor.name + "()\n");
     return this[node.constructor.name](node);
   }
   Program(p) {
     p.statements = this.analyze(p.block[0].statements);
+    return p;
+  }
+  Block(p) {
+    p.statements = this.analyze(p.statements);
     return p;
   }
   ArrayType(t) {
@@ -191,7 +194,7 @@ class Context {
   }
   Declaration(d) {
     // console.log("BEFORE:", d);
-    let variable = new Variable(this.analyze(d.assignment.target));
+    let variable = new Variable(d.assignment.target.name);
     variable.type = this.analyze(d.type);
     this.add(variable.name, variable);
     d.assignment.target = variable;
@@ -204,9 +207,9 @@ class Context {
     return f;
   }
   FunctionDeclaration(d) {
-    d.type = d.type ? this.analyze(d.returnType) : Type.VOID;
+    d.type = d.type ? this.analyze(d.type) : Type.VOID;
     // Declarations generate brand new function objects
-    const f = (d.function = new Function(d.name));
+    const f = (d.function = new Function(d.id));
     // When entering a function body, we must reset the inLoop setting,
     // because it is possible to declare a function inside a loop!
     const childContext = this.newChild({ inLoop: false, forFunction: f });
@@ -216,13 +219,13 @@ class Context {
       d.type
     );
     // Add before analyzing the body to allow recursion
-    this.add(f.name, f);
-    d.body = childContext.analyze(d.body);
+    this.add(f.id, f);
+    d.block = childContext.analyze(d.block);
     return d;
   }
   Parameter(p) {
     p.type = this.analyze(p.type);
-    this.add(p.name, p);
+    this.add(p.id, p);
     return p;
   }
   Increment(s) {
@@ -287,30 +290,30 @@ class Context {
     s.body = this.newChild({ inLoop: true }).analyze(s.body);
     return s;
   }
-  RepeatStatement(s) {
-    s.count = this.analyze(s.count);
-    check(s.count).isInteger();
-    s.body = this.newChild({ inLoop: true }).analyze(s.body);
+  // RepeatStatement(s) {
+  //   s.count = this.analyze(s.count);
+  //   check(s.count).isInteger();
+  //   s.body = this.newChild({ inLoop: true }).analyze(s.body);
+  //   return s;
+  // }
+  ForLoop(s) {
+    s.declaration = this.analyze(s.declaration);
+    // check(s.low).isInteger();
+    s.expression = this.analyze(s.expression);
+    check(s.expression).isBoolean();
+    s.assignment = this.analyze(s.assignment);
+    // check(s.high).isInteger();
+    s.block = this.newChild({ inLoop: true }).analyze(s.block);
     return s;
   }
-  ForRangeStatement(s) {
-    s.low = this.analyze(s.low);
-    check(s.low).isInteger();
-    s.high = this.analyze(s.high);
-    check(s.high).isInteger();
-    s.iterator = new Variable(s.iterator, true);
-    s.iterator.type = Type.INT;
-    s.body = this.newChild({ inLoop: true }).analyze(s.body);
-    return s;
-  }
-  ForStatement(s) {
-    s.collection = this.analyze(s.collection);
-    check(s.collection).isAnArray();
-    s.iterator = new Variable(s.iterator, true);
-    s.iterator.type = s.collection.type.baseType;
-    s.body = this.newChild({ inLoop: true }).analyze(s.body);
-    return s;
-  }
+  // ForStatement(s) {
+  //   s.collection = this.analyze(s.collection);
+  //   check(s.collection).isAnArray();
+  //   s.iterator = new Variable(s.iterator, true);
+  //   s.iterator.type = s.collection.type.baseType;
+  //   s.body = this.newChild({ inLoop: true }).analyze(s.body);
+  //   return s;
+  // }
   Conditional(e) {
     e.test = this.analyze(e.test);
     check(e.test).isBoolean();
@@ -430,18 +433,18 @@ class Context {
     e.type = new ArrayType(e.baseType);
     return e;
   }
-  MemberExpression(e) {
+  Property(e) {
     e.object = this.analyze(e.object);
     check(e.field).isInTheObject(e.object);
     e.type = e.object.type.fields.find(f => f.name === e.field).type;
     return e;
   }
-  Call(c) {
-    c.callee = this.analyze(c.callee);
-    check(c.callee).isCallable();
+  FunctionCall(c) {
+    c.id = this.analyze(c.id);
+    check(c.id).isCallable();
     c.args = this.analyze(c.args);
-    check(c.args).matchParametersOf(c.callee.type);
-    c.type = c.callee.type.returnType;
+    check(c.args).matchParametersOf(c.id.type);
+    c.type = c.id.type.returnType;
 
     return c;
   }
@@ -504,6 +507,6 @@ export default function analyze(node) {
   for (const [name, type] of Object.entries(library)) {
     initialContext.add(name, type);
   }
-  // console.log(initialContext);
+  console.log(initialContext);
   return initialContext.analyze(node);
 }

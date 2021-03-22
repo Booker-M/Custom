@@ -72,19 +72,19 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
     );
   },
   FunctionCall(id, _1, args, _2) {
-    return new ast.FunctionCall(id.sourceString, args.ast());
+    return new ast.FunctionCall(id.ast(), args.ast());
   },
   Declaration(type, assignment) {
     return new ast.Declaration(type.ast(), assignment.ast());
   },
   Assignment_assign(id, _1, exp) {
-    return new ast.Assignment(id.sourceString, exp.ast());
+    return new ast.Assignment(id.ast(), exp.ast());
   },
   Assignment_increment(id, op) {
-    return new ast.Assignment(id.sourceString, op.sourceString);
+    return new ast.Assignment(id.ast(), op.sourceString);
   },
   Assignment_decrement(id, op) {
-    return new ast.Assignment(id.sourceString, op.sourceString);
+    return new ast.Assignment(id.ast(), op.sourceString);
   },
   FunctionDeclaration(type, id, _1, params, _2, _3, block, _4) {
     return new ast.FunctionDeclaration(
@@ -202,7 +202,10 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
   id(_first, _rest) {
     return new ast.IdentifierExpression(this.sourceString);
   },
-  numlit(_whole, _point, _fraction) {
+  intlit(_whole) {
+    return BigInt(this.sourceString);
+  },
+  floatlit(_whole, _point, _fraction) {
     return Number(this.sourceString);
   },
   stringlit(_1, _chars, _2) {
@@ -213,6 +216,12 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
   },
   EmptyListOf() {
     return [];
+  },
+  true(_) {
+    return true;
+  },
+  false(_) {
+    return false;
   },
   _terminal() {
     return this.sourceString;
