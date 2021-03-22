@@ -6,6 +6,7 @@ import {
   ArrayType,
   DictType,
   SetType,
+  IdentifierExpression,
 } from "./ast.js";
 import * as stdlib from "./stdlib.js";
 
@@ -23,7 +24,6 @@ const check = self => ({
     );
   },
   isNumericOrString() {
-    console.log(Type.INT, Type.FLOAT, Type.STRING);
     must(
       [Type.INT, Type.FLOAT, Type.STRING].includes(self.type),
       `Expected a number or string, found ${self.type.name}`
@@ -66,8 +66,8 @@ const check = self => ({
   isAssignableTo(type) {
     // console.log(self, type);
     must(
-      type === Type.ANY || self.isAssignableTo(type),
-      `Cannot assign a ${self.name} to a ${type.name}`
+      type === Type.ANY || self.type.isAssignableTo(type),
+      `Cannot assign a ${self.type.name} to a ${type.name}`
     );
   },
   isNotReadOnly() {
@@ -112,7 +112,7 @@ const check = self => ({
       targetTypes.length === self.length,
       `${targetTypes.length} argument(s) required but ${self.length} passed`
     );
-    targetTypes.forEach((type, i) => check(self[i].type).isAssignableTo(type));
+    targetTypes.forEach((type, i) => check(self[i]).isAssignableTo(type));
   },
   matchParametersOf(calleeType) {
     check(self).match(calleeType.parameterTypes);
@@ -148,6 +148,7 @@ class Context {
     this.locals.set(name, entity);
   }
   lookup(name) {
+    // console.log("LOCALS", this.locals);
     const entity = this.locals.get(name);
     if (entity) {
       return entity;
@@ -195,12 +196,13 @@ class Context {
   }
   Declaration(d) {
     // console.log("BEFORE:", d);
-    let variable = new Variable(d.assignment.target.name);
-    variable.type = this.analyze(d.type);
-    this.add(variable.name, variable);
-    d.assignment.target = variable;
-    d.assignment = this.analyze(d.assignment);
+    d.variable = new Variable(this.analyze(d.assignment.target.name));
+    d.variable.type = d.type;
+    // d.variable.type = d.type;
+    this.add(d.variable.name, d.variable);
+    d.assignment.target = new IdentifierExpression(d.variable.name);
     // console.log("AFTER:", d);
+    d.assignment = this.analyze(d.assignment);
     return d;
   }
   Field(f) {
@@ -246,7 +248,7 @@ class Context {
     s.target = this.analyze(s.target);
     // console.log("SOURCE 2.0:", s.source);
     // console.log("TARGET 2.0:", s.target);
-    check(s.source.type).isAssignableTo(s.target.type);
+    check(s.source).isAssignableTo(s.target.type);
     // check(s.target).isNotReadOnly();
     return s;
   }
@@ -451,8 +453,8 @@ class Context {
   }
   IdentifierExpression(e) {
     // Id expressions get "replaced" with the variables they refer to
-    console.log("BEFORE LOOKUP", e);
-    console.log("AFTER LOOKUP", this.lookup(e.name));
+    // console.log("BEFORE LOOKUP", e);
+    // console.log("AFTER LOOKUP", this.lookup(e.name));
     return this.lookup(e.name);
   }
   TypeId(t) {
@@ -487,13 +489,13 @@ class Context {
     e.values = e.map(item => this.analyze(item.value));
     return e;
   }
-  Variable(v) {
-    // v.type = this.analyze(new Type(v.type));
-    if (typeof v.type === "string") {
-      v.type = new Type(v.type);
-    }
-    return v;
-  }
+  // Variable(v) {
+  //   // v.type = this.analyze(new Type(v.type));
+  //   if (typeof v.type === "string") {
+  //     v.type = new Type(v.type);
+  //   }
+  //   return v;
+  // }
 }
 
 export default function analyze(node) {

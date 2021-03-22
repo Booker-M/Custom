@@ -201,6 +201,7 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
   },
   id(_first, _rest) {
     return new ast.IdentifierExpression(this.sourceString);
+    // return this.sourceString;
   },
   intlit(_whole) {
     return BigInt(this.sourceString);

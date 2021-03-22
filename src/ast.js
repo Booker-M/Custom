@@ -59,6 +59,7 @@ export class FunctionCall {
 
 export class Declaration {
   constructor(type, assignment) {
+    type = Type.get(type);
     Object.assign(this, { type, assignment });
   }
 }
@@ -188,14 +189,11 @@ export class Type {
   static STRING = new Type(`${languageConfig.string}`);
   static VOID = new Type(`${languageConfig.void}`);
   static TYPE = new Type("type");
+  static ANY = new Type("any");
 
   // Equivalence: when are two types the same
   isEquivalentTo(target) {
-    return (
-      // (target.name === `${languageConfig.float}` &&
-      //   this.name === `${languageConfig.int}`) ||
-      this.name === target.name
-    );
+    return this == target;
   }
   // T1 assignable to T2 is when x:T1 can be assigned to y:T2. By default
   // this is only when two types are equivalent; however, for other kinds
@@ -203,28 +201,49 @@ export class Type {
   isAssignableTo(target) {
     return this.isEquivalentTo(target);
   }
+
+  static get(type) {
+    return type === `${languageConfig.bool}`
+      ? Type.BOOLEAN
+      : type === `${languageConfig.int}`
+      ? Type.INT
+      : type === `${languageConfig.float}`
+      ? Type.FLOAT
+      : type === `${languageConfig.string}`
+      ? Type.STRING
+      : type === `${languageConfig.void}`
+      ? Type.VOID
+      : type;
+  }
 }
 
 export class ArrayType extends Type {
+  // Example: [int]
   constructor(baseType) {
     super(`[${baseType.name ? baseType.name : baseType}]`);
-    this.baseType = baseType;
+    this.baseType = Type.get(baseType);
   }
   // [T] equivalent to [U] only when T is equivalent to U. Same for
   // assignability: we do NOT want arrays to be covariant!
-  // isEquivalentTo(target) {
-  //   return (
-  //     this.baseType &&
-  //     target.baseType &&
-  //     this.baseType.isEquivalentTo(target.baseType)
-  //   );
-  // }
+  isEquivalentTo(target) {
+    return (
+      target.constructor === ArrayType &&
+      this.baseType.isEquivalentTo(target.baseType)
+    );
+  }
 }
 
 export class SetType extends Type {
   constructor(baseType) {
     super(`{${baseType.name ? baseType.name : baseType}}`);
-    this.baseType = baseType;
+    this.baseType = Type.get(baseType);
+  }
+
+  isEquivalentTo(target) {
+    return (
+      target.constructor === SetType &&
+      this.baseType.isEquivalentTo(target.baseType)
+    );
   }
 }
 
@@ -235,8 +254,16 @@ export class DictType extends Type {
         baseValue.name ? baseValue.name : baseValue
       }>`
     );
-    this.baseKey = baseKey;
-    this.baseValue = baseValue;
+    this.baseKey = Type.get(baseKey);
+    this.baseValue = Type.get(baseValue);
+  }
+
+  isEquivalentTo(target) {
+    return (
+      target.constructor === DictType &&
+      this.baseKey.isEquivalentTo(target.baseKey) &&
+      this.baseValue.isEquivalentTo(target.baseValue)
+    );
   }
 }
 
