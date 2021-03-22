@@ -19,5 +19,5 @@ Description
 <br><br><br><br><br><br>
 
 ## Andrew Seaman
-Idk what's going on with him ngl
+Description
 <br><br><br><br><br><br>
