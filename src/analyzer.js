@@ -111,7 +111,7 @@ const check = self => ({
       targetTypes.length === self.length,
       `${targetTypes.length} argument(s) required but ${self.length} passed`
     );
-    targetTypes.forEach((type, i) => check(self[i]).isAssignableTo(type));
+    targetTypes.forEach((type, i) => check(self[i].type).isAssignableTo(type));
   },
   matchParametersOf(calleeType) {
     check(self).match(calleeType.parameterTypes);
@@ -265,10 +265,10 @@ class Context {
     check(this.function).returnsNothing();
     return s;
   }
-  IfStatement(s) {
-    s.test = this.analyze(s.test);
-    check(s.test).isBoolean();
-    s.consequent = this.newChild().analyze(s.consequent);
+  StatementIfElse(s) {
+    s.ifExpression = this.analyze(s.ifExpression);
+    check(s.ifExpression).isBoolean();
+    s.ifBlock = this.newChild().analyze(s.ifBlock);
     if (s.alternate.constructor === Array) {
       // It's a block of statements, make a new context
       s.alternate = this.newChild().analyze(s.alternate);
@@ -450,6 +450,8 @@ class Context {
   }
   IdentifierExpression(e) {
     // Id expressions get "replaced" with the variables they refer to
+    console.log("BEFORE LOOKUP", e);
+    console.log("AFTER LOOKUP", this.lookup(e.name));
     return this.lookup(e.name);
   }
   TypeId(t) {

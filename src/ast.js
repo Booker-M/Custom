@@ -257,6 +257,15 @@ export class FunctionType extends Type {
   }
 }
 
+// Appears in the syntax tree only and disappears after semantic analysis
+// since references to the Id node will be replaced with references to the
+// actual type node the the id refers to.
+export class TypeId {
+  constructor(name) {
+    this.name = name;
+  }
+}
+
 // These nodes are created during semantic analysis only
 export class Function {
   constructor(name) {
