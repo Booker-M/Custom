@@ -49,6 +49,8 @@ const semanticChecks = [
     "${languageConfig.if} ${languageConfig.else}",
     `${languageConfig.int} main (${languageConfig.int} argc, ${languageConfig.string}[]  argv) {
     ${languageConfig.print}("hello");
+    ${languageConfig.int} x = 0;
+    ${languageConfig.int} y = 1;
     ${languageConfig.if}(x < y) {
         ${languageConfig.print}('please work')
     }

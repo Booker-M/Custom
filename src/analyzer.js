@@ -23,6 +23,7 @@ const check = self => ({
     );
   },
   isNumericOrString() {
+    console.log(Type.INT, Type.FLOAT, Type.STRING);
     must(
       [Type.INT, Type.FLOAT, Type.STRING].includes(self.type),
       `Expected a number or string, found ${self.type.name}`
