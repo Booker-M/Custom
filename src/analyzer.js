@@ -64,7 +64,7 @@ const check = self => ({
     );
   },
   isAssignableTo(type) {
-    // console.log(self, type);
+    console.log(self, type);
     must(
       type === Type.ANY || self.type.isAssignableTo(type),
       `Cannot assign a ${self.type.name} to a ${type.name}`
@@ -177,16 +177,16 @@ class Context {
     return p;
   }
   ArrayType(t) {
-    t.baseType = this.analyze(t.baseType);
+    // t.baseType = this.analyze(t.baseType);
     return t;
   }
   SetType(t) {
-    t.baseType = this.analyze(t.baseType);
+    // t.baseType = this.analyze(t.baseType);
     return t;
   }
   DictType(t) {
-    t.baseKey = this.analyze(t.baseKey);
-    t.baseValue = this.analyze(t.baseValue);
+    // t.baseKey = this.analyze(t.baseKey);
+    // t.baseValue = this.analyze(t.baseValue);
     return t;
   }
   FunctionType(t) {
@@ -198,7 +198,6 @@ class Context {
     // console.log("BEFORE:", d);
     d.variable = new Variable(this.analyze(d.assignment.target.name));
     d.variable.type = d.type;
-    // d.variable.type = d.type;
     this.add(d.variable.name, d.variable);
     d.assignment.target = new IdentifierExpression(d.variable.name);
     // console.log("AFTER:", d);
@@ -408,7 +407,6 @@ class Context {
         ? a.elements[0].type
         : a.elements[0].type.name
     );
-    // console.log("ARRAY TYPE:", a.type);
     return a;
   }
   CustomSet(a) {
@@ -419,7 +417,6 @@ class Context {
         ? a.elements[0].type
         : a.elements[0].type.name
     );
-    // console.log("SET TYPE:", a.type);
     return a;
   }
   CustomDict(a) {
@@ -428,7 +425,6 @@ class Context {
     check(a.keys).allHaveSameType();
     check(a.values).allHaveSameType();
     a.type = new DictType(a.keys[0]?.type, a.values[0]?.type);
-    // console.log("DICT TYPE:", a.type);
     return a;
   }
   EmptyArray(e) {
@@ -453,8 +449,6 @@ class Context {
   }
   IdentifierExpression(e) {
     // Id expressions get "replaced" with the variables they refer to
-    // console.log("BEFORE LOOKUP", e);
-    // console.log("AFTER LOOKUP", this.lookup(e.name));
     return this.lookup(e.name);
   }
   TypeId(t) {
@@ -489,13 +483,6 @@ class Context {
     e.values = e.map(item => this.analyze(item.value));
     return e;
   }
-  // Variable(v) {
-  //   // v.type = this.analyze(new Type(v.type));
-  //   if (typeof v.type === "string") {
-  //     v.type = new Type(v.type);
-  //   }
-  //   return v;
-  // }
 }
 
 export default function analyze(node) {

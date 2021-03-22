@@ -40,7 +40,7 @@ functions[languageConfig.print] = makeFunction(
 );
 functions[languageConfig.length] = makeFunction(
   `${languageConfig.length}`,
-  new FunctionType([ArrayType], Type.INT)
+  new FunctionType([new ArrayType(Type.ANY)], Type.INT)
 );
 
 export { functions };
