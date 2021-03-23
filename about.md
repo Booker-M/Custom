@@ -11,7 +11,7 @@ In his free time, he enjoys making indie games and discovering new music.
 <br><br><br><br><br><br>
 
 ## Ian Green
-Description
+Ian is a Computer Science and Electrical Engineering major and Pure Mathematics minor at Loyola Marymount University. Ian works in the Bioinformatics lab at LMU. In his free time, Ian enjoys gaming and biking.
 <br><br><br><br><br><br>
 
 ## Veronica Backer-Peral
