@@ -48,7 +48,7 @@ Custom {
                 | type "[]"                                   -- array
                 | type "{}"                                   -- set
                 |  "string" | "bool" | "int" | "float"
-  keyword       =  ~"int" (type | bool | "if" | "else" | "return" | "for" | "while" | "in" | "void") ~alnum
+  keyword       =  type | bool | "if" | "else" | "return" | "for" | "while" | "in" | "void") ~alnum
   id            =  ~keyword letter (alnum)*
   prefixop      =  "!" | "-"
   relop         =  ">" | ">=" | "==" | "!=" | "<" | "<="

@@ -23,12 +23,18 @@ export class Block {
 }
 
 export class StatementIfElse {
-  constructor(ifExpression, ifBlock, elseIfExpression, elseIfBlock, elseBlock) {
+  constructor(
+    ifExpression,
+    ifBlock,
+    elseIfExpressions,
+    elseIfBlocks,
+    elseBlock
+  ) {
     Object.assign(this, {
       ifExpression,
       ifBlock,
-      elseIfExpression,
-      elseIfBlock,
+      elseIfExpressions,
+      elseIfBlocks,
       elseBlock,
     });
   }
@@ -41,8 +47,8 @@ export class WhileLoop {
 }
 
 export class ForLoop {
-  constructor(declaration, expression, assignment, block) {
-    Object.assign(this, { declaration, expression, assignment, block });
+  constructor(declaration, test, assignment, body) {
+    Object.assign(this, { declaration, test, assignment, body });
   }
 }
 
@@ -94,9 +100,9 @@ export class IdentifierExpression {
   }
 }
 
-export class TernaryExpression {
-  constructor(first, second, third) {
-    Object.assign(this, { first, second, third });
+export class Conditional {
+  constructor(test, consequence, third) {
+    Object.assign(this, { test, consequence, third });
   }
 }
 

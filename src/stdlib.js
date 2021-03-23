@@ -29,9 +29,7 @@ export const types = {
   void: Type.VOID,
 };
 
-export const constants = {
-  // true: makeConstant("true", Type.BOOLEAN, true),
-};
+export const constants = {};
 
 const functions = {};
 functions[languageConfig.print] = makeFunction(
