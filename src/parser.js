@@ -13,57 +13,23 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
   Program(block) {
     return new ast.Program(block.ast());
   },
-  Block(statements) {
+  Block(_1, statements, _2) {
     return new ast.Block(statements.ast());
   },
-  Statement_declarative(statement, _1) {
+  Statement(statement, _1) {
     return statement.ast();
   },
-  Statement_if(
-    _1,
-    _2,
-    ifExpression,
-    _3,
-    _4,
-    ifBlock,
-    _5,
-    _6,
-    _7,
-    _8,
-    elseIfExpression,
-    _9,
-    _10,
-    elseIfBlock,
-    _11,
-    _12,
-    _13,
-    elseBlock,
-    _14
-  ) {
+  IfStatement(_1, _2, test, _3, consequence, _4, alternate) {
     return new ast.StatementIfElse(
-      ifExpression.ast(),
-      ifBlock.ast(),
-      elseIfExpression.ast(),
-      elseIfBlock.ast(),
-      elseBlock.ast()
+      test.ast(),
+      consequence.ast(),
+      alternate.ast()
     );
   },
-  Loop_while(_1, _2, exp, _3, _4, block, _5) {
+  Loop_while(_1, _2, exp, _3, block) {
     return new ast.WhileLoop(exp.ast(), block.ast());
   },
-  Loop_for(
-    _1,
-    _2,
-    declaration,
-    _3,
-    expression,
-    _4,
-    assignment,
-    _5,
-    _6,
-    block,
-    _7
-  ) {
+  Loop_for(_1, _2, declaration, _3, expression, _4, assignment, _5, block) {
     return new ast.ForLoop(
       declaration.ast(),
       expression.ast(),
@@ -80,13 +46,13 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
   Assignment_assign(id, _1, exp) {
     return new ast.Assignment(id.ast(), exp.ast());
   },
-  Assignment_increment(id, op) {
-    return new ast.Assignment(id.ast(), op.sourceString);
+  Assignment_increment(id, _op) {
+    return new ast.Increment(id.ast());
   },
-  Assignment_decrement(id, op) {
-    return new ast.Assignment(id.ast(), op.sourceString);
+  Assignment_decrement(id, _op) {
+    return new ast.Decrement(id.ast());
   },
-  FunctionDeclaration(type, id, _1, params, _2, _3, block, _4) {
+  FunctionDeclaration(type, id, _1, params, _2, block) {
     return new ast.FunctionDeclaration(
       type.ast(),
       id.sourceString,
@@ -105,11 +71,7 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
     );
   },
   Exp_ternary(BinExp, _1, BinExp2, _2, BinExp3) {
-    return new ast.TernaryExpression(
-      BinExp.ast(),
-      BinExp2.ast(),
-      BinExp3.ast()
-    );
+    return new ast.Conditional(BinExp.ast(), BinExp2.ast(), BinExp3.ast());
   },
   BinExp_binary(BinExp, binop, AddExp) {
     return new ast.BinaryExpression(

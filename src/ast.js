@@ -8,8 +8,8 @@ const languageConfig = JSON.parse(
 //PARSER
 
 export class Program {
-  constructor(block) {
-    this.block = block;
+  constructor(statements) {
+    this.statements = statements;
   }
   [util.inspect.custom]() {
     return prettied(this);
@@ -23,19 +23,11 @@ export class Block {
 }
 
 export class StatementIfElse {
-  constructor(
-    ifExpression,
-    ifBlock,
-    elseIfExpressions,
-    elseIfBlocks,
-    elseBlock
-  ) {
+  constructor(test, consequence, alternate) {
     Object.assign(this, {
-      ifExpression,
-      ifBlock,
-      elseIfExpressions,
-      elseIfBlocks,
-      elseBlock,
+      test,
+      consequence,
+      alternate,
     });
   }
 }
@@ -76,6 +68,18 @@ export class Assignment {
   }
 }
 
+export class Increment {
+  constructor(variable) {
+    this.variable = variable;
+  }
+}
+
+export class Decrement {
+  constructor(variable) {
+    this.variable = variable;
+  }
+}
+
 export class Parameter {
   constructor(type, id) {
     Object.assign(this, { type, id });
@@ -101,8 +105,8 @@ export class IdentifierExpression {
 }
 
 export class Conditional {
-  constructor(test, consequence, third) {
-    Object.assign(this, { test, consequence, third });
+  constructor(test, consequence, alternate) {
+    Object.assign(this, { test, consequence, alternate });
   }
 }
 
@@ -131,8 +135,8 @@ export class CustomDict {
 }
 
 export class Index {
-  constructor(collection, element) {
-    Object.assign(this, { collection, element });
+  constructor(collection, index) {
+    Object.assign(this, { collection, index });
   }
 }
 export class Property {
@@ -293,11 +297,11 @@ export class FunctionType extends Type {
 // Appears in the syntax tree only and disappears after semantic analysis
 // since references to the Id node will be replaced with references to the
 // actual type node the the id refers to.
-export class TypeId {
-  constructor(name) {
-    this.name = name;
-  }
-}
+// export class TypeId {
+//   constructor(name) {
+//     this.name = name;
+//   }
+// }
 
 // These nodes are created during semantic analysis only
 export class Function {

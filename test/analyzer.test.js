@@ -9,8 +9,15 @@ const languageConfig = JSON.parse(
 );
 const semanticChecks = [
   ["String Declaration", `${languageConfig.string} x = "Hello World!"`],
-  ["Boolean Declaration", `${languageConfig.bool} y = ${languageConfig.true};`],
-  ["Int Declaration", `${languageConfig.int} i = 0;`],
+  [
+    "Boolean Declaration",
+    `${languageConfig.bool} y = ${languageConfig.true} && ${languageConfig.true} || !${languageConfig.true} == !${languageConfig.false};`,
+  ],
+  [
+    "Boolean Declaration Conditional",
+    `${languageConfig.int} y = ${languageConfig.true} ? 0 : 1;`,
+  ],
+  ["Int Declaration", `${languageConfig.int} i = -1 * 2 / 3 % 4 ^ 5;`],
   ["Float Declaration", `${languageConfig.float} z = 1.234`],
   [
     "Array Declaration of Floats",
@@ -50,7 +57,7 @@ const semanticChecks = [
     `${languageConfig.int} main (${languageConfig.int} argc, ${languageConfig.string}[]  argv) {
     ${languageConfig.print}("hello");
     ${languageConfig.int} x = 0;
-    ${languageConfig.int} y = 1;
+    ${languageConfig.int} y = -1;
     ${languageConfig.if}(x < y) {
         ${languageConfig.print}('please work')
     }

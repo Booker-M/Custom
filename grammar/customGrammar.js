@@ -6,16 +6,14 @@ const languageConfig = JSON.parse(
 
 const Custom = `
 Custom {
-    Program       =  Block*
-    Block         =  Statement+
-    Statement     =  (Loop | FunctionDeclaration | Return | FunctionCall | Declaration | Assignment) (";")?  --declarative
-                  | "${languageConfig.if}" "(" Exp ")" "{" Block "}"
-                    ("${languageConfig.else}" "${languageConfig.if}" "(" Exp ")" "{" Block "}" )*
-                    ("${languageConfig.else}" "{" Block "}")?   -- if
+    Program       =  Statement*
+    Block         =  "{" Statement+ "}"
+    Statement     =  (Loop | FunctionDeclaration | Return | FunctionCall | Declaration | Assignment | IfStatement) (";")?
+    IfStatement   =  "${languageConfig.if}" "(" Exp ")" Block ("${languageConfig.else}" (IfStatement | Block))?
 
-    Loop 			    = "${languageConfig.while}" "(" Exp ")" "{" Block "}" -- while
-                  | "${languageConfig.for}" "(" Declaration ";" Exp ";" Assignment  ")" "{" Block "}"  -- for
-    FunctionDeclaration =  type id "(" Params ")" "{" Block "}"
+    Loop 			    = "${languageConfig.while}" "(" Exp ")" Block -- while
+                  | "${languageConfig.for}" "(" Declaration ";" Exp ";" Assignment  ")" Block  -- for
+    FunctionDeclaration =  type id "(" Params ")" Block
     FunctionCall  =  id "(" Args ")"
     Declaration   =  type Assignment
     Assignment    = id "=" Exp						                      -- assign

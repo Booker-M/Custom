@@ -73,15 +73,15 @@ const check = self => ({
   isNotReadOnly() {
     must(!self.readOnly, `Cannot assign to constant ${self.name}`);
   },
-  areAllDistinct() {
-    must(
-      new Set(self.map(f => f.name)).size === self.length,
-      "Fields must be distinct"
-    );
-  },
-  isInTheObject(object) {
-    must(object.type.fields.map(f => f.name).includes(self), "No such field");
-  },
+  // areAllDistinct() {
+  //   must(
+  //     new Set(self.map(f => f.name)).size === self.length,
+  //     "Fields must be distinct"
+  //   );
+  // },
+  // isInTheObject(object) {
+  //   must(object.type.fields.map(f => f.name).includes(self), "No such field");
+  // },
   isInsideALoop() {
     must(self.inLoop, "Break can only appear in a loop");
   },
@@ -169,7 +169,7 @@ class Context {
     return this[node.constructor.name](node);
   }
   Program(p) {
-    p.statements = this.analyze(p.block[0].statements);
+    p.statements = this.analyze(p.statements);
     return p;
   }
   Block(p) {
@@ -268,9 +268,9 @@ class Context {
     return s;
   }
   StatementIfElse(s) {
-    s.ifExpression = this.analyze(s.ifExpression);
-    check(s.ifExpression).isBoolean();
-    s.ifBlock = this.newChild().analyze(s.ifBlock);
+    s.test = this.analyze(s.test);
+    check(s.test).isBoolean();
+    s.consequence = this.newChild().analyze(s.consequence);
     if (s.alternate.constructor === Array) {
       // It's a block of statements, make a new context
       s.alternate = this.newChild().analyze(s.alternate);
@@ -280,32 +280,20 @@ class Context {
     }
     return s;
   }
-  ShortIfStatement(s) {
-    s.test = this.analyze(s.test);
-    check(s.test).isBoolean();
-    s.consequent = this.newChild().analyze(s.consequent);
-    return s;
-  }
   WhileStatement(s) {
     s.test = this.analyze(s.test);
     check(s.test).isBoolean();
     s.body = this.newChild({ inLoop: true }).analyze(s.body);
     return s;
   }
-  // RepeatStatement(s) {
-  //   s.count = this.analyze(s.count);
-  //   check(s.count).isInteger();
-  //   s.body = this.newChild({ inLoop: true }).analyze(s.body);
-  //   return s;
-  // }
   ForLoop(s) {
     s.declaration = this.analyze(s.declaration);
     // check(s.low).isInteger();
-    s.expression = this.analyze(s.expression);
-    check(s.expression).isBoolean();
+    s.test = this.analyze(s.test);
+    check(s.test).isBoolean();
     s.assignment = this.analyze(s.assignment);
     // check(s.high).isInteger();
-    s.block = this.newChild({ inLoop: true }).analyze(s.block);
+    s.body = this.newChild({ inLoop: true }).analyze(s.body);
     return s;
   }
   // ForStatement(s) {
@@ -319,44 +307,36 @@ class Context {
   Conditional(e) {
     e.test = this.analyze(e.test);
     check(e.test).isBoolean();
-    e.consequent = this.analyze(e.consequent);
+    e.consequence = this.analyze(e.consequence);
     e.alternate = this.analyze(e.alternate);
-    check(e.consequent).hasSameTypeAs(e.alternate);
-    e.type = e.consequent.type;
+    check(e.consequence).hasSameTypeAs(e.alternate);
+    e.type = e.consequence.type;
     return e;
   }
-  UnwrapElse(e) {
-    e.optional = this.analyze(e.optional);
-    e.alternate = this.analyze(e.alternate);
-    check(e.optional).isAnOptional();
-    check(e.alternate).isAssignableTo(e.optional.type.baseType);
-    e.type = e.optional.type;
-    return e;
-  }
-  OrExpression(e) {
-    e.disjuncts = this.analyze(e.disjuncts);
-    e.disjuncts.forEach(disjunct => check(disjunct).isBoolean());
-    e.type = Type.BOOLEAN;
-    return e;
-  }
-  AndExpression(e) {
-    e.conjuncts = this.analyze(e.conjuncts);
-    e.conjuncts.forEach(conjunct => check(conjunct).isBoolean());
-    e.type = Type.BOOLEAN;
-    return e;
-  }
+  // OrExpression(e) {
+  //   e.disjuncts = this.analyze(e.disjuncts);
+  //   e.disjuncts.forEach(disjunct => check(disjunct).isBoolean());
+  //   e.type = Type.BOOLEAN;
+  //   return e;
+  // }
+  // AndExpression(e) {
+  //   e.conjuncts = this.analyze(e.conjuncts);
+  //   e.conjuncts.forEach(conjunct => check(conjunct).isBoolean());
+  //   e.type = Type.BOOLEAN;
+  //   return e;
+  // }
   BinaryExpression(e) {
     e.left = this.analyze(e.left);
     e.right = this.analyze(e.right);
-    if (["&", "|", "^", "<<", ">>"].includes(e.op)) {
-      check(e.left).isInteger();
-      check(e.right).isInteger();
-      e.type = Type.INT;
+    if (["&&", "||"].includes(e.op)) {
+      check(e.left).isBoolean();
+      check(e.right).isBoolean();
+      e.type = Type.BOOLEAN;
     } else if (["+"].includes(e.op)) {
       check(e.left).isNumericOrString();
       check(e.left).hasSameTypeAs(e.right);
       e.type = e.left.type;
-    } else if (["-", "*", "/", "%", "**"].includes(e.op)) {
+    } else if (["-", "*", "/", "%", "^"].includes(e.op)) {
       check(e.left).isNumeric();
       check(e.left).hasSameTypeAs(e.right);
       e.type = e.left.type;
@@ -372,29 +352,18 @@ class Context {
   }
   UnaryExpression(e) {
     e.operand = this.analyze(e.operand);
-    if (e.op === "#") {
-      check(e.operand).isAnArray();
-      e.type = Type.INT;
-    } else if (e.op === "-") {
+    if (e.op === "-") {
       check(e.operand).isNumeric();
       e.type = e.operand.type;
     } else if (e.op === "!") {
       check(e.operand).isBoolean();
       e.type = Type.BOOLEAN;
-    } else {
-      // Operator is "some"
-      e.type = new OptionalType(e.operand.type);
     }
     return e;
   }
-  EmptyOptional(e) {
-    e.baseType = this.analyze(e.baseType);
-    e.type = new OptionalType(e.baseType);
-    return e;
-  }
-  SubscriptExpression(e) {
-    e.array = this.analyze(e.array);
-    e.type = e.array.type.baseType;
+  Index(e) {
+    e.collection = this.analyze(e.collection);
+    e.type = e.collection.type.baseType;
     e.index = this.analyze(e.index);
     check(e.index).isInteger();
     return e;
@@ -451,11 +420,11 @@ class Context {
     // Id expressions get "replaced" with the variables they refer to
     return this.lookup(e.name);
   }
-  TypeId(t) {
-    t = this.lookup(t.name);
-    check(t).isAType();
-    return t;
-  }
+  // TypeId(t) {
+  //   t = this.lookup(t.name);
+  //   check(t).isAType();
+  //   return t;
+  // }
   Number(e) {
     return e;
   }
@@ -475,9 +444,9 @@ class Context {
     l.type = l.value.type;
     return l;
   }
-  elements(e) {
-    return e.map(item => this.analyze(item));
-  }
+  // elements(e) {
+  //   return e.map(item => this.analyze(item));
+  // }
   keyValues(e) {
     e.keys = e.map(item => this.analyze(item.key));
     e.values = e.map(item => this.analyze(item.value));
