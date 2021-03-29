@@ -32,9 +32,16 @@ export class StatementIfElse {
   }
 }
 
+export class ReturnStatement {
+  // Example: return c[5]
+  constructor(expression) {
+    this.expression = expression;
+  }
+}
+
 export class WhileLoop {
-  constructor(exp, block) {
-    Object.assign(this, { exp, block });
+  constructor(test, body) {
+    Object.assign(this, { test, body });
   }
 }
 
@@ -46,6 +53,7 @@ export class ForLoop {
 
 export class FunctionDeclaration {
   constructor(type, id, params, block) {
+    type = Type.get(type);
     Object.assign(this, { type, id, params, block });
   }
 }
@@ -107,12 +115,6 @@ export class IdentifierExpression {
 export class Conditional {
   constructor(test, consequence, alternate) {
     Object.assign(this, { test, consequence, alternate });
-  }
-}
-
-export class ParenExpression {
-  constructor(exp) {
-    this.exp = exp;
   }
 }
 

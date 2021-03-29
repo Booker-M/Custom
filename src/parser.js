@@ -105,10 +105,10 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
     );
   },
   ParenExp_parens(_1, expression, _2) {
-    return new ast.ParenExpression(expression.ast());
+    return expression.ast();
   },
   Return(_1, ParenExp) {
-    return ParenExp.ast();
+    return new ast.ReturnStatement(ParenExp.ast());
   },
   Array(_1, elements, _2) {
     return new ast.CustomArray(elements.ast());

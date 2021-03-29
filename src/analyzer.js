@@ -241,14 +241,9 @@ class Context {
     return s;
   }
   Assignment(s) {
-    // console.log("SOURCE:", s.source);
-    // console.log("TARGET:", s.target);
     s.source = this.analyze(s.source);
     s.target = this.analyze(s.target);
-    // console.log("SOURCE 2.0:", s.source);
-    // console.log("TARGET 2.0:", s.target);
     check(s.source).isAssignableTo(s.target.type);
-    // check(s.target).isNotReadOnly();
     return s;
   }
   BreakStatement(s) {
@@ -262,11 +257,11 @@ class Context {
     check(s.expression).isReturnableFrom(this.function);
     return s;
   }
-  ShortReturnStatement(s) {
-    check(this).isInsideAFunction();
-    check(this.function).returnsNothing();
-    return s;
-  }
+  // ShortReturnStatement(s) {
+  //   check(this).isInsideAFunction();
+  //   check(this.function).returnsNothing();
+  //   return s;
+  // }
   StatementIfElse(s) {
     s.test = this.analyze(s.test);
     check(s.test).isBoolean();
@@ -274,13 +269,10 @@ class Context {
     if (s.alternate.constructor === Array) {
       // It's a block of statements, make a new context
       s.alternate = this.newChild().analyze(s.alternate);
-    } else if (s.alternate) {
-      // It's a trailing if-statement, so same context
-      s.alternate = this.analyze(s.alternate);
     }
     return s;
   }
-  WhileStatement(s) {
+  WhileLoop(s) {
     s.test = this.analyze(s.test);
     check(s.test).isBoolean();
     s.body = this.newChild({ inLoop: true }).analyze(s.body);
@@ -296,14 +288,6 @@ class Context {
     s.body = this.newChild({ inLoop: true }).analyze(s.body);
     return s;
   }
-  // ForStatement(s) {
-  //   s.collection = this.analyze(s.collection);
-  //   check(s.collection).isAnArray();
-  //   s.iterator = new Variable(s.iterator, true);
-  //   s.iterator.type = s.collection.type.baseType;
-  //   s.body = this.newChild({ inLoop: true }).analyze(s.body);
-  //   return s;
-  // }
   Conditional(e) {
     e.test = this.analyze(e.test);
     check(e.test).isBoolean();

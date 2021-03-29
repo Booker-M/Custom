@@ -11,7 +11,7 @@ const semanticChecks = [
   ["String Declaration", `${languageConfig.string} x = "Hello World!"`],
   [
     "Boolean Declaration",
-    `${languageConfig.bool} y = ${languageConfig.true} && ${languageConfig.true} || !${languageConfig.true} == !${languageConfig.false};`,
+    `${languageConfig.bool} y = (7 == 7) && ${languageConfig.true} || !${languageConfig.true} == !${languageConfig.false};`,
   ],
   [
     "Boolean Declaration Conditional",
@@ -62,7 +62,25 @@ const semanticChecks = [
         ${languageConfig.print}('please work')
     }
     ${languageConfig.else} {
-        ${languageConfig.print}('cry')
+        ${languageConfig.print}('cry more')
+    }
+    ${languageConfig.return} 1;
+  }`,
+  ],
+  [
+    "${languageConfig.if} ${languageConfig.else} ${languageConfig.if} ${languageConfig.else}",
+    `${languageConfig.int} main (${languageConfig.int} argc, ${languageConfig.string}[]  argv) {
+    ${languageConfig.print}("hello");
+    ${languageConfig.int} x = 0;
+    ${languageConfig.int} y = -1;
+    ${languageConfig.if}(x < y) {
+        ${languageConfig.print}('please work')
+    }
+    ${languageConfig.else} ${languageConfig.if}(x < y) {
+      ${languageConfig.print}('cry')
+  }
+    ${languageConfig.else} {
+        ${languageConfig.print}('cry more')
     }
     ${languageConfig.return} 1;
   }`,
@@ -74,6 +92,13 @@ const semanticChecks = [
   ${languageConfig.for} (${languageConfig.int} i=0; i < ${languageConfig.length}(breeds); i++) {
     ${languageConfig.print} (names[i] + " is a " + breeds[i] + "!");
   }`,
+  ],
+  [
+    "While Loop",
+    `${languageConfig.int} i = 0;
+    ${languageConfig.while} (i < 10) {
+        i++;
+      }`,
   ],
 ];
 
