@@ -63,7 +63,7 @@ Custom {
     addop         =  "+" | "-"
     mullop        =  "*" | "/" | "%"
     expop         =  "^"
-    binop         =  "||" | "&&"
+    binop         =  "||" | "&&"new p5.Element(elt,pInst)
     bool          = "${languageConfig.true}" | "${languageConfig.false}"
     numlit        =  digit+ ("." digit+)?
     stringlit     =  "\\"" (char | "\\'")* "\\""
