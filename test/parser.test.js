@@ -8,13 +8,13 @@ const languageConfig = JSON.parse(
 );
 
 const correctExamples = {
-  "English Breeds": `${languageConfig.string} breeds = ["cat", "armadillo", "dog", "snake"]
-  ${languageConfig.string} names = ["Leslie", "Ben","Andy","April"]
-  ${languageConfig.for} (${languageConfig.int} i=0; i < breeds.size; i++) {
+  "English Breeds": `${languageConfig.string}[] breeds = ["cat", "armadillo", "dog", "snake"]
+  ${languageConfig.string}[] names = ["Leslie", "Ben","Andy","April"]
+  ${languageConfig.for} (${languageConfig.int} i=0; i < ${languageConfig.length}(breeds); i++) {
     ${languageConfig.print} (names[i] + " is a " + breeds[i] + "!");
   }`,
 
-  "${languageConfig.if} ${languageConfig.else}": `${languageConfig.int} main (${languageConfig.int} argc, ${languageConfig.char}  argv) {
+  "${languageConfig.if} ${languageConfig.else}": `${languageConfig.int} main (${languageConfig.int} argc, ${languageConfig.string}[]  argv) {
   ${languageConfig.print}("hello");
   ${languageConfig.if}(x < y) {
       ${languageConfig.print}('please work')
@@ -37,17 +37,29 @@ const correctExamples = {
 
   "${languageConfig.while} Loop": `${languageConfig.int} i = 0; ${languageConfig.while} (i < 10) { i++; ${languageConfig.print}(i); }`,
 
-  "Array Declaration": `${languageConfig.float} probabilities = []; probabilities = [0.1, 0.4, 0.5]`,
+  "Array Declaration": `${languageConfig.float}[] probabilities = []; probabilities = [0.1, 0.4, 0.5]`,
 
-  "Set Declaration": `${languageConfig.string} cheese = {"brie", "cheddar", "mozzarella", "gouda"}`,
+  "Nested Arrays": `${languageConfig.int}[][] arrays = [[1,2], [3,4], [5,6]]`,
+
+  "Set Declaration": `${languageConfig.string}{} cheese = {"brie", "cheddar", "mozzarella", "gouda"}`,
+
+  "Nested Sets": `${languageConfig.int}{}{} sets = {{1,2}, {3,4}, {5,6}}`,
 
   "Dict Declaration": `<${languageConfig.string}, ${languageConfig.int}> playersAndScores = {"Anthony" : 1, "Steve" : -1, "Gerry" : 3}`,
 
+  "Nested Dicts": `<${languageConfig.string}, <${languageConfig.string}, ${languageConfig.string}>> dicts = {"outer key" : {"inner key" : "inner value"}}`,
+
+  "Nested Data Structures": `<${languageConfig.string}[]{}, <${languageConfig.string}[], ${languageConfig.string}>> dicts = {{["outer"], ["key"]} : {["inner", "key"] : "inner value"}}`,
+
   "Array indexing": `${languageConfig.string} x = Dogs[i]`,
+
+  "List Comprehension": `<${languageConfig.bool}, ${languageConfig.int}> newDict = { a:b*b ${languageConfig.for} a,b ${languageConfig.in} oldDict ${languageConfig.if} a == ${languageConfig.true}}`,
 
   "Object properties": `${languageConfig.string} y = Person.name`,
 
   "Function Call": `test(a, b, c, (x == 1), "done")`,
+
+  "Nested Function Call": `f(g(x))`,
 
   "Assignment Increment/Decrement": `x++; x--;`,
 
@@ -61,14 +73,14 @@ const correctExamples = {
     return(keyValues["first"])
   }`,
 
-  "ListComprehension": `${languageConfig.int} y = [x%y ${languageConfig.for} x ${languageConfig.in} z ${languageConfig.for} y ${languageConfig.in} z ${languageConfig.if} x*y == 7];`
+  ListComprehension: `${languageConfig.int} y = [x%y ${languageConfig.for} x ${languageConfig.in} z ${languageConfig.for} y ${languageConfig.in} z ${languageConfig.if} x*y == 7];`,
 };
 
 const incorrectExamples = {
   "id CANNOT be a keyword": `let x = ${languageConfig.if}`,
 };
 
-const ASTtest = `${languageConfig.int} main (${languageConfig.int} argc, ${languageConfig.char}  argv) {
+const ASTtest = `${languageConfig.int} main (${languageConfig.int} argc, ${languageConfig.string}  argv) {
   ${languageConfig.print}("hello");
   ${languageConfig.if}(x < y) {
       ${languageConfig.print}('please work')
@@ -80,25 +92,28 @@ const ASTtest = `${languageConfig.int} main (${languageConfig.int} argc, ${langu
 }`;
 
 const ASTexpected =
-  "   1 | program: Program\n" +
-  "   2 |   block[0]: Block\n" +
-  "   3 |     statements[0]: FunctionDeclaration type='decimalBegone' id='main'\n" +
-  "   4 |       params[0]: Parameter type='decimalBegone' id='argc'\n" +
-  "   5 |       params[1]: Parameter type='charizard' id='argv'\n" +
-  "   6 |       block: Block\n" +
-  "   7 |         statements[0]: ParenExpression\n" +
-  "   8 |           exp: Literal value='hello'\n" +
-  "   9 |         statements[1]: StatementIfElse\n" +
-  "  10 |           ifExpression: BinaryExpression op='<'\n" +
-  "  11 |             left: IdentifierExpression name='x'\n" +
-  "  12 |             right: IdentifierExpression name='y'\n" +
-  "  13 |           ifBlock: Block\n" +
-  "  14 |             statements[0]: ParenExpression\n" +
-  "  15 |               exp: Literal value='please work'\n" +
-  "  16 |           elseBlock[0]: Block\n" +
-  "  17 |             statements[0]: ParenExpression\n" +
-  "  18 |               exp: Literal value='cry'\n" +
-  "  19 |         statements[2]: Number";
+  `   1 | program: Program\n` +
+  `   2 |   block[0]: Block\n` +
+  `   3 |     statements[0]: FunctionDeclaration type='${languageConfig.int}' id='main'\n` +
+  `   4 |       params[0]: Parameter type='${languageConfig.int}' id='argc'\n` +
+  `   5 |       params[1]: Parameter type='${languageConfig.string}' id='argv'\n` +
+  `   6 |       block: Block\n` +
+  `   7 |         statements[0]: FunctionCall\n` +
+  `   8 |           id: IdentifierExpression name='${languageConfig.print}'\n` +
+  `   9 |           args[0]: Literal value='hello'\n` +
+  `  10 |         statements[1]: StatementIfElse\n` +
+  `  11 |           ifExpression: BinaryExpression op='<'\n` +
+  `  12 |             left: IdentifierExpression name='x'\n` +
+  `  13 |             right: IdentifierExpression name='y'\n` +
+  `  14 |           ifBlock: Block\n` +
+  `  15 |             statements[0]: FunctionCall\n` +
+  `  16 |               id: IdentifierExpression name='${languageConfig.print}'\n` +
+  `  17 |               args[0]: Literal value='please work'\n` +
+  `  18 |           elseBlock[0]: Block\n` +
+  `  19 |             statements[0]: FunctionCall\n` +
+  `  20 |               id: IdentifierExpression name='${languageConfig.print}'\n` +
+  `  21 |               args[0]: Literal value='cry'\n` +
+  `  22 |         statements[2]: BigInt`;
 
 describe("Checking parsing on correct code\n", () => {
   for (const [example, code] of Object.entries(correctExamples)) {

@@ -1,5 +1,5 @@
 ![](https://github.com/Booker-M/Custom/blob/main/logo/Custom.png?raw=true)  
-# <div align="center">{Custom}</div>  
+# <div align="center">[{Custom}](https://booker-m.github.io/Custom/)</div>  
 ### <div align="center">Andrew Seaman, Booker Martin, Ian Green, Veronica Backer-Peral</div>
 
 ## Introduction
@@ -13,9 +13,9 @@ After the tragic loss of the Custom Hotel, we wanted to dedicate our customizabl
 
 ### Default Types and Keywords
 **Types:**  
-`"string", "char", "bool", "int", "float"`  
+`"string", "bool", "int", "float"`  
 **Keywords:**  
-`"if", "else", "return", "print", "for", "while", "true", "false"`  
+`"if", "else", "return", "print", "for", "while", "in", "true", "false"`  
 Change them to whatever you desire!  
 
 ### Variable Declaration and Assignment
@@ -36,7 +36,7 @@ function getFirstValue(keyValues) {
 </td><td>
 
 ```
-int getFirstValue(string, int> keyValues) {
+int getFirstValue(string keyValues) {
     return(keyValues["first"])
 }
 ```
@@ -57,15 +57,24 @@ In order of lowest to highest precedence:
 
 ### Data Structures
 **Array:**  
-`float probabilities = [0.1, 0.4, 0.5]`  
+`float[] probabilities = [0.1, 0.4, 0.5]`  
+`int[][] nestedArrays = [[1,2], [3,4], [5,6]]`  
 Arrays are fixed-length.  
   
 **Set:**  
-`string cheese = {"brie", "cheddar", "mozzarella", "gouda"}`  
+`string{} cheese = {"brie", "cheddar", "mozzarella", "gouda"}`  
+`bool{}{} nestedSets = {{true,false,true}, {false,true}, {true}}`  
 
 **Dictionary:**  
 `<string, int> playersAndScores = {"Anthony" : 1, "Steve" : -1, "Gerry" : 3}`  
+`<string, <string, string>> nestedDicts = {"outer key" : {"inner key" : "inner value"}}`  
+`<string[]{}, <string[], string>> dicts = {{["this"], ["can"]} : {["get", "pretty"] : "confusing"}}`  
 Sets and dictionaries are dynamic-length.  
+
+### List Comprehension
+`int[] newArray = [ x for x in oldArray if x % 2 == 0 ]`  
+`int{} newSet = { x for x in oldSet if x % 2 == 0 }`  
+`<bool, int> newDict = { a:b*b for a,b in oldDict if a == true }`  
 
 ### Loops
 **For Loop:**  
@@ -130,15 +139,17 @@ you want! */
     "else": "yolo",
     "for": "fosho",
     "while": "whileWhileWhile",
+    "in": "within",
     "print": "gimme",
     "return": "sendIt",
+    "length": "whatsDaSize",
     "true": "facts",
     "false": "nawMan",
     "string": "letterz",
-    "char": "charizard",
     "int": "decimalBegone",
     "float": "floatYoBoat",
-    "bool": "boolin"
+    "bool": "boolin",
+    "void": "darkness"
 }
 ```
 
@@ -154,8 +165,8 @@ for (let i=0; i < breeds.length; i++) {
 ```
 ### Custom program customized for English speakers:
 ```
-string breeds = ["cat", "armadillo", "dog", "snake"]
-string names = ["Leslie", "Ben","Andy","April"]
+string[] breeds = ["cat", "armadillo", "dog", "snake"]
+string[] names = ["Leslie", "Ben","Andy","April"]
 
 for (int i=0; i < breeds.size; i++) {
     print (names[i] + " is a " + breeds[i] + "!");
@@ -163,8 +174,8 @@ for (int i=0; i < breeds.size; i++) {
 ```
 ### Custom program customized for Spanish speakers:
 ```
-cuerda razas = ["gata", "armadillo", "perro", "serpiente"]
-cuerda nombres = ["Leslie", "Ben","Andy,"April"]
+cuerda[] razas = ["gata", "armadillo", "perro", "serpiente"]
+cuerda[] nombres = ["Leslie", "Ben","Andy,"April"]
 
 por (ent i=0; i < razas.tamaño; i++) {
     imprime (nombres[i] + " es un/una " + razas[i] + "!");
@@ -172,8 +183,8 @@ por (ent i=0; i < razas.tamaño; i++) {
 ```
 ### Custom program customized for French speakers:
 ```
-chaine races = ["chat", "tatou", "chien", "serpent"]
-chaine noms = ["Leslie", "Ben","Andy,"April"]
+chaine[] races = ["chat", "tatou", "chien", "serpent"]
+chaine[] noms = ["Leslie", "Ben","Andy,"April"]
 
 pour (ent i=0; i < races.dimension; i++) {
     imprimez (noms[i] + " cette un/une " + races[i] + "!");

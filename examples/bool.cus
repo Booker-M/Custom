@@ -1,0 +1,2 @@
+${languageConfig.bool} x = ${languageConfig.true}
+${languageConfig.bool} x = facts

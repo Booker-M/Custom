@@ -72,19 +72,19 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
     );
   },
   FunctionCall(id, _1, args, _2) {
-    return new ast.FunctionCall(id.sourceString, args.ast());
+    return new ast.FunctionCall(id.ast(), args.ast());
   },
   Declaration(type, assignment) {
     return new ast.Declaration(type.ast(), assignment.ast());
   },
   Assignment_assign(id, _1, exp) {
-    return new ast.Assignment(id.sourceString, exp.ast());
+    return new ast.Assignment(id.ast(), exp.ast());
   },
   Assignment_increment(id, op) {
-    return new ast.Assignment(id.sourceString, op.sourceString);
+    return new ast.Assignment(id.ast(), op.sourceString);
   },
   Assignment_decrement(id, op) {
-    return new ast.Assignment(id.sourceString, op.sourceString);
+    return new ast.Assignment(id.ast(), op.sourceString);
   },
   FunctionDeclaration(type, id, _1, params, _2, _3, block, _4) {
     return new ast.FunctionDeclaration(
@@ -145,13 +145,10 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
   ParenExp_parens(_1, expression, _2) {
     return new ast.ParenExpression(expression.ast());
   },
-  Print(_1, ParenExp) {
-    return ParenExp.ast();
-  },
   Return(_1, ParenExp) {
     return ParenExp.ast();
   },
-  Array_declarative(_1, elements, _2) {
+  Array(_1, elements, _2) {
     return new ast.CustomArray(elements.ast());
   },
   Set(_1, elements, _2) {
@@ -169,16 +166,47 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
   KeyValue(key, _1, value) {
     return new ast.KeyValue(key.ast(), value.ast());
   },
-  ListComp(_1, newExp, _2, args, _3, list, _4, condExp, _5) {
-    return new ast.ListComp(newExp.ast(), args.ast(), list.ast(), condExp.ast());
+  ListComp(
+    _1,
+    newKeyExp,
+    _2,
+    newValueExp,
+    _3,
+    key,
+    _4,
+    value,
+    _5,
+    list,
+    _6,
+    condExp,
+    _7
+  ) {
+    return new ast.ListComp(
+      newKeyExp.ast(),
+      newValueExp.ast(),
+      key.sourceString,
+      value.sourceString,
+      list.sourceString,
+      condExp.ast()
+    );
   },
-  Type_dict(_1, type1, _2, type2, _3) {
-    return new ast.TypeDict(type1.sourceString, type2.sourceString);
+  type_dict(_1, _2, type1, _3, _4, _5, type2, _6, _7) {
+    return new ast.DictType(type1.ast(), type2.ast());
   },
-  Id(_first, _rest) {
+  type_array(type, _1) {
+    return new ast.ArrayType(type.ast());
+  },
+  type_set(type, _1) {
+    return new ast.SetType(type.ast());
+  },
+  id(_first, _rest) {
     return new ast.IdentifierExpression(this.sourceString);
+    // return this.sourceString;
   },
-  numlit(_whole, _point, _fraction) {
+  intlit(_whole) {
+    return BigInt(this.sourceString);
+  },
+  floatlit(_whole, _point, _fraction) {
     return Number(this.sourceString);
   },
   stringlit(_1, _chars, _2) {
@@ -189,6 +217,12 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
   },
   EmptyListOf() {
     return [];
+  },
+  true(_) {
+    return true;
+  },
+  false(_) {
+    return false;
   },
   _terminal() {
     return this.sourceString;
