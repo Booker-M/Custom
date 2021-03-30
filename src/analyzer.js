@@ -381,14 +381,6 @@ class Context {
     return a;
   }
   EmptyArray(e) {
-    e.baseType = this.analyze(e.baseType);
-    e.type = new ArrayType(e.baseType);
-    return e;
-  }
-  Property(e) {
-    e.object = this.analyze(e.object);
-    check(e.field).isInTheObject(e.object);
-    e.type = e.object.type.fields.find(f => f.name === e.field).type;
     return e;
   }
   FunctionCall(c) {

@@ -122,9 +122,6 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
   Index(id1, _1, id2, _2) {
     return new ast.Index(id1.ast(), id2.ast());
   },
-  Property(id1, _1, id2) {
-    return new ast.Property(id1.ast(), id2.ast());
-  },
   KeyValue(key, _1, value) {
     return new ast.KeyValue(key.ast(), value.ast());
   },

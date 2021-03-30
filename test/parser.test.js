@@ -55,8 +55,6 @@ const correctExamples = {
 
   "List Comprehension": `<${languageConfig.bool}, ${languageConfig.int}> newDict = { a:b*b ${languageConfig.for} a,b ${languageConfig.in} oldDict ${languageConfig.if} a == ${languageConfig.true}}`,
 
-  "Object properties": `${languageConfig.string} y = Person.name`,
-
   "Function Call": `test(a, b, c, (x == 1), "done")`,
 
   "Nested Function Call": `f(g(x))`,

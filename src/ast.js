@@ -141,11 +141,6 @@ export class Index {
     Object.assign(this, { collection, index });
   }
 }
-export class Property {
-  constructor(object, field) {
-    Object.assign(this, { object, field });
-  }
-}
 
 export class KeyValue {
   constructor(key, value) {

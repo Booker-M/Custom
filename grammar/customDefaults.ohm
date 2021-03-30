@@ -1,73 +1,67 @@
+
 Custom {
-  Program       =  Block*
-  Block         =  Statement+
-  Statement     =  (Loop | FunctionDeclaration | Return | FunctionCall | Declaration | Assignment) (";")?  --declarative
-                | "if" "(" Exp ")" "{" Block "}"
-                  ("else" "if" "(" Exp ")" "{" Block "}" )*
-                  ("else" "{" Block "}")?                     -- if
-
-  Loop 			    = "while" "(" Exp ")" "{" Block "}" --while
-                | "for" "(" Declaration ";" Exp ";" Assignment  ")" "{" Block "}"  --for
-  FunctionDeclaration =  type id "(" Params ")" "{" Block "}"
-  FunctionCall  =  id "(" Args ")"
-  Declaration   =  type Assignment
-  Assignment    = id "=" Exp						                      -- assign
-                | id "++"							                        -- increment
-                | id "--"								                      -- decrement
-
-  Args          =  ListOf<BinExp, ",">
-  Params        =  ListOf<Param, ",">
-  Param         =  type id
-
-  Exp           =  Exp relop BinExp                           -- binary
-                |  BinExp "?" BinExp ":" BinExp               -- ternary
-                |  BinExp
-  BinExp        =  BinExp binop AddExp                        -- binary
-                |  AddExp
-  AddExp        =  AddExp addop MullExp                       -- binary
-                |  MullExp
-  MullExp       =  MullExp mullop PrefixExp                   -- binary
-                |  PrefixExp
-  PrefixExp     =  prefixop ExpoExp                           -- binary
-                |  ExpoExp
-  ExpoExp       =  ParenExp expop ExpoExp                     -- binary
-                |  ParenExp
-  ParenExp      =  "(" Exp ")"                                -- parens
-                |  ListComp | Array | Set | Dict | Index | FunctionCall | Property | bool | floatlit | intlit | stringlit | id
-
-  Return        =  "return " ParenExp
-  Array         =  "[" ListOf<BinExp, ","> "]"
-  Set           =  "{" ListOf<BinExp, ","> "}"
-  Dict          =  "{" ListOf<KeyValue, ","> "}"
-  Index         =  id "[" (id | intlit | stringlit) "]"
-  Property      =  id ~space "." ~space id
-  KeyValue      =  BinExp ":" BinExp
-  ListComp      =  ("[" | "{") Exp (":" Exp)? ("for" id ("," id)? "in" id)+ ("if" Exp)* ("]" | "}")
-
-  type          =  "<" space? type space? "," space? type space? ">"  -- dict
-                | type "[]"                                   -- array
-                | type "{}"                                   -- set
-                |  "string" | "bool" | "int" | "float"
-  keyword       =  type | bool | "if" | "else" | "return" | "for" | "while" | "in" | "void") ~alnum
-  id            =  ~keyword letter (alnum)*
-  prefixop      =  "!" | "-"
-  relop         =  ">" | ">=" | "==" | "!=" | "<" | "<="
-  addop         =  "+" | "-"
-  mullop        =  "*" | "/" | "%"
-  expop         =  "^"
-  binop         =  "||" | "&&"
-  bool          =  true | false
-  true          =  "true" ~alnum
-  false         =  "false" ~alnum
-  intlit        =  digit+
-  floatlit      =  digit+ "." digit+
-  stringlit     =  "\"" (char | "\'")* "\""
-                |  "\'" (char | "\"")* "\'"
-  char          =  escape
-                |  ~"\\" ~"\"" ~"\'" ~"\\n" any
-  escape        = "\\\\" | "\\\"" | "\\'" | "\\n" | "\\t"
-                |  "\\u{" hexDigit+ "}"                       -- codepoint
-  space         := " " | "\t" | "\n" | comment
-  comment       =  "//" (~"\n" any)*                          --singleline
-                | "/*" (~("*/") any )* "*/"                   --multiline
+    Program       =  Statement*
+    Block         =  "{" Statement+ "}"
+    Statement     =  (Loop | FunctionDeclaration | Return | FunctionCall | Declaration | Assignment | IfStatement) (";")?
+    IfStatement   =  "if" "(" Exp ")" Block ("else" (IfStatement | Block))?
+​
+    Loop                = "while" "(" Exp ")" Block -- while
+                  | "for" "(" Declaration ";" Exp ";" Assignment  ")" Block  -- for
+    FunctionDeclaration =  type id "(" Params ")" Block
+    FunctionCall  =  id "(" Args ")"
+    Declaration   =  type Assignment
+    Assignment    = id "=" Exp                                            -- assign
+                  | id "++"                                                 -- increment
+                  | id "--"                                                   -- decrement
+​
+    Args          =  ListOf<BinExp, ",">
+    Params        =  ListOf<Param, ",">
+    Param         =  type id
+​
+    Exp           =  Exp relop BinExp                           -- binary
+                  |  BinExp "?" BinExp ":" BinExp               -- ternary
+                  |  BinExp
+    BinExp        =  BinExp binop AddExp                        -- binary
+                  |  AddExp
+    AddExp        =  AddExp addop MullExp                       -- binary
+                  |  MullExp
+    MullExp       =  MullExp mullop PrefixExp                   -- binary
+                  |  PrefixExp
+    PrefixExp     =  prefixop ExpoExp                           -- binary
+                  |  ExpoExp
+    ExpoExp       =  ParenExp expop ExpoExp                     -- binary
+                  |  ParenExp
+    ParenExp      =  "(" Exp ")"                                -- parens
+                  |  ListComp | Array | Set | Dict | Index | FunctionCall | Property | bool | floatlit | intlit | stringlit | id
+​
+    Return        =  "return " ParenExp
+    Array         =  "[" ListOf<BinExp, ","> "]"
+    Set           =  "{" ListOf<BinExp, ","> "}"
+    Dict          =  "{" ListOf<KeyValue, ","> "}"
+    Index         =  id "[" (id | intlit | stringlit) "]"
+    Property      =  id ~space "." ~space id
+    KeyValue      =  BinExp ":" BinExp
+    ListComp      =  ("[" | "{") Exp (":" Exp)? ("for" id ("," id)? "in" id)+ ("if" Exp)* ("]" | "}")
+​
+    type          =  "<" space? type space? "," space? type space? ">"  -- dict
+                  | type "[]"                                   -- array
+                  | type "{}"                                   -- set
+                  |"string" | "bool" | "int" | "float"
+    keyword       =  (type | bool | "if" | "else" | "return" | "for" | "while" | "in" | "void") ~alnum
+    id            =  ~keyword letter (alnum)*
+    prefixop      =  "!" | "-"
+    relop         =  ">" | ">=" | "==" | "!=" | "<" | "<="
+    addop         =  "+" | "-"
+    mullop        =  "*" | "/" | "%"
+    expop         =  "^"
+    binop         =  "||" | "&&"
+    bool          = true | false
+    true          = "true" ~alnum
+    false         = "false" ~alnum
+    intlit        =  digit+
+    floatlit      =  digit+ "." digit+
+    stringlit     =  "\\"" (char | "\\'")* "\\""
+                  | "\\'" (char | "\\"")* "\\'"
+    comment       =  "//" (~"\\n" any)*                         -- singleline
+                  | "/*" (~("*/") any )* "*/"                   -- multiline
 }
