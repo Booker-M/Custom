@@ -117,7 +117,7 @@ class Context {
     this.locals = new Map();
     // Whether we are in a loop, so that we know whether breaks and continues
     // are legal here
-    this.inLoop = configuration.inLoop ?? parent?.inLoop ?? false; // eslint-disable-line no-eval 
+    this.inLoop = configuration.inLoop ?? parent?.inLoop ?? false;  
     // Whether we are in a function, so that we know whether a return
     // statement can appear here, and if so, how we typecheck it
     this.function = configuration.forFunction ?? parent?.function ?? null;
