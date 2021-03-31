@@ -45,11 +45,11 @@ const semanticChecks = [
   //   "Dict Declaration",
   //   `<${languageConfig.int}, ${languageConfig.string}> cheeses = {1: "brie", 2: "cheddar", 3: "gouda"}`,
   // ],
-  [
-    "Dict Lookup",
-    `<${languageConfig.int}, ${languageConfig.string}> cheeses = {1: "brie", 2: "cheddar", 3: "gouda"};
-    ${languageConfig.print}(cheeses[1])`,
-  ],
+  // [
+  //   "Dict Lookup",
+  //   `<${languageConfig.int}, ${languageConfig.string}> cheeses = {1: "brie", 2: "cheddar", 3: "gouda"};
+  //   ${languageConfig.print}(cheeses[1])`,
+  // ],
   // [
   //   "Nested Dicts Declaration",
   //   `<${languageConfig.int}, <${languageConfig.int}, ${languageConfig.string}>> cheeses = {1: {1: "brie"}, 2: {1: "cheddar"}, 3: {3: "gouda"}}`,
@@ -108,6 +108,13 @@ const semanticChecks = [
   //       i--;`,
   // ],
   // [
+  //   "Break Statement",
+  //   `${languageConfig.int} i = 0;
+  //     ${languageConfig.while} (i < 10) {
+  //         break;
+  //     }`,
+  // ],
+  // [
   //   "Function Declaration and Execution",
   //   `${languageConfig.int} add (${languageConfig.int} a, ${languageConfig.int} b) {
   //     ${languageConfig.return} (a + b);
@@ -127,14 +134,20 @@ const semanticChecks = [
   //   <${languageConfig.int},${languageConfig.string}> dictionary = {1: "one", 2: "two", 3: "three"}
   //   `,
   // ],
+  [
+    "Return Statement",
+    `
+    ${languageConfig.int} sevenPlease() {
+      ${languageConfig.int} seven = 7;
+      ${languageConfig.return} (seven);
+    }
+    `,
+  ],
   // [
-  //   "Return Statement",
-  //   `
-  //   ${languageConfig.int} sevenPlease() {
-  //     ${languageConfig.int} seven = 7;
-  //     ${languageConfig.return} (seven);
-  //   }
-  //   `,
+  //   "Void Function returning nothing",
+  //   `${languageConfig.void} main () {
+  //     ${languageConfig.return};
+  //   }`,
   // ],
 ];
 

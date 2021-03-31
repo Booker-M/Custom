@@ -8,17 +8,18 @@ const Custom = `
 Custom {
     Program       =  Statement*
     Block         =  "{" Statement+ "}"
-    Statement     =  (Loop | FunctionDeclaration | Return | FunctionCall | Declaration | Assignment | IfStatement) (";")?
+    Statement     =  (Loop | FunctionDeclaration | Return | FunctionCall | Declaration | Assignment | IfStatement | Break) (";")?
     IfStatement   =  "${languageConfig.if}" "(" Exp ")" Block ("${languageConfig.else}" (IfStatement | Block))?
 
     Loop 			    =  "${languageConfig.while}" "(" Exp ")" Block -- while
-                  |  "${languageConfig.for}" "(" Declaration ";" Exp ";" Assignment  ")" Block  -- for
-    FunctionDeclaration =  type id "(" Params ")" Block
+                  |  "${languageConfig.for}" "(" Declaration ";" Exp ";" Assignment ")" Block  -- for
+    FunctionDeclaration =  (type | "${languageConfig.void}") id "(" Params ")" Block
     FunctionCall  =  id "(" Args ")"
     Declaration   =  type Assignment
     Assignment    =  id "=" Exp						                       -- assign
                   |  id "++"							                       -- increment
                   |  id "--"								                     -- decrement
+    Break         =  "break" ~alnum
 
     Args          =  ListOf<BinExp, ",">
     Params        =  ListOf<Param, ",">
@@ -40,7 +41,7 @@ Custom {
     ParenExp      =  "(" Exp ")"                                 -- parens
                   |  ListComp | Array | Set | Dict | Index | FunctionCall | bool | floatlit | intlit | stringlit | id
 
-    Return        =  "${languageConfig.return} " ParenExp
+    Return        =  "${languageConfig.return}" ParenExp?
     Array         =  "[" ListOf<BinExp, ","> "]"
     Set           =  "{" ListOf<BinExp, ","> "}"
     Dict          =  "{" ListOf<KeyValue, ","> "}"

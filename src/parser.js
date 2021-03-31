@@ -37,6 +37,9 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
       block.ast()
     );
   },
+  Break(_1) {
+    return new ast.BreakStatement();
+  },
   FunctionCall(id, _1, args, _2) {
     return new ast.FunctionCall(id.ast(), args.ast());
   },

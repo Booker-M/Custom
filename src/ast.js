@@ -51,6 +51,10 @@ export class ForLoop {
   }
 }
 
+export class BreakStatement {
+  // Intentionally empty
+}
+
 export class FunctionDeclaration {
   constructor(type, id, params, block) {
     Object.assign(this, { type, id, params, block });
@@ -158,23 +162,6 @@ export class ListComp {
     });
   }
 }
-// export class TypeDict {
-//   constructor(type1, type2) {
-//     Object.assign(this, { type1, type2 });
-//   }
-// }
-
-// export class TypeArray {
-//   constructor(type) {
-//     this.type = type;
-//   }
-// }
-
-// export class TypeSet {
-//   constructor(type) {
-//     this.type = type;
-//   }
-// }
 
 export class Literal {
   constructor(value) {
@@ -259,16 +246,16 @@ export class FunctionType extends Type {
     super(`(${parameterTypes.map(t => t.name).join(",")})->${returnType.name}`);
     Object.assign(this, { parameterTypes, returnType });
   }
-  // isAssignableTo(target) {
-  //   return (
-  //     target.constructor === FunctionType &&
-  //     this.returnType.isAssignableTo(target.returnType) &&
-  //     this.parameterTypes.length === target.parameterTypes.length &&
-  //     this.parameterTypes.every((t, i) =>
-  //       target.parameterTypes[i].isAssignableTo(t)
-  //     )
-  //   );
-  // }
+  isAssignableTo(target) {
+    return (
+      target.constructor === FunctionType &&
+      this.returnType.isAssignableTo(target.returnType) &&
+      this.parameterTypes.length === target.parameterTypes.length &&
+      this.parameterTypes.every((t, i) =>
+        target.parameterTypes[i].isAssignableTo(t)
+      )
+    );
+  }
 }
 
 // Appears in the syntax tree only and disappears after semantic analysis

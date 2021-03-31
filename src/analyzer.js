@@ -343,9 +343,15 @@ class Context {
   }
   Index(e) {
     e.collection = this.analyze(e.collection);
-    e.type = e.collection.type.baseKey;
     e.index = this.analyze(e.index);
-    check(e.index).isInteger();
+    if (e.collection.type.baseType) {
+      e.type = e.collection.type.baseType;
+      check(e.index).isInteger();
+    } else {
+      e.type = e.collection.type.baseValue;
+      console.log(e.index.type, e.collection.type.baseKey);
+      check(e.index.type).hasSameTypeAs(e.collection.type.baseKey);
+    }
     return e;
   }
   CustomArray(a) {
@@ -423,14 +429,6 @@ class Context {
     l.type = l.value.type;
     return l;
   }
-  // elements(e) {
-  //   return e.map(item => this.analyze(item));
-  // }
-  // keyValues(e) {
-  //   e.keys = e.map(item => this.analyze(item.key));
-  //   e.values = e.map(item => this.analyze(item.value));
-  //   return e;
-  // }
 }
 
 export default function analyze(node) {
