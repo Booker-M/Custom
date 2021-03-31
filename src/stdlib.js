@@ -5,9 +5,9 @@ const languageConfig = JSON.parse(
   fs.readFileSync("./config/customConfig.json", "utf8")
 );
 
-function makeConstant(name, type, value) {
-  return Object.assign(new Variable(name, true), { type, value });
-}
+// function makeConstant(name, type, value) {
+//   return Object.assign(new Variable(name, true), { type, value });
+// }
 
 function makeFunction(name, type) {
   return Object.assign(new Function(name), { type });

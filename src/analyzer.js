@@ -64,7 +64,7 @@ const check = self => ({
     );
   },
   isAssignableTo(type) {
-    // console.log(self, type);
+    console.log(self, type);
     must(
       type === Type.ANY || self.type.isAssignableTo(type),
       `Cannot assign a ${self.type.name} to a ${type.name}`
@@ -117,9 +117,9 @@ const check = self => ({
   matchParametersOf(calleeType) {
     check(self).match(calleeType.parameterTypes);
   },
-  matchFieldsOf(structType) {
-    check(self).match(structType.fields.map(f => f.type));
-  },
+  // matchFieldsOf(structType) {
+  //   check(self).match(structType.fields.map(f => f.type));
+  // },
 });
 
 class Context {
@@ -189,11 +189,11 @@ class Context {
     t.baseValue = this.analyze(t.baseValue);
     return t;
   }
-  FunctionType(t) {
-    t.parameterTypes = this.analyze(t.parameterTypes);
-    t.returnType = this.analyze(t.returnType);
-    return t;
-  }
+  // FunctionType(t) {
+  //   t.parameterTypes = this.analyze(t.parameterTypes);
+  //   t.returnType = this.analyze(t.returnType);
+  //   return t;
+  // }
   Declaration(d) {
     d.variable = new Variable(this.analyze(d.assignment.target.name));
     d.variable.type = this.analyze(d.type);
@@ -343,7 +343,7 @@ class Context {
   }
   Index(e) {
     e.collection = this.analyze(e.collection);
-    e.type = e.collection.type.baseType;
+    e.type = e.collection.type.baseKey;
     e.index = this.analyze(e.index);
     check(e.index).isInteger();
     return e;

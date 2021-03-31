@@ -211,7 +211,7 @@ export class Type {
 export class ArrayType extends Type {
   // Example: [int]
   constructor(baseType) {
-    super(`[${baseType.name ? baseType.name : baseType}]`);
+    super(`[${baseType.name}]`);
     this.baseType = baseType;
   }
   // [T] equivalent to [U] only when T is equivalent to U. Same for
@@ -226,7 +226,7 @@ export class ArrayType extends Type {
 
 export class SetType extends Type {
   constructor(baseType) {
-    super(`{${baseType.name ? baseType.name : baseType}}`);
+    super(`{${baseType.name}}`);
     this.baseType = baseType;
   }
 
@@ -240,11 +240,7 @@ export class SetType extends Type {
 
 export class DictType extends Type {
   constructor(baseKey, baseValue) {
-    super(
-      `<${baseKey.name ? baseKey.name : baseKey}, ${
-        baseValue.name ? baseValue.name : baseValue
-      }>`
-    );
+    super(`<${baseKey.name}, ${baseValue.name}>`);
     this.baseKey = baseKey;
     this.baseValue = baseValue;
   }
@@ -263,16 +259,16 @@ export class FunctionType extends Type {
     super(`(${parameterTypes.map(t => t.name).join(",")})->${returnType.name}`);
     Object.assign(this, { parameterTypes, returnType });
   }
-  isAssignableTo(target) {
-    return (
-      target.constructor === FunctionType &&
-      this.returnType.isAssignableTo(target.returnType) &&
-      this.parameterTypes.length === target.parameterTypes.length &&
-      this.parameterTypes.every((t, i) =>
-        target.parameterTypes[i].isAssignableTo(t)
-      )
-    );
-  }
+  // isAssignableTo(target) {
+  //   return (
+  //     target.constructor === FunctionType &&
+  //     this.returnType.isAssignableTo(target.returnType) &&
+  //     this.parameterTypes.length === target.parameterTypes.length &&
+  //     this.parameterTypes.every((t, i) =>
+  //       target.parameterTypes[i].isAssignableTo(t)
+  //     )
+  //   );
+  // }
 }
 
 // Appears in the syntax tree only and disappears after semantic analysis
@@ -314,9 +310,12 @@ function prettied(node) {
     let descriptor = `${" ".repeat(indent)}${prefix}: ${node.constructor.name}`;
     let [simpleProps, complexProps] = ["", []];
     for (const [prop, child] of Object.entries(node)) {
-      if (seen.has(child)) {
+      /* if (seen.has(child)) {
         simpleProps += ` ${prop}=$${seen.get(child)}`;
-      } else if (Array.isArray(child) || (child && typeof child == "object")) {
+      } else */ if (
+        Array.isArray(child) ||
+        (child && typeof child == "object")
+      ) {
         complexProps.push([prop, child]);
       } else {
         simpleProps += ` ${prop}=${util.inspect(child)}`;
