@@ -89,7 +89,31 @@ const ASTtest = `${languageConfig.int} main (${languageConfig.int} argc, ${langu
   ${languageConfig.return} 1;
 }`;
 
-// const ASTexpected =
+const ASTexpected = `   1 | program: Program
+   2 |   statements[0]: FunctionDeclaration id='main'
+   3 |     type: TypeId name='decimalBegone'
+   4 |     params[0]: Parameter id='argc'
+   5 |       type: TypeId name='decimalBegone'
+   6 |     params[1]: Parameter id='argv'
+   7 |       type: TypeId name='letterz'
+   8 |     block: Block
+   9 |       statements[0]: FunctionCall
+  10 |         id: IdentifierExpression name='gimme'
+  11 |         args[0]: Literal value='hello'
+  12 |       statements[1]: StatementIfElse
+  13 |         test: BinaryExpression op='<'
+  14 |           left: IdentifierExpression name='x'
+  15 |           right: IdentifierExpression name='y'
+  16 |         consequence: Block
+  17 |           statements[0]: FunctionCall
+  18 |             id: IdentifierExpression name='gimme'
+  19 |             args[0]: Literal value='please work'
+  20 |         alternate[0]: Block
+  21 |           statements[0]: FunctionCall
+  22 |             id: IdentifierExpression name='gimme'
+  23 |             args[0]: Literal value='cry'
+  24 |       statements[2]: ReturnStatement
+  25 |         expression[0]: BigInt`
 
 describe("Checking parsing on correct code\n", () => {
   for (const [example, code] of Object.entries(correctExamples)) {
@@ -98,7 +122,7 @@ describe("Checking parsing on correct code\n", () => {
       done();
     });
   }
-  // assert.deepStrictEqual(util.format(parse(ASTtest)), ASTexpected);
+  assert.deepStrictEqual(util.format(parse(ASTtest)), ASTexpected);
 });
 
 describe("Checking parsing on incorrect code\n", () => {
