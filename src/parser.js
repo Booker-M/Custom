@@ -164,6 +164,9 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
   typeid(type) {
     return new ast.TypeId(type.ast());
   },
+  void(type) {
+    return new ast.TypeId(type.ast());
+  },
   id(_first, _rest) {
     return new ast.IdentifierExpression(this.sourceString);
     // return this.sourceString;

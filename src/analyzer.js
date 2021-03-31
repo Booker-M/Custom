@@ -44,12 +44,6 @@ const check = self => ({
   isAType() {
     must([Type].includes(self.constructor), "Type expected");
   },
-  isAnOptional() {
-    must(self.type.constructor === OptionalType, "Optional expected");
-  },
-  isAnArray() {
-    must(self.type.constructor === ArrayType, "Array expected");
-  },
   hasSameTypeAs(other) {
     must(
       self.type.isEquivalentTo(other.type),
@@ -57,31 +51,23 @@ const check = self => ({
     );
   },
   allHaveSameType() {
-    // self.slice(1).every(e => console.log(e.type.name, self[0].type.name)),
     must(
       self.slice(1).every(e => e.type.name === self[0].type.name),
       "Not all elements have the same type"
     );
   },
   isAssignableTo(type) {
-    console.log(self, type);
     must(
       type === Type.ANY || self.type.isAssignableTo(type),
       `Cannot assign a ${self.type.name} to a ${type.name}`
     );
   },
-  isNotReadOnly() {
-    must(!self.readOnly, `Cannot assign to constant ${self.name}`);
+  areAllDistinct() {
+    must(
+      new Set(self.map(f => (f.value ? f.value : f))).size === self.length,
+      "Fields must be distinct"
+    );
   },
-  // areAllDistinct() {
-  //   must(
-  //     new Set(self.map(f => f.name)).size === self.length,
-  //     "Fields must be distinct"
-  //   );
-  // },
-  // isInTheObject(object) {
-  //   must(object.type.fields.map(f => f.name).includes(self), "No such field");
-  // },
   isInsideALoop() {
     must(self.inLoop, "Break can only appear in a loop");
   },
@@ -117,9 +103,9 @@ const check = self => ({
   matchParametersOf(calleeType) {
     check(self).match(calleeType.parameterTypes);
   },
-  // matchFieldsOf(structType) {
-  //   check(self).match(structType.fields.map(f => f.type));
-  // },
+  isUndefined() {
+    must(self === undefined, "Should not be defined");
+  },
 });
 
 class Context {
@@ -148,7 +134,6 @@ class Context {
     this.locals.set(name, entity);
   }
   lookup(name) {
-    // console.log("LOCALS:", this.locals);
     const entity = this.locals.get(name);
     if (entity) {
       return entity;
@@ -163,9 +148,6 @@ class Context {
     return new Context(this, configuration);
   }
   analyze(node) {
-    console.log("NODE:");
-    console.log(node);
-    console.log(node.constructor.name + "()\n");
     return this[node.constructor.name](node);
   }
   Program(p) {
@@ -189,11 +171,6 @@ class Context {
     t.baseValue = this.analyze(t.baseValue);
     return t;
   }
-  // FunctionType(t) {
-  //   t.parameterTypes = this.analyze(t.parameterTypes);
-  //   t.returnType = this.analyze(t.returnType);
-  //   return t;
-  // }
   Declaration(d) {
     d.variable = new Variable(this.analyze(d.assignment.target.name));
     d.variable.type = this.analyze(d.type);
@@ -202,12 +179,8 @@ class Context {
     d.assignment = this.analyze(d.assignment);
     return d;
   }
-  Field(f) {
-    f.type = this.analyze(f.type);
-    return f;
-  }
   FunctionDeclaration(d) {
-    d.type = d.type ? this.analyze(d.type) : Type.VOID;
+    d.type = this.analyze(d.type);
     // Declarations generate brand new function objects
     const f = (d.function = new Function(d.id));
     // When entering a function body, we must reset the inLoop setting,
@@ -250,16 +223,16 @@ class Context {
   }
   ReturnStatement(s) {
     check(this).isInsideAFunction();
-    check(this.function).returnsSomething();
-    s.expression = this.analyze(s.expression);
-    check(s.expression).isReturnableFrom(this.function);
+    if (this.function.type.returnType === Type.VOID) {
+      check(this.function).returnsNothing();
+      check(s.expression[0]).isUndefined();
+    } else {
+      s.expression = this.analyze(s.expression[0]);
+      check(this.function).returnsSomething();
+      check(s.expression).isReturnableFrom(this.function);
+    }
     return s;
   }
-  // ShortReturnStatement(s) {
-  //   check(this).isInsideAFunction();
-  //   check(this.function).returnsNothing();
-  //   return s;
-  // }
   StatementIfElse(s) {
     s.test = this.analyze(s.test);
     check(s.test).isBoolean();
@@ -293,18 +266,6 @@ class Context {
     e.type = e.consequence.type;
     return e;
   }
-  // OrExpression(e) {
-  //   e.disjuncts = this.analyze(e.disjuncts);
-  //   e.disjuncts.forEach(disjunct => check(disjunct).isBoolean());
-  //   e.type = Type.BOOLEAN;
-  //   return e;
-  // }
-  // AndExpression(e) {
-  //   e.conjuncts = this.analyze(e.conjuncts);
-  //   e.conjuncts.forEach(conjunct => check(conjunct).isBoolean());
-  //   e.type = Type.BOOLEAN;
-  //   return e;
-  // }
   BinaryExpression(e) {
     e.left = this.analyze(e.left);
     e.right = this.analyze(e.right);
@@ -349,7 +310,6 @@ class Context {
       check(e.index).isInteger();
     } else {
       e.type = e.collection.type.baseValue;
-      console.log(e.index.type, e.collection.type.baseKey);
       check(e.index.type).hasSameTypeAs(e.collection.type.baseKey);
     }
     return e;
@@ -358,40 +318,26 @@ class Context {
     a.elements = this.analyze(a.elements);
     check(a.elements).allHaveSameType();
     a.type = new ArrayType(
-      a.elements.length > 0
-        ? typeof a.elements[0].type === "object"
-          ? a.elements[0].type
-          : a.elements[0].type.name
-        : Type.ANY
+      a.elements.length > 0 ? a.elements[0].type : Type.ANY
     );
     return a;
   }
   CustomSet(a) {
     a.elements = this.analyze(a.elements);
     check(a.elements).allHaveSameType();
-    a.type = new SetType(
-      a.elements.length > 0
-        ? typeof a.elements[0].type === "object"
-          ? a.elements[0].type
-          : a.elements[0].type.name
-        : Type.ANY
-    );
+    check(a.elements).areAllDistinct();
+    a.type = new SetType(a.elements.length > 0 ? a.elements[0].type : Type.ANY);
     return a;
   }
   CustomDict(a) {
     a.keys = a.keyValues.map(item => this.analyze(item.key));
     a.values = a.keyValues.map(item => this.analyze(item.value));
     check(a.keys).allHaveSameType();
+    check(a.keys).areAllDistinct();
     check(a.values).allHaveSameType();
-    a.type = new DictType(
-      a.keys.length > 0 ? a.keys[0].type : Type.ANY,
-      a.values.length > 0 ? a.values[0].type : Type.ANY
-    );
+    a.type = new DictType(a.keys[0].type, a.values[0].type);
     return a;
   }
-  // EmptyArray(e) {
-  //   return e;
-  // }
   FunctionCall(c) {
     c.id = this.analyze(c.id);
     check(c.id).isCallable();
@@ -445,6 +391,5 @@ export default function analyze(node) {
   for (const [name, type] of Object.entries(library)) {
     initialContext.add(name, type);
   }
-  console.log(initialContext);
   return initialContext.analyze(node);
 }

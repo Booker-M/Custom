@@ -13,7 +13,7 @@ Custom {
 
     Loop 			    =  "${languageConfig.while}" "(" Exp ")" Block -- while
                   |  "${languageConfig.for}" "(" Declaration ";" Exp ";" Assignment ")" Block  -- for
-    FunctionDeclaration =  (type | "${languageConfig.void}") id "(" Params ")" Block
+    FunctionDeclaration =  (type | void) id "(" Params ")" Block
     FunctionCall  =  id "(" Args ")"
     Declaration   =  type Assignment
     Assignment    =  id "=" Exp						                       -- assign
@@ -54,6 +54,7 @@ Custom {
                   |  type "{}"                                   -- set
                   |  typeid
     typeid        =  "${languageConfig.string}" | "${languageConfig.bool}" | "${languageConfig.int}" | "${languageConfig.float}"
+    void          =  "${languageConfig.void}"
     keyword       =  (type | bool | "${languageConfig.if}" | "${languageConfig.else}" | "${languageConfig.return}" | "${languageConfig.for}" | "${languageConfig.while}" | "${languageConfig.in}" | "${languageConfig.void}") ~alnum
     id            =  ~keyword letter (alnum)*
     prefixop      =  "!" | "-"

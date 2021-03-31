@@ -219,8 +219,9 @@ export class SetType extends Type {
 
   isEquivalentTo(target) {
     return (
-      target.constructor === SetType &&
-      this.baseType.isEquivalentTo(target.baseType)
+      (target.constructor === SetType &&
+        this.baseType.isEquivalentTo(target.baseType)) ||
+      (target.constructor === DictType && this.baseType === Type.ANY)
     );
   }
 }
@@ -246,16 +247,16 @@ export class FunctionType extends Type {
     super(`(${parameterTypes.map(t => t.name).join(",")})->${returnType.name}`);
     Object.assign(this, { parameterTypes, returnType });
   }
-  isAssignableTo(target) {
-    return (
-      target.constructor === FunctionType &&
-      this.returnType.isAssignableTo(target.returnType) &&
-      this.parameterTypes.length === target.parameterTypes.length &&
-      this.parameterTypes.every((t, i) =>
-        target.parameterTypes[i].isAssignableTo(t)
-      )
-    );
-  }
+  // isAssignableTo(target) {
+  //   return (
+  //     target.constructor === FunctionType &&
+  //     this.returnType.isAssignableTo(target.returnType) &&
+  //     this.parameterTypes.length === target.parameterTypes.length &&
+  //     this.parameterTypes.every((t, i) =>
+  //       target.parameterTypes[i].isAssignableTo(t)
+  //     )
+  //   );
+  // }
 }
 
 // Appears in the syntax tree only and disappears after semantic analysis
