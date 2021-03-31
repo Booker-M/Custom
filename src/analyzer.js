@@ -24,8 +24,6 @@ const check = self => ({
     );
   },
   isNumericOrString() {
-    console.log("IS NUMERIC OR STRING:", self.type);
-    console.log(Type.INT);
     must(
       [Type.INT, Type.FLOAT, Type.STRING].includes(self.type),
       `Expected a number or string, found ${self.type.name}`
@@ -59,14 +57,14 @@ const check = self => ({
     );
   },
   allHaveSameType() {
-    self.slice(1).every(e => console.log(e.type.name, self[0].type.name)),
-      must(
-        self.slice(1).every(e => e.type.name === self[0].type.name),
-        "Not all elements have the same type"
-      );
+    // self.slice(1).every(e => console.log(e.type.name, self[0].type.name)),
+    must(
+      self.slice(1).every(e => e.type.name === self[0].type.name),
+      "Not all elements have the same type"
+    );
   },
   isAssignableTo(type) {
-    console.log(self, type);
+    // console.log(self, type);
     must(
       type === Type.ANY || self.type.isAssignableTo(type),
       `Cannot assign a ${self.type.name} to a ${type.name}`
@@ -150,7 +148,7 @@ class Context {
     this.locals.set(name, entity);
   }
   lookup(name) {
-    console.log("LOCALS", this.locals);
+    // console.log("LOCALS:", this.locals);
     const entity = this.locals.get(name);
     if (entity) {
       return entity;
@@ -197,12 +195,10 @@ class Context {
     return t;
   }
   Declaration(d) {
-    // console.log("BEFORE:", d);
     d.variable = new Variable(this.analyze(d.assignment.target.name));
     d.variable.type = this.analyze(d.type);
     this.add(d.variable.name, d.variable);
     d.assignment.target = new IdentifierExpression(d.variable.name);
-    // console.log("AFTER:", d);
     d.assignment = this.analyze(d.assignment);
     return d;
   }
@@ -223,7 +219,7 @@ class Context {
       d.type
     );
     // Add before analyzing the body to allow recursion
-    this.add(f.id, f);
+    this.add(f.name, f);
     d.block = childContext.analyze(d.block);
     return d;
   }
@@ -243,12 +239,8 @@ class Context {
     return s;
   }
   Assignment(s) {
-    console.log("SOURCE BEFORE:", s.source);
-    console.log("TARGET BEFORE:", s.target);
     s.source = this.analyze(s.source);
     s.target = this.analyze(s.target);
-    console.log("SOURCE AFTER:", s.source);
-    console.log("TARGET AFTER:", s.target);
     check(s.source).isAssignableTo(s.target.type);
     return s;
   }

@@ -112,11 +112,11 @@ const semanticChecks = [
 ];
 
 const semanticErrors = [
-  // ["String to Integer Declaration", `${languageConfig.int} x = "Hello World!"`],
-  // [
-  //   "Forgetting Curly Braces when Declaring Dict",
-  //   `${languageConfig.string} cheese = {"brie", "cheddar", "gouda"}`,
-  // ],
+  ["String to Integer Declaration", `${languageConfig.int} x = "Hello World!"`],
+  [
+    "Forgetting Curly Braces when Declaring Dict",
+    `${languageConfig.string} cheese = {"brie", "cheddar", "gouda"}`,
+  ],
 ];
 
 const graphChecks = [];
