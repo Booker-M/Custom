@@ -53,7 +53,6 @@ export class ForLoop {
 
 export class FunctionDeclaration {
   constructor(type, id, params, block) {
-    type = Type.get(type);
     Object.assign(this, { type, id, params, block });
   }
 }
@@ -65,7 +64,6 @@ export class FunctionCall {
 
 export class Declaration {
   constructor(type, assignment) {
-    type = Type.get(type);
     Object.assign(this, { type, assignment });
   }
 }
@@ -208,27 +206,13 @@ export class Type {
   isAssignableTo(target) {
     return this.isEquivalentTo(target);
   }
-
-  static get(type) {
-    return type === `${languageConfig.bool}`
-      ? Type.BOOLEAN
-      : type === `${languageConfig.int}`
-      ? Type.INT
-      : type === `${languageConfig.float}`
-      ? Type.FLOAT
-      : type === `${languageConfig.string}`
-      ? Type.STRING
-      : type === `${languageConfig.void}`
-      ? Type.VOID
-      : type;
-  }
 }
 
 export class ArrayType extends Type {
   // Example: [int]
   constructor(baseType) {
     super(`[${baseType.name ? baseType.name : baseType}]`);
-    this.baseType = Type.get(baseType);
+    this.baseType = baseType;
   }
   // [T] equivalent to [U] only when T is equivalent to U. Same for
   // assignability: we do NOT want arrays to be covariant!
@@ -243,7 +227,7 @@ export class ArrayType extends Type {
 export class SetType extends Type {
   constructor(baseType) {
     super(`{${baseType.name ? baseType.name : baseType}}`);
-    this.baseType = Type.get(baseType);
+    this.baseType = baseType;
   }
 
   isEquivalentTo(target) {
@@ -261,8 +245,8 @@ export class DictType extends Type {
         baseValue.name ? baseValue.name : baseValue
       }>`
     );
-    this.baseKey = Type.get(baseKey);
-    this.baseValue = Type.get(baseValue);
+    this.baseKey = baseKey;
+    this.baseValue = baseValue;
   }
 
   isEquivalentTo(target) {
@@ -294,11 +278,11 @@ export class FunctionType extends Type {
 // Appears in the syntax tree only and disappears after semantic analysis
 // since references to the Id node will be replaced with references to the
 // actual type node the the id refers to.
-// export class TypeId {
-//   constructor(name) {
-//     this.name = name;
-//   }
-// }
+export class TypeId {
+  constructor(name) {
+    this.name = name;
+  }
+}
 
 // These nodes are created during semantic analysis only
 export class Function {

@@ -102,14 +102,21 @@ const semanticChecks = [
         }
         i--;`,
   ],
+  [
+    "Function Declaration and Execution",
+    `${languageConfig.int} add (${languageConfig.int} a, ${languageConfig.int} b) {
+      ${languageConfig.return} (a + b);
+    }
+    add(1,2)`,
+  ],
 ];
 
 const semanticErrors = [
-  ["String to Integer Declaration", `${languageConfig.int} x = "Hello World!"`],
-  [
-    "Forgetting Curly Braces when Declaring Dict",
-    `${languageConfig.string} cheese = {"brie", "cheddar", "gouda"}`,
-  ],
+  // ["String to Integer Declaration", `${languageConfig.int} x = "Hello World!"`],
+  // [
+  //   "Forgetting Curly Braces when Declaring Dict",
+  //   `${languageConfig.string} cheese = {"brie", "cheddar", "gouda"}`,
+  // ],
 ];
 
 const graphChecks = [];

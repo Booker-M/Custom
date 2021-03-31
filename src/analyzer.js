@@ -24,6 +24,8 @@ const check = self => ({
     );
   },
   isNumericOrString() {
+    console.log("IS NUMERIC OR STRING:", self.type);
+    console.log(Type.INT);
     must(
       [Type.INT, Type.FLOAT, Type.STRING].includes(self.type),
       `Expected a number or string, found ${self.type.name}`
@@ -41,9 +43,9 @@ const check = self => ({
       `Expected an integer, found ${self.type.name}`
     );
   },
-  // isAType() {
-  //   must([Type, StructDeclaration].includes(self.constructor), "Type expected");
-  // },
+  isAType() {
+    must([Type].includes(self.constructor), "Type expected");
+  },
   isAnOptional() {
     must(self.type.constructor === OptionalType, "Optional expected");
   },
@@ -148,7 +150,7 @@ class Context {
     this.locals.set(name, entity);
   }
   lookup(name) {
-    // console.log("LOCALS", this.locals);
+    console.log("LOCALS", this.locals);
     const entity = this.locals.get(name);
     if (entity) {
       return entity;
@@ -177,16 +179,16 @@ class Context {
     return p;
   }
   ArrayType(t) {
-    // t.baseType = this.analyze(t.baseType);
+    t.baseType = this.analyze(t.baseType);
     return t;
   }
   SetType(t) {
-    // t.baseType = this.analyze(t.baseType);
+    t.baseType = this.analyze(t.baseType);
     return t;
   }
   DictType(t) {
-    // t.baseKey = this.analyze(t.baseKey);
-    // t.baseValue = this.analyze(t.baseValue);
+    t.baseKey = this.analyze(t.baseKey);
+    t.baseValue = this.analyze(t.baseValue);
     return t;
   }
   FunctionType(t) {
@@ -197,7 +199,7 @@ class Context {
   Declaration(d) {
     // console.log("BEFORE:", d);
     d.variable = new Variable(this.analyze(d.assignment.target.name));
-    d.variable.type = d.type;
+    d.variable.type = this.analyze(d.type);
     this.add(d.variable.name, d.variable);
     d.assignment.target = new IdentifierExpression(d.variable.name);
     // console.log("AFTER:", d);
@@ -209,8 +211,7 @@ class Context {
     return f;
   }
   FunctionDeclaration(d) {
-    // d.type = d.type ? this.analyze(d.type) : Type.VOID;
-    d.type = d.type ? d.type : Type.VOID;
+    d.type = d.type ? this.analyze(d.type) : Type.VOID;
     // Declarations generate brand new function objects
     const f = (d.function = new Function(d.id));
     // When entering a function body, we must reset the inLoop setting,
@@ -242,8 +243,12 @@ class Context {
     return s;
   }
   Assignment(s) {
+    console.log("SOURCE BEFORE:", s.source);
+    console.log("TARGET BEFORE:", s.target);
     s.source = this.analyze(s.source);
     s.target = this.analyze(s.target);
+    console.log("SOURCE AFTER:", s.source);
+    console.log("TARGET AFTER:", s.target);
     check(s.source).isAssignableTo(s.target.type);
     return s;
   }
@@ -281,11 +286,9 @@ class Context {
   }
   ForLoop(s) {
     s.declaration = this.analyze(s.declaration);
-    // check(s.low).isInteger();
     s.test = this.analyze(s.test);
     check(s.test).isBoolean();
     s.assignment = this.analyze(s.assignment);
-    // check(s.high).isInteger();
     s.body = this.newChild({ inLoop: true }).analyze(s.body);
     return s;
   }
@@ -404,11 +407,11 @@ class Context {
     // Id expressions get "replaced" with the variables they refer to
     return this.lookup(e.name);
   }
-  // TypeId(t) {
-  //   t = this.lookup(t.name);
-  //   check(t).isAType();
-  //   return t;
-  // }
+  TypeId(t) {
+    t = this.lookup(t.name);
+    check(t).isAType();
+    return t;
+  }
   Number(e) {
     return e;
   }

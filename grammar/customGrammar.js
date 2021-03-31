@@ -11,33 +11,33 @@ Custom {
     Statement     =  (Loop | FunctionDeclaration | Return | FunctionCall | Declaration | Assignment | IfStatement) (";")?
     IfStatement   =  "${languageConfig.if}" "(" Exp ")" Block ("${languageConfig.else}" (IfStatement | Block))?
 
-    Loop 			    = "${languageConfig.while}" "(" Exp ")" Block -- while
-                  | "${languageConfig.for}" "(" Declaration ";" Exp ";" Assignment  ")" Block  -- for
+    Loop 			    =  "${languageConfig.while}" "(" Exp ")" Block -- while
+                  |  "${languageConfig.for}" "(" Declaration ";" Exp ";" Assignment  ")" Block  -- for
     FunctionDeclaration =  type id "(" Params ")" Block
     FunctionCall  =  id "(" Args ")"
     Declaration   =  type Assignment
-    Assignment    = id "=" Exp						                      -- assign
-                  | id "++"							                        -- increment
-                  | id "--"								                      -- decrement
+    Assignment    =  id "=" Exp						                       -- assign
+                  |  id "++"							                       -- increment
+                  |  id "--"								                     -- decrement
 
     Args          =  ListOf<BinExp, ",">
     Params        =  ListOf<Param, ",">
     Param         =  type id
 
-    Exp           =  Exp relop BinExp                           -- binary
-                  |  BinExp "?" BinExp ":" BinExp               -- ternary
+    Exp           =  Exp relop BinExp                            -- binary
+                  |  BinExp "?" BinExp ":" BinExp                -- ternary
                   |  BinExp
-    BinExp        =  BinExp binop AddExp                        -- binary
+    BinExp        =  BinExp binop AddExp                         -- binary
                   |  AddExp
-    AddExp        =  AddExp addop MullExp                       -- binary
+    AddExp        =  AddExp addop MullExp                        -- binary
                   |  MullExp
-    MullExp       =  MullExp mullop PrefixExp                   -- binary
+    MullExp       =  MullExp mullop PrefixExp                    -- binary
                   |  PrefixExp
-    PrefixExp     =  prefixop ExpoExp                           -- binary
+    PrefixExp     =  prefixop ExpoExp                            -- binary
                   |  ExpoExp
-    ExpoExp       =  ParenExp expop ExpoExp                     -- binary
+    ExpoExp       =  ParenExp expop ExpoExp                      -- binary
                   |  ParenExp
-    ParenExp      =  "(" Exp ")"                                -- parens
+    ParenExp      =  "(" Exp ")"                                 -- parens
                   |  ListComp | Array | Set | Dict | Index | FunctionCall | bool | floatlit | intlit | stringlit | id
 
     Return        =  "${languageConfig.return} " ParenExp
@@ -49,9 +49,10 @@ Custom {
     ListComp      =  ("[" | "{") Exp (":" Exp)? ("${languageConfig.for}" id ("," id)? "${languageConfig.in}" id)+ ("${languageConfig.if}" Exp)* ("]" | "}")
 
     type          =  "<" space? type space? "," space? type space? ">"  -- dict
-                  | type "[]"                                   -- array
-                  | type "{}"                                   -- set
-                  |"${languageConfig.string}" | "${languageConfig.bool}" | "${languageConfig.int}" | "${languageConfig.float}"
+                  |  type "[]"                                   -- array
+                  |  type "{}"                                   -- set
+                  |  typeid
+    typeid        =  "${languageConfig.string}" | "${languageConfig.bool}" | "${languageConfig.int}" | "${languageConfig.float}"
     keyword       =  (type | bool | "${languageConfig.if}" | "${languageConfig.else}" | "${languageConfig.return}" | "${languageConfig.for}" | "${languageConfig.while}" | "${languageConfig.in}" | "${languageConfig.void}") ~alnum
     id            =  ~keyword letter (alnum)*
     prefixop      =  "!" | "-"
@@ -60,20 +61,20 @@ Custom {
     mullop        =  "*" | "/" | "%"
     expop         =  "^"
     binop         =  "||" | "&&"
-    bool          = true | false
-    true          = "${languageConfig.true}" ~alnum
-    false         = "${languageConfig.false}" ~alnum
+    bool          =  true | false
+    true          =  "${languageConfig.true}" ~alnum
+    false         =  "${languageConfig.false}" ~alnum
     intlit        =  digit+
     floatlit      =  digit+ "." digit+
     stringlit     =  "\\"" (char | "\\'")* "\\""
-                  | "\\'" (char | "\\"")* "\\'"
+                  |  "\\'" (char | "\\"")* "\\'"
     char          =  escape
                   |  ~"\\\\" ~"\\"" ~"\\'" ~"\\\\n" any
-    escape        = "\\\\\\\\" | "\\\\\\"" | "\\\\'" | "\\\\n" | "\\\\t"
-                  |  "\\\\u{" hexDigit+ "}"                     -- codepoint
+    escape        =  "\\\\\\\\" | "\\\\\\"" | "\\\\'" | "\\\\n" | "\\\\t"
+                  |  "\\\\u{" hexDigit+ "}"                      -- codepoint
     space         := " " | "\\t" | "\\n" | comment
-    comment       =  "//" (~"\\n" any)*                         -- singleline
-                  | "/*" (~("*/") any )* "*/"                   -- multiline
+    comment       =  "//" (~"\\n" any)*                          -- singleline
+                  |  "/*" (~("*/") any )* "*/"                   -- multiline
 }`;
 
 export default Custom;

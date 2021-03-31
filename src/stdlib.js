@@ -21,13 +21,12 @@ const floatFloatFloatType = new FunctionType(
 );
 const stringToIntsType = new FunctionType([Type.STRING], floatsType);
 
-export const types = {
-  int: Type.INT,
-  float: Type.FLOAT,
-  boolean: Type.BOOLEAN,
-  string: Type.STRING,
-  void: Type.VOID,
-};
+const types = {};
+types[languageConfig.int] = Type.INT;
+types[languageConfig.float] = Type.FLOAT;
+types[languageConfig.bool] = Type.BOOLEAN;
+types[languageConfig.string] = Type.STRING;
+types[languageConfig.void] = Type.VOID;
 
 export const constants = {};
 
@@ -41,4 +40,4 @@ functions[languageConfig.length] = makeFunction(
   new FunctionType([new ArrayType(Type.ANY)], Type.INT)
 );
 
-export { functions };
+export { types, functions };
