@@ -175,6 +175,7 @@ export class Type {
   constructor(name) {
     this.name = name;
   }
+  
   static BOOLEAN = new Type(`${languageConfig.bool}`);
   static INT = new Type(`${languageConfig.int}`);
   static FLOAT = new Type(`${languageConfig.float}`);

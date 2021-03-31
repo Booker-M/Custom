@@ -39,7 +39,7 @@ Custom {
     ExpoExp       =  ParenExp expop ExpoExp                      -- binary
                   |  ParenExp
     ParenExp      =  "(" Exp ")"                                 -- parens
-                  |  ListComp | Array | Set | Dict | Index | FunctionCall | bool | floatlit | intlit | stringlit | id
+                  | Array | Set | Dict | Index | FunctionCall | bool | floatlit | intlit | stringlit | id
 
     Return        =  "${languageConfig.return}" ParenExp?
     Array         =  "[" ListOf<BinExp, ","> "]"
@@ -47,7 +47,6 @@ Custom {
     Dict          =  "{" ListOf<KeyValue, ","> "}"
     Index         =  id "[" (id | intlit | stringlit) "]"
     KeyValue      =  BinExp ":" BinExp
-    ListComp      =  ("[" | "{") Exp (":" Exp)? ("${languageConfig.for}" id ("," id)? "${languageConfig.in}" id)+ ("${languageConfig.if}" Exp)* ("]" | "}")
 
     type          =  "<" space? type space? "," space? type space? ">"  -- dict
                   |  type "[]"                                   -- array

@@ -128,30 +128,6 @@ const astBuilder = customGrammar.createSemantics().addOperation("ast", {
   KeyValue(key, _1, value) {
     return new ast.KeyValue(key.ast(), value.ast());
   },
-  ListComp(
-    _1,
-    newKeyExp,
-    _2,
-    newValueExp,
-    _3,
-    key,
-    _4,
-    value,
-    _5,
-    list,
-    _6,
-    condExp,
-    _7
-  ) {
-    return new ast.ListComp(
-      newKeyExp.ast(),
-      newValueExp.ast(),
-      key.sourceString,
-      value.sourceString,
-      list.sourceString,
-      condExp.ast()
-    );
-  },
   type_dict(_1, _2, type1, _3, _4, _5, type2, _6, _7) {
     return new ast.DictType(type1.ast(), type2.ast());
   },

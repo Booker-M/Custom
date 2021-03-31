@@ -53,8 +53,6 @@ const correctExamples = {
 
   "Array indexing": `${languageConfig.string} x = Dogs[i]`,
 
-  "List Comprehension": `<${languageConfig.bool}, ${languageConfig.int}> newDict = { a:b*b ${languageConfig.for} a,b ${languageConfig.in} oldDict ${languageConfig.if} a == ${languageConfig.true}}`,
-
   "Function Call": `test(a, b, c, (x == 1), "done")`,
 
   "Nested Function Call": `f(g(x))`,
@@ -71,7 +69,6 @@ const correctExamples = {
     return(keyValues["first"])
   }`,
 
-  ListComprehension: `${languageConfig.int} y = [x%y ${languageConfig.for} x ${languageConfig.in} z ${languageConfig.for} y ${languageConfig.in} z ${languageConfig.if} x*y == 7];`,
 };
 
 const incorrectExamples = {
