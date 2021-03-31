@@ -108,7 +108,7 @@ Arrays are fixed-length.
 {% raw %}
 
 `string{} cheese = {"brie", "cheddar", "mozzarella", "gouda"}`  
-`bool{}{} nestedSets = {{true,false,true}, {false,true}, {true}}`  
+`bool{}{} nestedSets = {{true,false}, {false,true}, {true}}`  
 
 {% endraw %}
 
@@ -121,11 +121,6 @@ Arrays are fixed-length.
 
 {% endraw %}
 Sets and dictionaries are dynamic-length.  
-
-### List Comprehension
-`int[] newArray = [ x for x in oldArray if x % 2 == 0 ]`  
-`int{} newSet = { x for x in oldSet if x % 2 == 0 }`  
-`<bool, int> newDict = { a:b*b for a,b in oldDict if a == true }`  
 
 ### Loops
 **For Loop:**  
