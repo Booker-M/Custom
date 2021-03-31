@@ -11,8 +11,6 @@ const languageConfig = JSON.parse(
 //To implement:
 //${languageConfig.string} index = dictionary[1]
 
-
-
 const semanticChecks = [
   [
     "Array indexing",
@@ -25,17 +23,17 @@ const semanticChecks = [
     "Dictionary indexing",
     `
     <${languageConfig.int},${languageConfig.string}> dictionary = {1: "one", 2: "two", 3: "three"}
-    `
+    `,
   ],
   [
     "Return Statement",
     `
     ${languageConfig.int} sevenPlease() {
       ${languageConfig.int} seven = 7;
-      return (seven);
+      ${languageConfig.return} (seven);
     }
-    `
-  ]
+    `,
+  ],
 ];
 
 const semanticErrors = [

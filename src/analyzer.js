@@ -209,7 +209,8 @@ class Context {
     return f;
   }
   FunctionDeclaration(d) {
-    d.type = d.type ? this.analyze(d.type) : Type.VOID;
+    // d.type = d.type ? this.analyze(d.type) : Type.VOID;
+    d.type = d.type ? d.type : Type.VOID;
     // Declarations generate brand new function objects
     const f = (d.function = new Function(d.id));
     // When entering a function body, we must reset the inLoop setting,
