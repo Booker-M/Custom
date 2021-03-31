@@ -57,11 +57,11 @@ const check = self => ({
     );
   },
   allHaveSameType() {
-    // self.slice(1).every(e => console.log(e.type.name, self[0].type.name)),
-    must(
-      self.slice(1).every(e => e.type.name === self[0].type.name),
-      "Not all elements have the same type"
-    );
+    self.slice(1).every(e => console.log(e.type.name, self[0].type.name)),
+      must(
+        self.slice(1).every(e => e.type.name === self[0].type.name),
+        "Not all elements have the same type"
+      );
   },
   isAssignableTo(type) {
     console.log(self, type);
@@ -357,9 +357,11 @@ class Context {
     a.elements = this.analyze(a.elements);
     check(a.elements).allHaveSameType();
     a.type = new ArrayType(
-      typeof a.elements[0].type === "object"
-        ? a.elements[0].type
-        : a.elements[0].type.name
+      a.elements.length > 0
+        ? typeof a.elements[0].type === "object"
+          ? a.elements[0].type
+          : a.elements[0].type.name
+        : Type.ANY
     );
     return a;
   }
@@ -367,9 +369,11 @@ class Context {
     a.elements = this.analyze(a.elements);
     check(a.elements).allHaveSameType();
     a.type = new SetType(
-      typeof a.elements[0].type === "object"
-        ? a.elements[0].type
-        : a.elements[0].type.name
+      a.elements.length > 0
+        ? typeof a.elements[0].type === "object"
+          ? a.elements[0].type
+          : a.elements[0].type.name
+        : Type.ANY
     );
     return a;
   }
@@ -378,12 +382,15 @@ class Context {
     a.values = a.keyValues.map(item => this.analyze(item.value));
     check(a.keys).allHaveSameType();
     check(a.values).allHaveSameType();
-    a.type = new DictType(a.keys[0]?.type, a.values[0]?.type);
+    a.type = new DictType(
+      a.keys.length > 0 ? a.keys[0].type : Type.ANY,
+      a.values.length > 0 ? a.values[0].type : Type.ANY
+    );
     return a;
   }
-  EmptyArray(e) {
-    return e;
-  }
+  // EmptyArray(e) {
+  //   return e;
+  // }
   FunctionCall(c) {
     c.id = this.analyze(c.id);
     check(c.id).isCallable();
@@ -424,11 +431,11 @@ class Context {
   // elements(e) {
   //   return e.map(item => this.analyze(item));
   // }
-  keyValues(e) {
-    e.keys = e.map(item => this.analyze(item.key));
-    e.values = e.map(item => this.analyze(item.value));
-    return e;
-  }
+  // keyValues(e) {
+  //   e.keys = e.map(item => this.analyze(item.key));
+  //   e.values = e.map(item => this.analyze(item.value));
+  //   return e;
+  // }
 }
 
 export default function analyze(node) {

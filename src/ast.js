@@ -200,7 +200,7 @@ export class Type {
 
   // Equivalence: when are two types the same
   isEquivalentTo(target) {
-    return target == Type.ANY || this == target;
+    return target == Type.ANY || this == Type.ANY || this == target;
   }
   // T1 assignable to T2 is when x:T1 can be assigned to y:T2. By default
   // this is only when two types are equivalent; however, for other kinds

@@ -23,6 +23,7 @@ const semanticChecks = [
     "Array Declaration of Floats",
     `${languageConfig.float}[] probabilities=[0.1,0.4,0.5];`,
   ],
+  ["Empty Array Declaration", `${languageConfig.float}[] nothing=[];`],
   [
     "Nested Arrays Declaration",
     `${languageConfig.string}[][] nestedArray = [["hey","there"],["this","is"],["super","hard"]];`,
@@ -55,50 +56,51 @@ const semanticChecks = [
   [
     "${languageConfig.if} ${languageConfig.else}",
     `${languageConfig.int} main (${languageConfig.int} argc, ${languageConfig.string}[]  argv) {
-    ${languageConfig.print}("hello");
-    ${languageConfig.int} x = 0;
-    ${languageConfig.int} y = -1;
-    ${languageConfig.if}(x < y) {
-        ${languageConfig.print}('please work')
-    }
-    ${languageConfig.else} {
-        ${languageConfig.print}('cry more')
-    }
-    ${languageConfig.return} 1;
-  }`,
+      ${languageConfig.print}("hello");
+      ${languageConfig.int} x = 0;
+      ${languageConfig.int} y = -1;
+      ${languageConfig.if}(x < y) {
+          ${languageConfig.print}('please work')
+      }
+      ${languageConfig.else} {
+          ${languageConfig.print}('cry more')
+      }
+      ${languageConfig.return} 1;
+    }`,
   ],
   [
     "${languageConfig.if} ${languageConfig.else} ${languageConfig.if} ${languageConfig.else}",
     `${languageConfig.int} main (${languageConfig.int} argc, ${languageConfig.string}[]  argv) {
-    ${languageConfig.print}("hello");
-    ${languageConfig.int} x = 0;
-    ${languageConfig.int} y = -1;
-    ${languageConfig.if}(x < y) {
-        ${languageConfig.print}('please work')
+      ${languageConfig.print}("hello");
+      ${languageConfig.int} x = 0;
+      ${languageConfig.int} y = -1;
+      ${languageConfig.if}(x < y) {
+          ${languageConfig.print}('please work')
+      }
+      ${languageConfig.else} ${languageConfig.if}(x < y) {
+        ${languageConfig.print}('cry')
     }
-    ${languageConfig.else} ${languageConfig.if}(x < y) {
-      ${languageConfig.print}('cry')
-  }
-    ${languageConfig.else} {
-        ${languageConfig.print}('cry more')
-    }
-    ${languageConfig.return} 1;
-  }`,
+      ${languageConfig.else} {
+          ${languageConfig.print}('cry more')
+      }
+      ${languageConfig.return} 1;
+    }`,
   ],
   [
     "English Breeds",
     `${languageConfig.string}[] breeds = ["cat", "armadillo", "dog", "snake"]
-  ${languageConfig.string}[] names = ["Leslie", "Ben","Andy","April"]
-  ${languageConfig.for} (${languageConfig.int} i=0; i < ${languageConfig.length}(breeds); i++) {
-    ${languageConfig.print} (names[i] + " is a " + breeds[i] + "!");
-  }`,
+    ${languageConfig.string}[] names = ["Leslie", "Ben","Andy","April"]
+    ${languageConfig.for} (${languageConfig.int} i=0; i < ${languageConfig.length}(breeds); i++) {
+      ${languageConfig.print} (names[i] + " is a " + breeds[i] + "!");
+    }`,
   ],
   [
     "While Loop",
     `${languageConfig.int} i = 0;
-    ${languageConfig.while} (i < 10) {
-        i++;
-      }`,
+      ${languageConfig.while} (i < 10) {
+          i++;
+        }
+        i--;`,
   ],
 ];
 
