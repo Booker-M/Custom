@@ -110,11 +110,12 @@ const fixtures = [
     `,
   },
   {
-    name: "While Loop",
+    name: "While Loop w/ Break",
     source: `
     ${languageConfig.int} i = 0;
     ${languageConfig.while} (i < 10) {
         i++;
+        break;
       }
       i--;
     `,
@@ -122,6 +123,7 @@ const fixtures = [
     let i = 0;
     while ((i < 10)) {
       i++;
+      break;
     }
     i--;
     `,
