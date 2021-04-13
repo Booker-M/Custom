@@ -32,6 +32,24 @@ const fixtures = [
     `,
   },
   {
+    name: "${languageConfig.if} ${languageConfig.else}",
+    source: `
+    ${languageConfig.if}(1 < 2) {
+        ${languageConfig.print}('please work')
+    }
+    ${languageConfig.else} {
+        ${languageConfig.print}('cry')
+    }
+    `,
+    expected: dedent`
+      if ((1 < 2)) {
+      console.log("please work");
+      } else {
+      console.log("cry");
+      }
+    `,
+  },
+  {
     name:
       "${languageConfig.if} ${languageConfig.else} ${languageConfig.if} ${languageConfig.else}",
     source: `
