@@ -26,24 +26,8 @@ export default function generate(program) {
     // [stdlib.functions.codepoints, s => `[...(${s})].map(s=>s.codePointAt(0))`],
   ]);
 
-  // Variable and function names in JS will be suffixed with _1, _2, _3,
-  // etc. This is because "switch", for example, is a legal name in Carlos,
-  // but not in JS. So we want to generate something like "switch_1".
-  // We handle this by mapping each name to its suffix.
-  // const targetName = (mapping => {
-  //   return entity => {
-  //     if (!mapping.has(entity)) {
-  //       mapping.set(entity, mapping.size + 1);
-  //     }
-  //     return `${entity.name ?? entity.description}_${mapping.get(entity)}`;
-  //   };
-  // })(new Map());
-
-  // const gen = node => generators[node.constructor.name](node);
-  const gen = node => {
-    console.log(output);
-    console.log(node);
-    return generators[node.constructor.name](node);
+  const gen = (node, { inExpression = false } = {}) => {
+    return generators[node.constructor.name](node, inExpression);
   };
 
   const generators = {
@@ -58,15 +42,6 @@ export default function generate(program) {
       // has already checked we never wrote to a const, so let is always fine.
       output.push(`let ${gen(d.variable)} = ${gen(d.assignment.source)};`);
     },
-    // ArrayType(t) {
-    //   return t.name;
-    // },
-    // SetType(t) {
-    //   return t.name;
-    // },
-    // DictType(t) {
-    //   return t.name;
-    // },
     Index(i) {
       return `${i.collection.name}[${i.index.name ? i.index.name : i.index}]`;
     },
@@ -76,19 +51,11 @@ export default function generate(program) {
       output.push("}");
     },
     Parameter(p) {
-      // return targetName(p);
       return `${p.id}`;
     },
     Variable(v) {
-      // if (v === stdlib.constants.π) {
-      //   return "Math.PI";
-      // }
-      // return targetName(v);
       return v.name;
     },
-    // Function(f) {
-    //   return targetName(f);
-    // },
     Increment(s) {
       output.push(`${gen(s.variable)}++;`);
     },
@@ -144,10 +111,12 @@ export default function generate(program) {
     },
     BinaryExpression(e) {
       const op = { "==": "===", "!=": "!==", "^": "**" }[e.op] ?? e.op;
-      return `(${gen(e.left)} ${op} ${gen(e.right)})`;
+      return `(${gen(e.left, { inExpression: true })} ${op} ${gen(e.right, {
+        inExpression: true,
+      })})`;
     },
     UnaryExpression(e) {
-      return `${e.op}(${gen(e.operand)})`;
+      return `${e.op}(${gen(e.operand, { inExpression: true })})`;
     },
     CustomArray(e) {
       return `[${gen(e.elements).join(",")}]`;
@@ -158,15 +127,16 @@ export default function generate(program) {
     CustomDict(e) {
       return `{${gen(e.keyValues).join(",")}}`;
     },
-    FunctionCall(c) {
+    FunctionCall(c, inExpression) {
       const targetCode = standardFunctions.has(c.id)
         ? standardFunctions.get(c.id)(gen(c.args))
         : `${c.id.name}(${gen(c.args).join(", ")})`;
-      if (c.id instanceof Type || c.id.type.returnType !== Type.VOID) {
+
+      if (inExpression) {
         return targetCode;
+      } else {
+        output.push(`${targetCode};`);
       }
-      output.push(`${targetCode};`);
-      // return targetCode;
     },
     Number(e) {
       return e;
