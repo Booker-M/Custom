@@ -1,4 +1,4 @@
-${languageConfig.int} fibonacci (${languageConfig.int} n) {
+${languageConfig.int} fibonacci (${languageConfig.int} n, ${languageConfig.int} number) {
   ${languageConfig.if}(n<0) {
       ${languageConfig.print}('Number cannot be negative.')
   }
@@ -9,7 +9,7 @@ ${languageConfig.int} fibonacci (${languageConfig.int} n) {
       ${languageConfig.return}(1)
   }
   ${languageConfig.else} {
-      ${languageConfig.return}(fibonacci(n))
+      ${languageConfig.return}(fibonacci(n - 1))
   }
 }
 

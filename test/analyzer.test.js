@@ -30,7 +30,6 @@ const semanticChecks = [
   ],
   [
     "Nested Nested Arrays Declaration",
-    // `${languageConfig.float}[][][] nestedArray = [[[1],[2]],[[3],[4]],[[5],[6]]];`,
     `${languageConfig.float}[][][] nestedArray = [[[1.0],[2.0]],[[3.0],[4.0]],[[5.0],[6.0]]];`,
   ],
   [

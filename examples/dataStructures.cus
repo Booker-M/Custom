@@ -1,0 +1,11 @@
+${languageConfig.float}[] probabilities=[0.1,0.4,0.5];
+${languageConfig.float}[] nothing=[];
+${languageConfig.string}[][] nestedArray = [["hey","there"],["this","is"],["super","hard"]];
+${languageConfig.string}{} cheese = {"brie", "cheddar", "gouda"};
+${languageConfig.bool}{}{} nestedSet = {{${languageConfig.true}, ${languageConfig.false}}, {${languageConfig.false}, ${languageConfig.true}}};
+${languageConfig.float}{} moreNothing={};
+<${languageConfig.int}, ${languageConfig.string}> cheeses = {1: "brie", 2: "cheddar", 3: "gouda"};
+${languageConfig.print}(cheeses[1]);
+<${languageConfig.int}, <${languageConfig.int}, ${languageConfig.string}>> moreCheeses = {1: {1: "brie"}, 2: {1: "cheddar"}, 3: {3: "gouda"}};
+<${languageConfig.int}, ${languageConfig.string}> noCheeses = {};
+<${languageConfig.int}[]{}, <${languageConfig.float}[]{}, ${languageConfig.string}{}[]>> evenMoreCheeses = {{[1]}: {{[1.0]}: [{"One"}]}, {[2]}: {{[2.0]}: [{"Two"}]}, {[3]}: {{[3.0]}: [{"Three"}]}};

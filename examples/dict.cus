@@ -1,1 +1,0 @@
-<${languageConfig.string}, ${languageConfig.int}> playersAndScores = {"Anthony" : 1, "Steve" : -1, "Gerry" : 3}

@@ -30,14 +30,14 @@ export default function generate(program) {
   // etc. This is because "switch", for example, is a legal name in Carlos,
   // but not in JS. So we want to generate something like "switch_1".
   // We handle this by mapping each name to its suffix.
-  const targetName = (mapping => {
-    return entity => {
-      if (!mapping.has(entity)) {
-        mapping.set(entity, mapping.size + 1);
-      }
-      return `${entity.name ?? entity.description}_${mapping.get(entity)}`;
-    };
-  })(new Map());
+  // const targetName = (mapping => {
+  //   return entity => {
+  //     if (!mapping.has(entity)) {
+  //       mapping.set(entity, mapping.size + 1);
+  //     }
+  //     return `${entity.name ?? entity.description}_${mapping.get(entity)}`;
+  //   };
+  // })(new Map());
 
   // const gen = node => generators[node.constructor.name](node);
   const gen = node => {
@@ -58,26 +58,17 @@ export default function generate(program) {
       // has already checked we never wrote to a const, so let is always fine.
       output.push(`let ${gen(d.variable)} = ${gen(d.assignment.source)};`);
     },
-    // TypeDeclaration(d) {
-    //   output.push(`class ${gen(d.type)} {`);
-    //   output.push(`constructor(${gen(d.type.fields).join(",")}) {`);
-    //   for (let field of d.type.fields) {
-    //     output.push(`this[${JSON.stringify(gen(field))}] = ${gen(field)};`);
-    //   }
-    //   output.push("}");
-    //   output.push("}");
+    // ArrayType(t) {
+    //   return t.name;
     // },
-    ArrayType(t) {
-      return targetName(t);
-    },
-    SetType(t) {
-      return targetName(t);
-    },
-    DictType(t) {
-      return targetName(t);
-    },
+    // SetType(t) {
+    //   return t.name;
+    // },
+    // DictType(t) {
+    //   return t.name;
+    // },
     Index(i) {
-      return `${i.collection.name}[${i.index.name}]`;
+      return `${i.collection.name}[${i.index.name ? i.index.name : i.index}]`;
     },
     FunctionDeclaration(d) {
       output.push(`function ${d.id}(${gen(d.params).join(", ")}) {`);
@@ -89,15 +80,15 @@ export default function generate(program) {
       return `${p.id}`;
     },
     Variable(v) {
-      if (v === stdlib.constants.π) {
-        return "Math.PI";
-      }
+      // if (v === stdlib.constants.π) {
+      //   return "Math.PI";
+      // }
       // return targetName(v);
       return v.name;
     },
-    Function(f) {
-      return targetName(f);
-    },
+    // Function(f) {
+    //   return targetName(f);
+    // },
     Increment(s) {
       output.push(`${gen(s.variable)}++;`);
     },
@@ -116,9 +107,10 @@ export default function generate(program) {
     StatementIfElse(s) {
       output.push(`if (${gen(s.test)}) {`);
       gen(s.consequence);
-      if (s.alternate.constructor === StatementIfElse) {
-        output.push("} else");
+      if (s.alternate[0].constructor === StatementIfElse) {
+        const length = output.length;
         gen(s.alternate);
+        output[length] = `} else ` + output[length];
       } else {
         output.push("} else {");
         gen(s.alternate);
@@ -157,12 +149,6 @@ export default function generate(program) {
     UnaryExpression(e) {
       return `${e.op}(${gen(e.operand)})`;
     },
-    EmptyOptional(e) {
-      return "undefined";
-    },
-    SubscriptExpression(e) {
-      return `${gen(e.array)}[${gen(e.index)}]`;
-    },
     CustomArray(e) {
       return `[${gen(e.elements).join(",")}]`;
     },
@@ -172,25 +158,6 @@ export default function generate(program) {
     CustomDict(e) {
       return `{${gen(e.keyValues).join(",")}}`;
     },
-    EmptyArray(e) {
-      return "[]";
-    },
-    MemberExpression(e) {
-      return `(${gen(e.object)}[${JSON.stringify(gen(e.field))}])`;
-    },
-    // Call(c) {
-    //   const targetCode = standardFunctions.has(c.callee)
-    //     ? standardFunctions.get(c.callee)(gen(c.args))
-    //     : c.callee.constructor === ArrayType ||
-    //       c.callee.constructor === SetType ||
-    //       c.callee.constructor === DictType
-    //     ? `new ${gen(c.callee)}(${gen(c.args).join(", ")})`
-    //     : `${gen(c.callee)}(${gen(c.args).join(", ")})`;
-    //   if (c.callee instanceof Type || c.callee.type.returnType !== Type.VOID) {
-    //     return targetCode;
-    //   }
-    //   output.push(`${targetCode};`);
-    // },
     FunctionCall(c) {
       const targetCode = standardFunctions.has(c.id)
         ? standardFunctions.get(c.id)(gen(c.args))
@@ -199,6 +166,7 @@ export default function generate(program) {
         return targetCode;
       }
       output.push(`${targetCode};`);
+      // return targetCode;
     },
     Number(e) {
       return e;
@@ -209,9 +177,9 @@ export default function generate(program) {
     Boolean(e) {
       return e;
     },
-    String(e) {
-      return JSON.stringify(e);
-    },
+    // String(e) {
+    //   return JSON.stringify(e);
+    // },
     Array(a) {
       return a.map(gen);
     },

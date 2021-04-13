@@ -117,7 +117,7 @@ class Context {
     this.locals = new Map();
     // Whether we are in a loop, so that we know whether breaks and continues
     // are legal here
-    this.inLoop = configuration.inLoop ?? parent?.inLoop ?? false;  
+    this.inLoop = configuration.inLoop ?? parent?.inLoop ?? false;
     // Whether we are in a function, so that we know whether a return
     // statement can appear here, and if so, how we typecheck it
     this.function = configuration.forFunction ?? parent?.function ?? null;
@@ -203,12 +203,12 @@ class Context {
   }
   Increment(s) {
     s.variable = this.analyze(s.variable);
-    check(s.variable).isInteger();
+    check(s.variable).isNumeric();
     return s;
   }
   Decrement(s) {
     s.variable = this.analyze(s.variable);
-    check(s.variable).isInteger();
+    check(s.variable).isNumeric();
     return s;
   }
   Assignment(s) {
