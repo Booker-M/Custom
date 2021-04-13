@@ -1,23 +1,28 @@
-// Code Generator Carlos -> JavaScript
+// Code Generator Custom -> JavaScript
 //
 // Invoke generate(program) with the program node to get back the JavaScript
 // translation as a string.
 
 import { StatementIfElse, Type, ArrayType, SetType, DictType } from "./ast.js";
 import * as stdlib from "./stdlib.js";
+import fs from "fs";
+
+const languageConfig = JSON.parse(
+  fs.readFileSync("./config/customConfig.json", "utf8")
+);
 
 export default function generate(program) {
   const output = [];
 
   const standardFunctions = new Map([
-    [stdlib.functions.print, x => `console.log(${x})`],
+    [stdlib.functions[languageConfig.print], x => `console.log(${x})`],
     [stdlib.functions.sin, x => `Math.sin(${x})`],
     [stdlib.functions.cos, x => `Math.cos(${x})`],
     [stdlib.functions.exp, x => `Math.exp(${x})`],
     [stdlib.functions.ln, x => `Math.log(${x})`],
     [stdlib.functions.hypot, (x, y) => `Math.hypot(${x},${y})`],
     [stdlib.functions.bytes, s => `[...Buffer.from(${s}, "utf8")]`],
-    // TODO CODEPOINTS
+    [stdlib.functions.codepoints, s => `[...(${s})].map(s=>s.codePointAt(0))`],
   ]);
 
   // Variable and function names in JS will be suffixed with _1, _2, _3,
@@ -33,26 +38,33 @@ export default function generate(program) {
     };
   })(new Map());
 
-  const gen = node => generators[node.constructor.name](node);
+  // const gen = node => generators[node.constructor.name](node);
+  const gen = node => {
+    console.log(node);
+    return generators[node.constructor.name](node);
+  };
 
   const generators = {
     Program(p) {
       gen(p.statements);
     },
-    VariableDeclaration(d) {
+    Block(p) {
+      gen(p.statements);
+    },
+    Declaration(d) {
       // We don't care about const vs. let in the generated code. The analyzer
       // has already checked we never wrote to a const, so let is always fine.
-      output.push(`let ${gen(d.variable)} = ${gen(d.initializer)};`);
+      output.push(`let ${gen(d.variable)} = ${gen(d.assignment.source)};`);
     },
-    TypeDeclaration(d) {
-      output.push(`class ${gen(d.type)} {`);
-      output.push(`constructor(${gen(d.type.fields).join(",")}) {`);
-      for (let field of d.type.fields) {
-        output.push(`this[${JSON.stringify(gen(field))}] = ${gen(field)};`);
-      }
-      output.push("}");
-      output.push("}");
-    },
+    // TypeDeclaration(d) {
+    //   output.push(`class ${gen(d.type)} {`);
+    //   output.push(`constructor(${gen(d.type.fields).join(",")}) {`);
+    //   for (let field of d.type.fields) {
+    //     output.push(`this[${JSON.stringify(gen(field))}] = ${gen(field)};`);
+    //   }
+    //   output.push("}");
+    //   output.push("}");
+    // },
     ArrayType(t) {
       return targetName(t);
     },
@@ -62,18 +74,18 @@ export default function generate(program) {
     DictType(t) {
       return targetName(t);
     },
-    Field(f) {
-      return targetName(f);
-    },
+    // Field(f) {
+    //   return targetName(f);
+    // },
+
     FunctionDeclaration(d) {
-      output.push(
-        `function ${gen(d.fun)}(${gen(d.fun.parameters).join(", ")}) {`
-      );
-      gen(d.body);
+      output.push(`function ${d.id}(${gen(d.params).join(", ")}) {`);
+      gen(d.block);
       output.push("}");
     },
     Parameter(p) {
-      return targetName(p);
+      // return targetName(p);
+      return `${p.id}`;
     },
     Variable(v) {
       if (v === stdlib.constants.π) {
@@ -99,12 +111,12 @@ export default function generate(program) {
     ReturnStatement(s) {
       output.push(`return ${gen(s.expression)};`);
     },
-    ShortReturnStatement(s) {
-      output.push("return;");
-    },
+    // ShortReturnStatement(s) {
+    //   output.push("return;");
+    // },
     StatementIfElse(s) {
       output.push(`if (${gen(s.test)}) {`);
-      gen(s.consequent);
+      gen(s.consequence);
       if (s.alternate.constructor === StatementIfElse) {
         output.push("} else");
         gen(s.alternate);
@@ -114,33 +126,33 @@ export default function generate(program) {
         output.push("}");
       }
     },
-    WhileStatement(s) {
+    WhileLoop(s) {
       output.push(`while (${gen(s.test)}) {`);
       gen(s.body);
       output.push("}");
     },
-    RepeatStatement(s) {
-      const i = targetName({ name: "i" });
-      output.push(`for (let ${i} = 0; ${i} < ${gen(s.count)}; ${i}++) {`);
-      gen(s.body);
-      output.push("}");
-    },
-    ForRangeStatement(s) {
-      const i = targetName(s.iterator);
-      const op = s.op === "..." ? "<=" : "<";
-      output.push(
-        `for (let ${i} = ${gen(s.low)}; ${i} ${op} ${gen(s.high)}; ${i}++) {`
-      );
-      gen(s.body);
-      output.push("}");
-    },
+    // RepeatStatement(s) {
+    //   const i = targetName({ name: "i" });
+    //   output.push(`for (let ${i} = 0; ${i} < ${gen(s.count)}; ${i}++) {`);
+    //   gen(s.body);
+    //   output.push("}");
+    // },
+    // ForRangeStatement(s) {
+    //   const i = targetName(s.iterator);
+    //   const op = s.op === "..." ? "<=" : "<";
+    //   output.push(
+    //     `for (let ${i} = ${gen(s.low)}; ${i} ${op} ${gen(s.high)}; ${i}++) {`
+    //   );
+    //   gen(s.body);
+    //   output.push("}");
+    // },
     ForStatement(s) {
       output.push(`for (let ${gen(s.iterator)} of ${gen(s.collection)}) {`);
       gen(s.body);
       output.push("}");
     },
     Conditional(e) {
-      return `((${gen(e.test)}) ? (${gen(e.consequent)}) : (${gen(
+      return `((${gen(e.test)}) ? (${gen(e.consequence)}) : (${gen(
         e.alternate
       )}))`;
     },
@@ -166,15 +178,24 @@ export default function generate(program) {
     MemberExpression(e) {
       return `(${gen(e.object)}[${JSON.stringify(gen(e.field))}])`;
     },
-    Call(c) {
-      const targetCode = standardFunctions.has(c.callee)
-        ? standardFunctions.get(c.callee)(gen(c.args))
-        : c.callee.constructor === ArrayType ||
-          c.callee.constructor === SetType ||
-          c.callee.constructor === DictType
-        ? `new ${gen(c.callee)}(${gen(c.args).join(", ")})`
-        : `${gen(c.callee)}(${gen(c.args).join(", ")})`;
-      if (c.callee instanceof Type || c.callee.type.returnType !== Type.VOID) {
+    // Call(c) {
+    //   const targetCode = standardFunctions.has(c.callee)
+    //     ? standardFunctions.get(c.callee)(gen(c.args))
+    //     : c.callee.constructor === ArrayType ||
+    //       c.callee.constructor === SetType ||
+    //       c.callee.constructor === DictType
+    //     ? `new ${gen(c.callee)}(${gen(c.args).join(", ")})`
+    //     : `${gen(c.callee)}(${gen(c.args).join(", ")})`;
+    //   if (c.callee instanceof Type || c.callee.type.returnType !== Type.VOID) {
+    //     return targetCode;
+    //   }
+    //   output.push(`${targetCode};`);
+    // },
+    FunctionCall(c) {
+      const targetCode = standardFunctions.has(c.id)
+        ? standardFunctions.get(c.id)(gen(c.args))
+        : `${c.id.name}(${gen(c.args).join(", ")})`;
+      if (c.id instanceof Type || c.id.type.returnType !== Type.VOID) {
         return targetCode;
       }
       output.push(`${targetCode};`);
@@ -193,6 +214,9 @@ export default function generate(program) {
     },
     Array(a) {
       return a.map(gen);
+    },
+    Literal(l) {
+      return `"${l.value}"`;
     },
   };
 
