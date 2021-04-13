@@ -113,9 +113,6 @@ export default function generate(program) {
     ReturnStatement(s) {
       output.push(`return ${gen(s.expression)};`);
     },
-    // ShortReturnStatement(s) {
-    //   output.push("return;");
-    // },
     StatementIfElse(s) {
       output.push(`if (${gen(s.test)}) {`);
       gen(s.consequence);
@@ -172,9 +169,9 @@ export default function generate(program) {
     CustomSet(e) {
       return `[${gen(e.elements).join(",")}]`;
     },
-    // CustomDict(e) {
-    //   return `{${gen(e.elements).join(",")}}`;
-    // },
+    CustomDict(e) {
+      return `{${gen(e.keyValues).join(",")}}`;
+    },
     EmptyArray(e) {
       return "[]";
     },
@@ -220,6 +217,9 @@ export default function generate(program) {
     },
     Literal(l) {
       return `"${l.value}"`;
+    },
+    KeyValue(k) {
+      return `${gen(k.key)}: ${gen(k.value)}`;
     },
   };
 
