@@ -151,7 +151,7 @@ export default function generate(program) {
       )}))`;
     },
     BinaryExpression(e) {
-      const op = { "==": "===", "!=": "!==" }[e.op] ?? e.op;
+      const op = { "==": "===", "!=": "!==", "^": "**" }[e.op] ?? e.op;
       return `(${gen(e.left)} ${op} ${gen(e.right)})`;
     },
     UnaryExpression(e) {
