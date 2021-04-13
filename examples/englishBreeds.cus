@@ -1,5 +1,5 @@
-${languageConfig.string} breeds = ["cat", "armadillo", "dog", "snake"]
-${languageConfig.string} names = ["Leslie", "Ben","Andy","April"]
-${languageConfig.for} (${languageConfig.int} i=0; i < breeds.size; i++) {
+${languageConfig.string}[] breeds = ["cat", "armadillo", "dog", "snake"]
+${languageConfig.string}[] names = ["Leslie", "Ben","Andy","April"]
+${languageConfig.for} (${languageConfig.int} i=0; i < ${languageConfig.length}(breeds); i++) {
   ${languageConfig.print} (names[i] + " is a " + breeds[i] + "!");
 }

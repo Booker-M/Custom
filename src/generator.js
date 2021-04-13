@@ -16,13 +16,14 @@ export default function generate(program) {
 
   const standardFunctions = new Map([
     [stdlib.functions[languageConfig.print], x => `console.log(${x})`],
-    [stdlib.functions.sin, x => `Math.sin(${x})`],
-    [stdlib.functions.cos, x => `Math.cos(${x})`],
-    [stdlib.functions.exp, x => `Math.exp(${x})`],
-    [stdlib.functions.ln, x => `Math.log(${x})`],
-    [stdlib.functions.hypot, (x, y) => `Math.hypot(${x},${y})`],
-    [stdlib.functions.bytes, s => `[...Buffer.from(${s}, "utf8")]`],
-    [stdlib.functions.codepoints, s => `[...(${s})].map(s=>s.codePointAt(0))`],
+    [stdlib.functions[languageConfig.length], x => `${x}.length`],
+    // [stdlib.functions.sin, x => `Math.sin(${x})`],
+    // [stdlib.functions.cos, x => `Math.cos(${x})`],
+    // [stdlib.functions.exp, x => `Math.exp(${x})`],
+    // [stdlib.functions.ln, x => `Math.log(${x})`],
+    // [stdlib.functions.hypot, (x, y) => `Math.hypot(${x},${y})`],
+    // [stdlib.functions.bytes, s => `[...Buffer.from(${s}, "utf8")]`],
+    // [stdlib.functions.codepoints, s => `[...(${s})].map(s=>s.codePointAt(0))`],
   ]);
 
   // Variable and function names in JS will be suffixed with _1, _2, _3,
@@ -40,6 +41,7 @@ export default function generate(program) {
 
   // const gen = node => generators[node.constructor.name](node);
   const gen = node => {
+    console.log(output);
     console.log(node);
     return generators[node.constructor.name](node);
   };
@@ -74,10 +76,9 @@ export default function generate(program) {
     DictType(t) {
       return targetName(t);
     },
-    // Field(f) {
-    //   return targetName(f);
-    // },
-
+    Index(i) {
+      return `${i.collection.name}[${i.index.name}]`;
+    },
     FunctionDeclaration(d) {
       output.push(`function ${d.id}(${gen(d.params).join(", ")}) {`);
       gen(d.block);
@@ -91,7 +92,8 @@ export default function generate(program) {
       if (v === stdlib.constants.π) {
         return "Math.PI";
       }
-      return targetName(v);
+      // return targetName(v);
+      return v.name;
     },
     Function(f) {
       return targetName(f);
@@ -131,23 +133,18 @@ export default function generate(program) {
       gen(s.body);
       output.push("}");
     },
-    // RepeatStatement(s) {
-    //   const i = targetName({ name: "i" });
-    //   output.push(`for (let ${i} = 0; ${i} < ${gen(s.count)}; ${i}++) {`);
-    //   gen(s.body);
-    //   output.push("}");
-    // },
-    // ForRangeStatement(s) {
-    //   const i = targetName(s.iterator);
-    //   const op = s.op === "..." ? "<=" : "<";
-    //   output.push(
-    //     `for (let ${i} = ${gen(s.low)}; ${i} ${op} ${gen(s.high)}; ${i}++) {`
-    //   );
-    //   gen(s.body);
-    //   output.push("}");
-    // },
-    ForStatement(s) {
-      output.push(`for (let ${gen(s.iterator)} of ${gen(s.collection)}) {`);
+    ForLoop(s) {
+      gen(s.declaration);
+      output[output.length - 1] =
+        `for (` + output[output.length - 1] + ` ${gen(s.test)};`;
+      gen(s.assignment);
+      const assignment = output[output.length - 1];
+      output[output.length - 1] =
+        output[output.length - 2] +
+        ` ` +
+        assignment.substring(0, assignment.length - 1) +
+        `) {`;
+      output.splice(output.length - 2, 1);
       gen(s.body);
       output.push("}");
     },
@@ -169,9 +166,15 @@ export default function generate(program) {
     SubscriptExpression(e) {
       return `${gen(e.array)}[${gen(e.index)}]`;
     },
-    ArrayExpression(e) {
+    CustomArray(e) {
       return `[${gen(e.elements).join(",")}]`;
     },
+    CustomSet(e) {
+      return `[${gen(e.elements).join(",")}]`;
+    },
+    // CustomDict(e) {
+    //   return `{${gen(e.elements).join(",")}}`;
+    // },
     EmptyArray(e) {
       return "[]";
     },
