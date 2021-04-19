@@ -24,8 +24,6 @@ Prints to stdout according to <outputType>, which must be one of:
   analyzed   the semantically analyzed representation
   optimized  the optimized semantically analyzed representation
   js         the translation to JavaScript
-  c          the translation to C
-  llvm       the translation to LLVM
   string     the string with any string literals replaced with your custom config values
 `;
 

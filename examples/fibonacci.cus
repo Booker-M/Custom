@@ -1,4 +1,3 @@
-
 ${languageConfig.int} fibonacci (${languageConfig.int} n) {
   ${languageConfig.if}(n<0) {
       ${languageConfig.print}('Number cannot be negative.')

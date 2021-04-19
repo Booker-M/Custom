@@ -1,0 +1,12 @@
+${languageConfig.int} main (${languageConfig.int} x, ${languageConfig.int}  y) {
+  ${languageConfig.if}(x < y) {
+    ${languageConfig.print}('please work')
+  }
+  ${languageConfig.else} ${languageConfig.if}(x > y) {
+    ${languageConfig.print}('cry')
+  }
+  ${languageConfig.else} {
+    ${languageConfig.print}('cry more')
+  }
+    ${languageConfig.return} 1;
+}
