@@ -8,7 +8,12 @@ import {
   SetType,
   IdentifierExpression,
 } from "./ast.js";
+import fs from "fs";
 import * as stdlib from "./stdlib.js";
+
+const languageConfig = JSON.parse(
+  fs.readFileSync("./config/customConfig.json", "utf8")
+);
 
 function must(condition, errorMessage) {
   if (!condition) {
@@ -378,6 +383,14 @@ class Context {
 }
 
 export default function analyze(node) {
+  //Easter Egg: throws error if a keyword is set to "juno"
+  for (const [key, value] of Object.entries(languageConfig)) {
+    must(
+      value.toLowerCase() !== "juno",
+      ` "Juno" is NOT an acceptable configuration keyword`
+    );
+  }
+
   // Allow primitives to be automatically typed
   Number.prototype.type = Type.FLOAT;
   BigInt.prototype.type = Type.INT;
@@ -388,6 +401,7 @@ export default function analyze(node) {
 
   // Add in all the predefined identifiers from the stdlib module
   const library = { ...stdlib.types, ...stdlib.constants, ...stdlib.functions };
+
   for (const [name, type] of Object.entries(library)) {
     initialContext.add(name, type);
   }
