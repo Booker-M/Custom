@@ -47,7 +47,7 @@ export default function generate(program) {
     },
     FunctionDeclaration(d) {
       output.push(`function ${d.id}(${gen(d.params).join(", ")}) {`);
-      gen(d.block);
+      gen(d.body);
       output.push("}");
     },
     Parameter(p) {

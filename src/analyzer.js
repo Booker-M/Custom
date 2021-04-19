@@ -198,7 +198,7 @@ class Context {
     );
     // Add before analyzing the body to allow recursion
     this.add(f.name, f);
-    d.block = childContext.analyze(d.block);
+    d.body = childContext.analyze(d.body);
     return d;
   }
   Parameter(p) {

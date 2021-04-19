@@ -56,8 +56,8 @@ export class BreakStatement {
 }
 
 export class FunctionDeclaration {
-  constructor(type, id, params, block) {
-    Object.assign(this, { type, id, params, block });
+  constructor(type, id, params, body) {
+    Object.assign(this, { type, id, params, body });
   }
 }
 export class FunctionCall {
@@ -235,16 +235,6 @@ export class FunctionType extends Type {
     super(`(${parameterTypes.map(t => t.name).join(",")})->${returnType.name}`);
     Object.assign(this, { parameterTypes, returnType });
   }
-  // isAssignableTo(target) {
-  //   return (
-  //     target.constructor === FunctionType &&
-  //     this.returnType.isAssignableTo(target.returnType) &&
-  //     this.parameterTypes.length === target.parameterTypes.length &&
-  //     this.parameterTypes.every((t, i) =>
-  //       target.parameterTypes[i].isAssignableTo(t)
-  //     )
-  //   );
-  // }
 }
 
 // Appears in the syntax tree only and disappears after semantic analysis

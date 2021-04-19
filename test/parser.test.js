@@ -68,7 +68,6 @@ const correctExamples = {
   "Function Declaration": `${languageConfig.int} getFirstValue(<${languageConfig.string}, ${languageConfig.int}> keyValues) {
     return(keyValues["first"])
   }`,
-
 };
 
 const incorrectExamples = {
@@ -93,7 +92,7 @@ const ASTexpected = `   1 | program: Program
    5 |       type: TypeId name='decimalBegone'
    6 |     params[1]: Parameter id='argv'
    7 |       type: TypeId name='letterz'
-   8 |     block: Block
+   8 |     body: Block
    9 |       statements[0]: FunctionCall
   10 |         id: IdentifierExpression name='gimme'
   11 |         args[0]: Literal value='hello'
@@ -110,7 +109,7 @@ const ASTexpected = `   1 | program: Program
   22 |             id: IdentifierExpression name='gimme'
   23 |             args[0]: Literal value='cry'
   24 |       statements[2]: ReturnStatement
-  25 |         expression[0]: BigInt`
+  25 |         expression[0]: BigInt`;
 
 describe("Checking parsing on correct code\n", () => {
   for (const [example, code] of Object.entries(correctExamples)) {
