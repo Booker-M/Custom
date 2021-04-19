@@ -17,7 +17,7 @@ After the tragic loss of the Custom Hotel, we wanted to dedicate our customizabl
 -Setting a keyword to "Juno" causes a compile error ("Hotel Juno" is the inferior successor to "Custom Hotel")  
 
 ## Grammar
-https://github.com/Booker-M/Custom/blob/main/grammar/customGrammar.js
+[https://github.com/Booker-M/Custom/blob/main/grammar/customGrammar.js](https://github.com/Booker-M/Custom/blob/main/grammar/customGrammar.js)  
 
 ### Default Types and Keywords
 **Types:**  
