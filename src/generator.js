@@ -17,13 +17,6 @@ export default function generate(program) {
   const standardFunctions = new Map([
     [stdlib.functions[languageConfig.print], x => `console.log(${x})`],
     [stdlib.functions[languageConfig.length], x => `${x}.length`],
-    // [stdlib.functions.sin, x => `Math.sin(${x})`],
-    // [stdlib.functions.cos, x => `Math.cos(${x})`],
-    // [stdlib.functions.exp, x => `Math.exp(${x})`],
-    // [stdlib.functions.ln, x => `Math.log(${x})`],
-    // [stdlib.functions.hypot, (x, y) => `Math.hypot(${x},${y})`],
-    // [stdlib.functions.bytes, s => `[...Buffer.from(${s}, "utf8")]`],
-    // [stdlib.functions.codepoints, s => `[...(${s})].map(s=>s.codePointAt(0))`],
   ]);
 
   const gen = (node, { inExpression = false } = {}) => {
@@ -147,9 +140,6 @@ export default function generate(program) {
     Boolean(e) {
       return e;
     },
-    // String(e) {
-    //   return JSON.stringify(e);
-    // },
     Array(a) {
       return a.map(gen);
     },
