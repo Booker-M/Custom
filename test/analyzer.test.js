@@ -115,7 +115,7 @@ const semanticChecks = [
     "Break Statement",
     `${languageConfig.int} i = 0;
       ${languageConfig.while} (i < 10) {
-          break;
+        ${languageConfig.break};
       }`,
   ],
   [

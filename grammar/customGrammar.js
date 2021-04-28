@@ -19,7 +19,7 @@ Custom {
     Assignment    =  id "=" Exp						                       -- assign
                   |  id "++"							                       -- increment
                   |  id "--"								                     -- decrement
-    Break         =  "break" ~alnum
+    Break         =  "${languageConfig.break}" ~alnum
 
     Args          =  ListOf<BinExp, ",">
     Params        =  ListOf<Param, ",">
@@ -54,7 +54,7 @@ Custom {
                   |  typeid
     typeid        =  "${languageConfig.string}" | "${languageConfig.bool}" | "${languageConfig.int}" | "${languageConfig.float}"
     void          =  "${languageConfig.void}"
-    keyword       =  (type | bool | "${languageConfig.if}" | "${languageConfig.else}" | "${languageConfig.return}" | "${languageConfig.for}" | "${languageConfig.while}" | "${languageConfig.in}" | "${languageConfig.void}") ~alnum
+    keyword       =  (type | bool | "${languageConfig.if}" | "${languageConfig.else}" | "${languageConfig.return}" | "${languageConfig.for}" | "${languageConfig.while}" | "${languageConfig.in}" | "${languageConfig.break}" | "${languageConfig.void}") ~alnum
     id            =  ~keyword letter (alnum)*
     prefixop      =  "!" | "-"
     relop         =  ">" | ">=" | "==" | "!=" | "<" | "<="

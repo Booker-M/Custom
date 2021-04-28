@@ -133,7 +133,7 @@ const fixtures = [
     ${languageConfig.int} i = 0;
     ${languageConfig.while} (i < 10) {
         i++;
-        break;
+        ${languageConfig.break};
       }
       i--;
     `,

@@ -71,19 +71,22 @@ const optimizers = {
     if (s.source === s.target) {
       return [];
     } else if (
-      s.source.op == "+" &&
-      ((optimize(s.source.left) == s.target && optimize(s.source.right) == 1) ||
-        (optimize(s.source.left) == 1 && optimize(s.source.right) == s.target))
+      s.source.op === "+" &&
+      ((optimize(s.source.left) === s.target &&
+        optimize(s.source.right) === 1) ||
+        (optimize(s.source.left) === 1 &&
+          optimize(s.source.right) === s.target))
     ) {
       return new ast.Increment(s.target);
     } else if (
-      s.source.op == "-" &&
-      ((optimize(s.source.left) == s.target && optimize(s.source.right) == 1) ||
-        (optimize(s.source.left) == 1 && optimize(s.source.right) == s.target))
+      s.source.op === "-" &&
+      ((optimize(s.source.left) === s.target &&
+        optimize(s.source.right) === 1) ||
+        (optimize(s.source.left) === 1 &&
+          optimize(s.source.right) === s.target))
     ) {
       return new ast.Decrement(s.target);
     }
-    console.log("DIDN'T MAKE IT THERE");
     return s;
   },
   BreakStatement(s) {
@@ -213,8 +216,18 @@ const optimizers = {
     return e;
   },
   Array(a) {
+    const x = [];
+    for (const e of a) {
+      x.push(e);
+      if (
+        e.constructor === ast.ReturnStatement ||
+        e.constructor === ast.BreakStatement
+      ) {
+        break;
+      }
+    }
     // Flatmap since each element can be an array
-    return a.flatMap(optimize);
+    return x.flatMap(optimize);
   },
   Literal(l) {
     return l;

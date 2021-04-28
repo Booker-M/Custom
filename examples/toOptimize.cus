@@ -1,0 +1,16 @@
+${languageConfig.int} x = 0
+x = x + 1
+x = x - 1
+${languageConfig.int} main() {
+    ${languageConfig.print}("KEEP THIS");
+    ${languageConfig.return} 1;
+    ${languageConfig.print}("DELETE THIS");
+    ${languageConfig.print}("AND THIS");
+}
+
+${languageConfig.for} (${languageConfig.int} i=0; i < 10; i++) {
+    ${languageConfig.print}("KEEP THIS");
+    ${languageConfig.break};
+    ${languageConfig.print}("DELETE THIS");
+    ${languageConfig.print}("AND THIS");
+}
