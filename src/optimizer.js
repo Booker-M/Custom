@@ -194,8 +194,12 @@ const optimizers = {
     return e;
   },
   CustomDict(e) {
-    e.keys = optimize(e.keys);
-    e.values = optimize(e.values);
+    e.keyValues = optimize(e.keyValues);
+    return e;
+  },
+  KeyValue(e) {
+    e.key = optimize(e.key);
+    e.value = optimize(e.value);
     return e;
   },
   FunctionCall(c) {

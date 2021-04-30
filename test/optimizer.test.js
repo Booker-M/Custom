@@ -27,10 +27,12 @@ const neg = x => new ast.UnaryExpression("-", x);
 const customArray = (...elements) => new ast.CustomArray(elements);
 const customSet = (...elements) => new ast.CustomSet(elements);
 const customDict = (...keyValues) => new ast.CustomDict(keyValues);
+const keyValue = (key, value) => new ast.KeyValue(key, value);
 const sub = (a, e) => new ast.Index(a, e);
 const unwrapElse = (o, e) => new ast.BinaryExpression("??", o, e);
 const conditional = (x, y, z) => new ast.Conditional(x, y, z);
 const some = x => new ast.UnaryExpression("some", x);
+const assignment = (target, source) => new ast.Assignment(target, source);
 
 const tests = [
   ["folds +", new ast.BinaryExpression("+", 5, 8), 13],
@@ -81,7 +83,78 @@ const tests = [
     customSet(0, onePlusTwo, 9),
     customSet(0, 3, 9),
   ],
+  [
+    "optimizes in dict literals",
+    customDict(
+      keyValue(0, 0),
+      keyValue(onePlusTwo, onePlusTwo),
+      keyValue(9, 0)
+    ),
+    customDict(keyValue(0, 0), keyValue(3, 3), keyValue(9, 0)),
+  ],
   ["optimizes in arguments", callIdentity([times(3, 5)]), callIdentity([15])],
+  [
+    "optimizes assignments to increment, var on left",
+    assignment(x, new ast.BinaryExpression("+", x, 1)),
+    new ast.Increment(x),
+  ],
+  [
+    "optimizes assignments to increment, var on right",
+    assignment(x, new ast.BinaryExpression("+", 1, x)),
+    new ast.Increment(x),
+  ],
+  [
+    "optimizes assignments to decrement, var on left",
+    assignment(x, new ast.BinaryExpression("-", x, 1)),
+    new ast.Decrement(x),
+  ],
+  [
+    "optimizes assignments to decrement, var on right",
+    assignment(x, new ast.BinaryExpression("-", 1, x)),
+    new ast.Decrement(x),
+  ],
+  [
+    "optimizes for loop with false test",
+    new ast.ForLoop(
+      new ast.Declaration(
+        languageConfig.int,
+        new ast.Assignment(x, new ast.BinaryExpression("*", x, "z"))
+      ),
+      new ast.BinaryExpression(">", 0, 1),
+      xmm,
+      [new ast.ReturnStatement(x), new ast.BinaryExpression(">", x, 0)]
+    ),
+    [],
+  ],
+  [
+    "optimizes for loop with code after return statement",
+    new ast.ForLoop(
+      new ast.Declaration(
+        languageConfig.int,
+        new ast.Assignment(x, new ast.BinaryExpression("*", x, "z"))
+      ),
+      new ast.BinaryExpression(">", x, 0),
+      xmm,
+      [new ast.ReturnStatement(x), new ast.BinaryExpression(">", x, 0)]
+    ),
+    new ast.ForLoop(
+      new ast.Declaration(
+        languageConfig.int,
+        new ast.Assignment(x, new ast.BinaryExpression("*", x, "z"))
+      ),
+      new ast.BinaryExpression(">", x, 0),
+      xmm,
+      [new ast.ReturnStatement(x)]
+    ),
+  ],
+  [
+    "optimizes while loop with code after break statement",
+    new ast.WhileLoop(true, [
+      new ast.BreakStatement(),
+      new ast.BinaryExpression(">", x, 0),
+    ]),
+    new ast.WhileLoop(true, [new ast.BreakStatement()]),
+  ],
   [
     "passes through nonoptimizable constructs",
     ...Array(2).fill([
@@ -89,7 +162,6 @@ const tests = [
         languageConfig.int,
         new ast.Assignment(x, new ast.BinaryExpression("*", x, "z"))
       ),
-      // new ast.TypeDeclaration([new ast.Field("x", ast.Type.INT)]),
       new ast.Assignment(x, new ast.BinaryExpression("*", x, "z")),
       new ast.Assignment(x, new ast.UnaryExpression("not", x)),
       new ast.FunctionCall(identity, new ast.Index(x, "f")),
@@ -110,6 +182,14 @@ const tests = [
         xmm,
         []
       ),
+      new ast.ArrayType(languageConfig.int),
+      new ast.SetType(languageConfig.int),
+      new ast.DictType(languageConfig.int, languageConfig.string),
+      new ast.Program(new ast.BinaryExpression(">", x, 0)),
+      new ast.Block(new ast.BinaryExpression(">", x, 0)),
+      new ast.Parameter(languageConfig.int, "n"),
+      new ast.Decrement(x),
+      new ast.Literal("hey"),
     ]),
   ],
 ];
