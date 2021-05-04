@@ -39,7 +39,7 @@ function getFirstValue(keyValues) {
 </td><td>
 
 ```
-int getFirstValue(string keyValues) {
+int getFirstValue(<string, int> keyValues) {
     return(keyValues["first"])
 }
 ```
