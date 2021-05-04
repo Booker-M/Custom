@@ -19,5 +19,5 @@ Veronica is a Computer Science, Applied Mathematics and History triple major at 
 <br>
 
 ## Andrew Seaman
-Andrew is a Computer Science major and Applied Math minor at Loyola Marymount University.  In his free time you can find him hiking, skiing, or at a concert! 
-<br><br><br><br><br><br>
+Andrew is a Computer Science major and Applied Math minor at Loyola Marymount University.  In his free time you can find him hiking, skiing, or at a concert!
+<br><br><br><br><br><br><br><br><br><br><br><br>
