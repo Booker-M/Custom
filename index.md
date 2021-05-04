@@ -52,7 +52,7 @@ function getFirstValue(keyValues) {
 </td><td>
 <div markdown="1">
 ```
-int getFirstValue(string, int> keyValues) {
+int getFirstValue(<string, int> keyValues) {
     return(keyValues["first"])
 }
 ```
