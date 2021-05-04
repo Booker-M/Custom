@@ -131,7 +131,7 @@ you want! */
 ```
 
 ## Example Keyword Configuration
-# Our Keywords of Choice
+### Our Keywords of Choice
 ```
 {
     "if": "maybe",
@@ -152,7 +152,7 @@ you want! */
 }
 ```
 
-# Real Hot Girl Script
+### Real Hot Girl Script
 ```
 {
     "if": "iHaveSomethingToSay",
