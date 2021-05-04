@@ -19,5 +19,5 @@ Description
 <br><br><br><br><br><br>
 
 ## Andrew Seaman
-Description
+Andrew is a Computer Science major and Applied Math minor at Loyola Marymount University.  In his free time you can find him hiking, skiing, or at a concert! 
 <br><br><br><br><br><br>
