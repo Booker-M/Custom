@@ -131,6 +131,7 @@ you want! */
 ```
 
 ## Example Keyword Configuration
+# Our Keywords of Choice
 ```
 {
     "if": "maybe",
@@ -148,6 +149,28 @@ you want! */
     "float": "floatYoBoat",
     "bool": "boolin",
     "void": "darkness"
+}
+```
+
+# Real Hot Girl Script
+```
+{
+    "if": "iHaveSomethingToSay",
+    "else": "BECAUSEIMONFUCKINGVACATION",
+    "for": "openHerUp",
+    "while": "wylin",
+    "in": "thatsSOinRn",
+    "break": "GTFO",
+    "print": "supLilBitch",
+    "return": "andThemsTheFacts",
+    "length": "howMuchLonger",
+    "true": "trueShit",
+    "false": "fraudulentAssBitch",
+    "string": "wordz",
+    "int": "digitz",
+    "float": "longz",
+    "bool": "boolz",
+    "void": "leftOnRead"
 }
 ```
 
