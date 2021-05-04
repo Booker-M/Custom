@@ -87,14 +87,14 @@ const ASTtest = `${languageConfig.int} main (${languageConfig.int} argc, ${langu
 
 const ASTexpected = `   1 | program: Program
    2 |   statements[0]: FunctionDeclaration id='main'
-   3 |     type: TypeId name='decimalBegone'
+   3 |     type: TypeId name='${languageConfig.int}'
    4 |     params[0]: Parameter id='argc'
-   5 |       type: TypeId name='decimalBegone'
+   5 |       type: TypeId name='${languageConfig.int}'
    6 |     params[1]: Parameter id='argv'
-   7 |       type: TypeId name='letterz'
+   7 |       type: TypeId name='${languageConfig.string}'
    8 |     body: Block
    9 |       statements[0]: FunctionCall
-  10 |         id: IdentifierExpression name='gimme'
+  10 |         id: IdentifierExpression name='${languageConfig.print}'
   11 |         args[0]: Literal value='hello'
   12 |       statements[1]: StatementIfElse
   13 |         test: BinaryExpression op='<'
@@ -102,11 +102,11 @@ const ASTexpected = `   1 | program: Program
   15 |           right: IdentifierExpression name='y'
   16 |         consequence: Block
   17 |           statements[0]: FunctionCall
-  18 |             id: IdentifierExpression name='gimme'
+  18 |             id: IdentifierExpression name='${languageConfig.print}'
   19 |             args[0]: Literal value='please work'
   20 |         alternate[0]: Block
   21 |           statements[0]: FunctionCall
-  22 |             id: IdentifierExpression name='gimme'
+  22 |             id: IdentifierExpression name='${languageConfig.print}'
   23 |             args[0]: Literal value='cry'
   24 |       statements[2]: ReturnStatement
   25 |         expression[0]: BigInt`;

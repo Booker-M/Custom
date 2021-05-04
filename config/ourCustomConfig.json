@@ -1,0 +1,18 @@
+{
+    "if": "maybe",
+    "else": "yolo",
+    "for": "fosho",
+    "while": "whileWhileWhile",
+    "in": "within",
+    "break": "gimmeABreak",
+    "print": "gimme",
+    "return": "sendIt",
+    "length": "whatsDaSize",
+    "true": "facts",
+    "false": "nawMan",
+    "string": "letterz",
+    "int": "decimalBegone",
+    "float": "floatYoBoat",
+    "bool": "boolin",
+    "void": "darkness"
+}
