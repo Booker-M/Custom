@@ -20,7 +20,6 @@
 import * as ast from "./ast.js";
 
 export default function optimize(node) {
-  console.log(node);
   return optimizers[node.constructor.name](node);
 }
 
