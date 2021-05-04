@@ -386,8 +386,8 @@ export default function analyze(node) {
   //Easter Egg: throws error if a keyword is set to "juno"
   for (const [key, value] of Object.entries(languageConfig)) {
     must(
-      value.toLowerCase() !== "juno",
-      ` "Juno" is NOT an acceptable configuration keyword`
+      value.toLowerCase() !== "june",
+      ` "June" is NOT an acceptable configuration keyword`
     );
   }
 

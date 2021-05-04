@@ -9,7 +9,7 @@ After the tragic loss of the Custom Hotel, we wanted to dedicate our customizabl
 -Statically-typed, object-oriented programming language  
 -Every keyword can be *customized* in the `./custom/customConfig.json` file  
 -Data structures such as arrays, sets, and dictionaries  
--Setting a keyword to "Juno" causes a compile error ("Hotel Juno" is the inferior successor to "Custom Hotel")  
+-Setting a keyword to "June" causes a compile error ("Hotel June" is the inferior successor to "Custom Hotel")  
 
 ## Grammar
 https://github.com/Booker-M/Custom/blob/main/grammar/customGrammar.js
